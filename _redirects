@@ -1,0 +1,6 @@
+# Allow direct deep links to folder-based pages (no SPA catch-all)
+/form-teacher      /roles/form-teacher              301
+/form-teacher/*    /roles/form-teacher/:splat       301
+
+# SPA fallback (put LAST)
+ /*                 /index.html                      200
