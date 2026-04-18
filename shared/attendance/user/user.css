@@ -52,6 +52,10 @@ html,body{
   text-decoration:none;
 }
 
+.col{ display:flex; align-items:center; width:100%; }
+.col--r{ justify-content:flex-end; }
+.col--l{ justify-content:flex-start; }
+
 .title{
   margin:0;
   text-align:left;
