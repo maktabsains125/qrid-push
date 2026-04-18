@@ -10,5 +10,6 @@
   to = "/.netlify/functions/camera"
   status = 200
 
-  [functions."push-send-daily"]
+[functions."push-send-daily"]
   schedule = "*/2 * * * *"
+
