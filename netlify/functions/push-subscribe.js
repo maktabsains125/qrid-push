@@ -27,7 +27,7 @@ exports.handler = async (event) => {
       };
     }
 
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbw3li4Y6jkFsznzz1tqbfBubVDI9b1K5C58GcAPV4N18RzRpd3HGzQLUnbUJcOzbbk/exec";
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbwSJCVKS5TOjXd_3C--O3xmBDxuopeX4TCxksx8mnc_LtDvSq1K4krIBubw85UptEzf/exec";
 
     const res = await fetch(GAS_URL, {
       method: "POST",
