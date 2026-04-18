@@ -210,18 +210,15 @@
     return `${PUSH_LINK_KEY_PREFIX}${userCode || ""}`;
   }
 
-  function getLocalPushLinked() {
+  function clearLocalPushLinked() {
     try {
-      return localStorage.getItem(getPushLinkKey()) === "1";
-    } catch (_) {
-      return false;
-    }
+      localStorage.removeItem(getPushLinkKey());
+    } catch (_) {}
   }
 
-  function setLocalPushLinked(v) {
+  function setLocalPushLinked() {
     try {
-      if (v) localStorage.setItem(getPushLinkKey(), "1");
-      else localStorage.removeItem(getPushLinkKey());
+      localStorage.setItem(getPushLinkKey(), "1");
     } catch (_) {}
   }
 
@@ -402,7 +399,7 @@
     }
 
     if (Notification.permission === "denied") {
-      setLocalPushLinked(false);
+      clearLocalPushLinked();
       setPushCardState({
         text: "Notifications are blocked in browser/site settings. Please allow them there first, then return here.",
         buttonLabel: "Blocked",
@@ -423,15 +420,15 @@
     try {
       const check = await checkPushSubscription();
       serverSaved = !!(check && check.saved && check.active);
-      if (serverSaved) setLocalPushLinked(true);
     } catch (_) {
       serverSaved = false;
     }
 
-    const localLinked = getLocalPushLinked();
-    const linked = serverSaved || localLinked;
+    if (!serverSaved) {
+      clearLocalPushLinked();
+    }
 
-    if (Notification.permission === "granted" && existingSub && linked) {
+    if (Notification.permission === "granted" && existingSub && serverSaved) {
       setPushCardState({
         text: "Notifications are enabled for greeting duty reminders.",
         buttonLabel: "On",
@@ -440,9 +437,9 @@
       return;
     }
 
-    if (Notification.permission === "granted" && existingSub && !linked) {
+    if (Notification.permission === "granted" && existingSub && !serverSaved) {
       setPushCardState({
-        text: "Notifications are allowed on this device, but greeting duty reminders are not linked yet. Press Enable notifications.",
+        text: "This browser is already allowed to send notifications, but this user is not currently linked in the reminder list. Press Enable notifications.",
         buttonLabel: "Enable notifications",
         buttonDisabled: false
       });
