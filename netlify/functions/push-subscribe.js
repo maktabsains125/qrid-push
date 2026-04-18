@@ -13,7 +13,7 @@ exports.handler = async (event) => {
     const code = String(body.code || "").trim();
     const subscription = body.subscription || {};
 
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbwb3p5U5vz1IC5ua6UVI7EbVslTIhhVmr0-quaNGJy3scyyeP-oGpxajqf1Yd5Rz_sI/exec";
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbzYFG0Z2pCifQSRLWQwPK8PGQugBUKSqoXPZdltLxJMKJ5y83b40PcmifTu8aHsQcVp/exec";
 
     if (!code) {
       return {
