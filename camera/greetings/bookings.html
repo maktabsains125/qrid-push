@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+  <meta name="theme-color" content="#8f61a5">
+  <title>Book Greetings</title>
+
+  <link rel="stylesheet" href="./bookings.css"/>
+  <link rel="stylesheet" href="/shared/stylesheet/left-kebab.css"/>
+
+  <script src="/auth.js" defer></script>
+  <script src="./bookings.js" defer></script>
+</head>
+
+<body>
+  <div class="page">
+
+    <!-- Header -->
+    <div class="topgrid">
+      <div class="col col--l">
+        <button class="head-kebab" id="kebabBtn" aria-label="Menu" type="button">⋮</button>
+      </div>
+
+      <h1 class="title" id="pageTitle">BOOK GREETINGS</h1>
+
+      <div class="col col--r">
+        <button class="closeBtn" id="xBtn" aria-label="Close" type="button">×</button>
+      </div>
+    </div>
+
+    <div class="subhead" id="statusMsg">Loading. Please wait...</div>
+	
+	<!-- Push permission card -->
+	<div class="pushCard" id="pushCard" hidden>
+  	  <div class="pushCardTitle">Greeting duty reminders</div>
+  		<div class="pushCardText" id="pushCardText">
+    	Get a reminder on the day when there is a greeting duty.
+  		</div>
+  	  <div class="pushCardBtns">
+    	<button class="pushBtn pushBtn--ghost" id="pushLaterBtn" type="button">Later</button>
+        <button class="pushBtn" id="pushEnableBtn" type="button">Enable notifications</button>
+  	  </div>
+	</div>
+
+    <!-- Month selector -->
+    <div class="monthRow">
+      <button class="monthBox" id="monthBox" type="button" aria-haspopup="listbox" aria-expanded="false">
+        <span id="monthText">JANUARY</span>
+        <span class="monthCaret">▾</span>
+      </button>
+
+      <div class="monthMenu" id="monthMenu" role="listbox" aria-label="Month" hidden></div>
+    </div>
+
+    <!-- Week navigator (clickable + arrows) -->
+    <div class="weekNav" aria-label="Week navigation">
+      <button class="weekArrow" id="weekPrev" type="button" aria-label="Previous week">‹</button>
+      <button class="weekPill" id="weekPill" type="button" aria-label="Change week">WEEK 1</button>
+      <button class="weekArrow" id="weekNext" type="button" aria-label="Next week">›</button>
+    </div>
+
+    <!-- Admin bar -->
+    <div class="adminBar" id="adminBar" hidden>
+      <button class="btn" id="editBtn" type="button">Edit mode: OFF</button>
+      <button class="btn" id="saveBtn" type="button">Save</button>
+    </div>
+
+    <!-- Calendar grid (ONLY selected week is rendered) -->
+    <div class="calGrid" id="calGrid"></div>
+
+    <!-- Legend (shift times) -->
+    <div class="legend" id="shiftLegend">
+      <div class="legRow">
+        <span class="sw sw1"></span>
+        <span class="legTxt" id="tShift1">SHIFT 1: --</span>
+      </div>
+      <div class="legRow">
+        <span class="sw sw2"></span>
+        <span class="legTxt" id="tShift2">SHIFT 2: --</span>
+      </div>
+      <div class="legRow">
+        <span class="sw sw3"></span>
+        <span class="legTxt" id="tShift3">SHIFT 3: --</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Kebab overlay -->
+  <div class="overlay" id="overlay" hidden>
+    <div class="overlay-panel" role="dialog" aria-modal="true" aria-label="Menu">
+      <div class="panel-head">
+        <div class="panel-title">Menu</div>
+        <button class="panel-close" id="panelCloseBtn" type="button">✕</button>
+      </div>
+      <div class="panel-list">
+        <button class="panel-item" id="goBookGreetings" type="button">Book greetings</button>
+        <button class="panel-item" id="goMySchedule" type="button">Personal schedule</button>
+        <button class="panel-item" id="goAdmin" type="button" hidden>Admin</button>
+      </div>
+    </div>
+    <div class="overlay-dim" id="overlayDim" aria-label="Close menu"></div>
+  </div>
+
+  <!-- Popup -->
+  <div class="popup" id="popup" hidden>
+    <div class="popupCard" role="dialog" aria-modal="true" aria-label="Notice">
+      <button class="popupX" id="popupX" type="button" aria-label="Close">×</button>
+      <div class="popupMsg" id="popupMsg">Message</div>
+    </div>
+  </div>
+
+  <!-- Center status overlay (Booking... / Cancelling... / Saving...) -->
+  <div class="saveOverlay" id="saveOverlay" hidden>
+    <div class="saveCard">
+      <div class="saveCardText" id="saveCardText">Saving...</div>
+    </div>
+  </div>
+
+</body>
+</html>

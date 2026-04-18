@@ -1,0 +1,770 @@
+/*******************************************************
+ * MSPSBS QR-ID Attendance — Backend (Single SS + ROSTER_INDEX + Batch Marking)
+ * Build: v2.0.4 — 2026-02-12
+ *
+ * BEST SOLUTION (QR scan speed):
+ * - Keep MANUAL flow unchanged (but still logs into lightweight)
+ * - SCAN flow logs into LOG spreadsheet using Sheets API Values.append (fast)
+ * - Batch worker reads from LOG spreadsheet and updates H:I there, but marks attendance in MAIN spreadsheet
+ *
+ * FIX INCLUDED:
+ * - Batch worker skips "truly empty" rows so it does NOT spam:
+ *   H="error" / I="Missing ID in Sheet1" for blank rows caused by formatting/lastRow artifacts.
+ *
+ * ONE-TIME:
+ *   Services → + → "Google Sheets API"
+ *
+ * Triggers (run once to create daily timers):
+ *   scheduleAmAddDaily()
+ *   scheduleAmRemoveDaily()
+ *   schedulePmAddDaily()
+ *   schedulePmRemoveDaily()
+ *
+ * Daily index build:
+ *   scheduleRosterIndexDaily()
+ *******************************************************/
+
+const CONFIG = {
+  // MAIN (attendance + users + info + roster index)
+  SPREADSHEET_ID: "11DmjoPR31wTqYT6Z9irU47Fp8u1npEqA9p0fU1Wo3w8",
+
+  // LOG DB (FAST queue for QR scans)
+  LOG_SPREADSHEET_ID: "1AidukjYoSlebSDoU-0O2vazQzFu2GqiUErAgapygRUo",
+
+  // Tabs
+  SHEET_LOG: "Sheet1",
+  SHEET_USERS: "Sheet2",
+  SHEET_INFO: "INFO",
+  SHEET_INDEX: "ROSTER_INDEX",
+
+  ATTEND_SHEETS: ["7", "8", "9", "10", "12", "13"],
+
+  // Attendance grid layout (fixed)
+  ID_COL: 4,               // column D
+  ID_START_ROW: 6,         // D6 downward
+  DATE_HEADER_ROW: 4,      // row 4
+  DATE_START_COL: 6,       // column F
+  DATE_HEADER_WIDTH: 150,  // scan F4 → (150 cols) to find today's date
+
+  // Two sessions (time window determines session)
+  SESSIONS: {
+    AM: { WINDOW_START: "06:25", WINDOW_END: "08:00", LATE_CUTOFF: "07:41" }, //WINDOW_START: "06:25", WINDOW_END: "08:00", LATE_CUTOFF: "07:31"
+    PM: { WINDOW_START: "11:00", WINDOW_END: "14:00", LATE_CUTOFF: "12:16" }, //WINDOW_START: "11:25", WINDOW_END: "14:00", LATE_CUTOFF: "13:01
+  },
+
+  // Frontend / security
+  ALLOWED_ORIGIN: "https://mspsbs-registration.netlify.app", // no trailing slash
+  SECRET: "zN7!d@P1f#V4xYq^G8hM3wJ9t$kL5eR2uC6sB0oH*FjZrXpW"
+};
+
+// Sheet1 columns (log/queue)
+const COL_TS     = 1; // A
+const COL_ID     = 2; // B
+const COL_NAME   = 3; // C
+const COL_MARK   = 4; // D
+const COL_USER   = 5; // E
+const COL_MODE   = 6; // F
+const COL_ISSUE  = 7; // G
+const COL_STATUS = 8; // H  (blank/pending | done | error)
+const COL_ERROR  = 9; // I  (error message)
+
+// Batch sizing
+const BATCH_MAX_PER_RUN = 100;
+
+// Cache keys
+function dateColCacheKey_(dayText) {
+  return `DATECOL::${CONFIG.SPREADSHEET_ID}::${dayText}`;
+}
+function rosterCacheKey_() {
+  return `ROSTERIDX::${CONFIG.SPREADSHEET_ID}`;
+}
+
+
+/* ===================== Utilities ===================== */
+function normalizeId_(s) {
+  return String(s || "").replace(/[^\d]/g, "");
+}
+
+function pad2_(n) { 
+  return ("0" + n).slice(-2); 
+}
+
+function parseHmm_(str) {
+  const m = String(str).match(/^(\d{1,2}):(\d{2})$/);
+  if (!m) throw new Error("Bad time HH:MM: " + str);
+  return (+m[1]) * 60 + (+m[2]);
+}
+
+function nowHmm_(d) {
+  return parseHmm_(pad2_(d.getHours()) + ":" + pad2_(d.getMinutes()));
+}
+
+function tz_() { 
+  return Session.getScriptTimeZone(); 
+}
+
+function todayText_(d) {
+  return Utilities.formatDate(d, tz_(), "dd/MM/yyyy");
+}
+
+/* === Brunei timestamp formatter === */
+function logTsBrunei_() {
+  // Output: DD/MM/YYYY HH:mm:ss in UTC+8
+  return Utilities.formatDate(new Date(), "Asia/Brunei", "dd/MM/yyyy HH:mm:ss");
+}
+
+
+/* ===================== Session / Mark ===================== */
+function detectSession_(now) {
+  const cur = nowHmm_(now);
+
+  const amS = parseHmm_(CONFIG.SESSIONS.AM.WINDOW_START);
+  const amE = parseHmm_(CONFIG.SESSIONS.AM.WINDOW_END);
+  if (cur >= amS && cur <= amE) return "AM";
+
+  const pmS = parseHmm_(CONFIG.SESSIONS.PM.WINDOW_START);
+  const pmE = parseHmm_(CONFIG.SESSIONS.PM.WINDOW_END);
+  if (cur >= pmS && cur <= pmE) return "PM";
+
+  return null;
+}
+function computeMark_(now, session) {
+  const cfg = CONFIG.SESSIONS[session];
+  const cur = nowHmm_(now);
+  const late = parseHmm_(cfg.LATE_CUTOFF);
+  return cur >= late ? "L" : "1";
+}
+
+/* ===================== Auth / CORS ===================== */
+function corsCheck_(e) {
+  try {
+    const allowed = String(CONFIG.ALLOWED_ORIGIN || "").replace(/\/+$/, "");
+    if (!allowed) return true;
+
+    // Netlify proxy may not send origin param; allow empty.
+    const qpOrigin = String(e?.parameter?.origin || "").replace(/\/+$/, "");
+    if (!qpOrigin) return true;
+
+    return qpOrigin === allowed;
+  } catch (_) {
+    return true;
+  }
+}
+
+function parseBodyJSON_(e) {
+  try {
+    const raw = e?.postData?.contents || e?.parameter?.json || "";
+    return raw ? JSON.parse(raw) : null;
+  } catch (_) {
+    return null;
+  }
+}
+
+function getTokenFromRequest_(e, bodyObj) {
+  try {
+    const hdrs = e?.requestHeaders || {};
+    const auth = hdrs["Authorization"] || hdrs["authorization"] || "";
+    const m = String(auth).match(/^Bearer\s+(.+)$/i);
+    if (m) return m[1].trim();
+  } catch (_) {}
+  return (bodyObj && bodyObj.token) ? String(bodyObj.token).trim() : "";
+}
+
+function hmacSha256Hex_(data, secret) {
+  return Utilities.computeHmacSignature(
+    Utilities.MacAlgorithm.HMAC_SHA_256, data, secret
+  ).map(b => ("0" + (b & 255).toString(16)).slice(-2)).join("");
+}
+
+function base64url_(s) {
+  return Utilities.base64EncodeWebSafe(Utilities.newBlob(s).getBytes()).replace(/=+$/, "");
+}
+
+function hexToBase64url_(hex) {
+  const bytes = [];
+  for (let i = 0; i < hex.length; i += 2) bytes.push(parseInt(hex.substr(i, 2), 16));
+  return Utilities.base64EncodeWebSafe(Utilities.newBlob(bytes).getBytes()).replace(/=+$/, "");
+}
+
+function base64urlNormalize_(s) {
+  let t = String(s || "").trim().replace(/\s+/g, "");
+  t = t.replace(/\+/g, "-").replace(/\//g, "_");
+  const padLen = (4 - (t.length % 4)) % 4;
+  return t + (padLen ? "=".repeat(padLen) : "");
+}
+function base64urlDecode_(s) {
+  const norm = base64urlNormalize_(s || "");
+  return Utilities.newBlob(Utilities.base64DecodeWebSafe(norm)).getDataAsString();
+}
+function base64urlToHex_(b64) {
+  const norm = base64urlNormalize_(b64);
+  const bytes = Utilities.base64DecodeWebSafe(norm);
+  let hex = "";
+  for (let i = 0; i < bytes.length; i++) hex += ("0" + (bytes[i] & 255).toString(16)).slice(-2);
+  return hex;
+}
+
+function signToken_(claims, ttlSeconds) {
+  const nowSec = Math.floor(Date.now() / 1000);
+  const payload = Object.assign({}, claims, { iat: nowSec, exp: nowSec + ttlSeconds });
+  const header = { alg: "HS256", typ: "JWT" };
+  const h64 = base64url_(JSON.stringify(header));
+  const p64 = base64url_(JSON.stringify(payload));
+  const sigHex = hmacSha256Hex_(h64 + "." + p64, CONFIG.SECRET);
+  return h64 + "." + p64 + "." + hexToBase64url_(sigHex);
+}
+
+function verifyToken_(tok) {
+  try {
+    if (!tok) return null;
+    const parts = String(tok).split(".");
+    if (parts.length !== 3) return null;
+    const [h64, p64, s64] = parts;
+
+    const expectHex = hmacSha256Hex_(h64 + "." + p64, CONFIG.SECRET);
+    const gotHex = base64urlToHex_(s64);
+    if (expectHex !== gotHex) return null;
+
+    const payload = JSON.parse(base64urlDecode_(p64));
+    const nowSec = Math.floor(Date.now() / 1000);
+    if (payload.exp && nowSec > payload.exp) return null;
+
+    return payload;
+  } catch (_) {
+    return null;
+  }
+}
+
+/* ===================== Sheets helpers ===================== */
+function ss_() {
+  // MAIN spreadsheet (heavy)
+  return SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+}
+function respondJSON_(obj) {
+  const out = ContentService.createTextOutput(JSON.stringify(obj));
+  out.setMimeType(ContentService.MimeType.JSON);
+  return out;
+}
+
+/* ===================== Users (Sheet2) ===================== */
+function getUsersMap_() {
+  const sheet = ss_().getSheetByName(CONFIG.SHEET_USERS);
+  if (!sheet) throw new Error("Sheet2 not found");
+  const last = sheet.getLastRow();
+  if (last < 2) return {};
+  const rows = sheet.getRange(2, 1, last - 1, 2).getValues();
+  const map = {};
+  rows.forEach(r => {
+    const u = String(r[0] ?? "").trim();
+    const p = r[1];
+    if (u) map[u.toUpperCase()] = (p == null ? "" : String(p));
+  });
+  return map;
+}
+
+/* ===================== INFO search ===================== */
+function searchInfoByName_(q, limit) {
+  const sh = ss_().getSheetByName(CONFIG.SHEET_INFO);
+  if (!sh) return [];
+  const last = sh.getLastRow();
+  if (last < 2) return [];
+  const vals = sh.getRange(2, 4, last - 1, 2).getValues(); // D:E
+  const qq = String(q || "").toLowerCase();
+  const out = [];
+  for (let i = 0; i < vals.length; i++) {
+    const nm = String(vals[i][0] || "");
+    const id = String(vals[i][1] || "");
+    if (!nm) continue;
+    if (!qq || nm.toLowerCase().includes(qq)) {
+      out.push({ name: nm, id: normalizeId_(id) });
+      if (out.length >= (limit || 8)) break;
+    }
+  }
+  return out;
+}
+
+/* ===================== ROSTER_INDEX ===================== */
+/**
+ * ROSTER_INDEX columns:
+ * A ID
+ * B Sheet
+ * C RowAbs
+ * D Name (optional blank)
+ * E UpdatedAt ISO
+ */
+function ensureRosterIndexSheet_() {
+  const ss = ss_();
+  let sh = ss.getSheetByName(CONFIG.SHEET_INDEX);
+  if (!sh) sh = ss.insertSheet(CONFIG.SHEET_INDEX);
+  const hdr = sh.getRange(1, 1, 1, 5).getValues()[0];
+  if (String(hdr[0] || "") !== "ID") {
+    sh.clear();
+    sh.getRange(1, 1, 1, 5).setValues([["ID", "Sheet", "RowAbs", "Name", "UpdatedAt"]]);
+  }
+  return sh;
+}
+
+/** Builds index by reading D6:D(last) from sheets 7/8/9/10/12/13 */
+function rebuildRosterIndex() {
+  const ss = ss_();
+  const out = [];
+  const updatedAt = new Date().toISOString();
+
+  CONFIG.ATTEND_SHEETS.forEach(sheetName => {
+    const sh = ss.getSheetByName(sheetName);
+    if (!sh) return;
+
+    const last = sh.getLastRow();
+    if (last < CONFIG.ID_START_ROW) return;
+
+    const height = last - CONFIG.ID_START_ROW + 1;
+    const ids = sh.getRange(CONFIG.ID_START_ROW, CONFIG.ID_COL, height, 1).getValues();
+
+    for (let i = 0; i < ids.length; i++) {
+      const id = normalizeId_(ids[i][0]);
+      if (!id) continue;
+      const rowAbs = CONFIG.ID_START_ROW + i;
+      out.push([id, sheetName, rowAbs, "", updatedAt]);
+    }
+  });
+
+  const idxSheet = ensureRosterIndexSheet_();
+  const lr = idxSheet.getLastRow();
+  if (lr >= 2) idxSheet.getRange(2, 1, lr - 1, 5).clearContent();
+
+  if (out.length) {
+    idxSheet.getRange(2, 1, out.length, 5).setValues(out);
+  }
+
+  // Cache map for 6 hours
+  const map = {};
+  out.forEach(r => { map[r[0]] = { sheet: r[1], rowAbs: r[2] }; });
+  CacheService.getScriptCache().put(rosterCacheKey_(), JSON.stringify(map), 6 * 60 * 60);
+
+  Logger.log(`ROSTER_INDEX rebuilt: ${out.length} rows`);
+}
+
+/** Loads roster map from cache or sheet */
+function loadRosterMap_() {
+  const cache = CacheService.getScriptCache();
+  const raw = cache.get(rosterCacheKey_());
+  if (raw) {
+    try { return JSON.parse(raw); } catch (_) {}
+  }
+
+  const sh = ensureRosterIndexSheet_();
+  const last = sh.getLastRow();
+  const map = {};
+  if (last >= 2) {
+    const rows = sh.getRange(2, 1, last - 1, 3).getValues(); // ID, Sheet, RowAbs
+    rows.forEach(r => {
+      const id = normalizeId_(r[0]);
+      const sheet = String(r[1] || "").trim();
+      const rowAbs = Number(r[2] || 0);
+      if (id && sheet && rowAbs) map[id] = { sheet, rowAbs };
+    });
+  }
+  cache.put(rosterCacheKey_(), JSON.stringify(map), 6 * 60 * 60);
+  return map;
+}
+
+/* ===================== Today column cache ===================== */
+function findTodayColAbs_(dayText) {
+  const cache = CacheService.getScriptCache();
+  const k = dateColCacheKey_(dayText);
+  const raw = cache.get(k);
+  if (raw != null) {
+    const n = Number(raw);
+    if (Number.isFinite(n) && n > 0) return n; // absolute column number
+  }
+
+  // Reference header read from sheet "7"
+  const ss = ss_();
+  const ref = ss.getSheetByName("7");
+  if (!ref) throw new Error('Reference sheet "7" not found');
+
+  const header = ref.getRange(
+    CONFIG.DATE_HEADER_ROW,
+    CONFIG.DATE_START_COL,
+    1,
+    CONFIG.DATE_HEADER_WIDTH
+  ).getValues()[0];
+
+  let offset = null;
+  for (let i = 0; i < header.length; i++) {
+    const v = header[i];
+    const txt = (v instanceof Date)
+      ? Utilities.formatDate(v, tz_(), "dd/MM/yyyy")
+      : String(v).trim();
+    if (txt === dayText) { offset = i; break; }
+  }
+  if (offset == null) throw new Error("Today date column not found in header: " + dayText);
+
+  const colAbs = CONFIG.DATE_START_COL + offset;
+  cache.put(k, String(colAbs), 12 * 60 * 60);
+  return colAbs;
+}
+
+/* ===================== FAST LOG APPEND (SCAN ONLY) ===================== */
+function requireLogDb_() {
+  const id = String(CONFIG.LOG_SPREADSHEET_ID || "").trim();
+  if (!id) throw new Error("LOG_SPREADSHEET_ID not set.");
+  return id;
+}
+
+function appendScanLogFast_(rowValues) {
+  const logId = requireLogDb_();
+  Sheets.Spreadsheets.Values.append(
+    { values: [rowValues] },
+    logId,
+    `${CONFIG.SHEET_LOG}!A:I`,
+    { valueInputOption: "RAW", insertDataOption: "INSERT_ROWS" }
+  );
+}
+
+/* ===================== FIX: skip truly empty rows ===================== */
+function isTrulyEmptyLogRow_(r) {
+  // Consider row empty if ID and Mark are blank AND Timestamp blank
+  const ts = String(r[COL_TS - 1] ?? "").trim();
+  const id = String(r[COL_ID - 1] ?? "").trim();
+  const mk = String(r[COL_MARK - 1] ?? "").trim();
+  return (!ts && !id && !mk);
+}
+
+
+/* ===================== Web entrypoints ===================== */
+function doPost(e) { return doGet(e); }
+function doOptions(e) { return respondJSON_({ ok: true }); }
+
+function doGet(e) {
+  try {
+    const params = e?.parameter || {};
+    const mode = (params.mode || "config").toLowerCase();
+    const bodyObj = parseBodyJSON_(e);
+
+    if (mode === "config") {
+      return respondJSON_({
+        ok: true,
+        build: "qr-id-backend v2.0.4 / 2026-02-12",
+        nowIso: new Date().toISOString(),
+        sessions: {
+          AM: {
+            windowStart: CONFIG.SESSIONS.AM.WINDOW_START,
+            windowEnd:   CONFIG.SESSIONS.AM.WINDOW_END,
+            lateCutoff:  CONFIG.SESSIONS.AM.LATE_CUTOFF
+          },
+          PM: {
+            windowStart: CONFIG.SESSIONS.PM.WINDOW_START,
+            windowEnd:   CONFIG.SESSIONS.PM.WINDOW_END,
+            lateCutoff:  CONFIG.SESSIONS.PM.LATE_CUTOFF
+          }
+        },
+        sheets: CONFIG.ATTEND_SHEETS
+      });
+    }
+
+    if (mode === "login") {
+      if (!corsCheck_(e)) return respondJSON_({ error: "Origin not allowed" });
+
+      const { username, password } = bodyObj || {};
+      if (!username || !password) return respondJSON_({ error: "Missing credentials" });
+
+      const users = getUsersMap_();
+      const key = String(username).trim().toUpperCase();
+      const stored = users[key];
+      if (!stored || String(stored) !== String(password)) return respondJSON_({ error: "Invalid login" });
+
+      const token = signToken_({ u: key }, 330 * 24 * 60 * 60);
+      return respondJSON_({ ok: true, token, user: key });
+    }
+
+    if (mode === "search") {
+      if (!corsCheck_(e)) return respondJSON_({ error: "Origin not allowed" });
+      const q = String((bodyObj && bodyObj.q) || "").trim();
+      const results = searchInfoByName_(q, 8);
+      return respondJSON_({ ok: true, results });
+    }
+
+    if (mode === "scan" || mode === "manual") {
+  if (!corsCheck_(e)) return respondJSON_({ error: "Origin not allowed" });
+
+  const token = getTokenFromRequest_(e, bodyObj);
+  const payload = verifyToken_(token);
+  if (!payload) return respondJSON_({ error: "Invalid or expired session" });
+
+  const { id, name } = bodyObj || {};
+  const user = String(payload.u || "").trim();
+  if (!id) return respondJSON_({ error: "Missing id" });
+  if (!user) return respondJSON_({ error: "Invalid session user" });
+
+  const now = new Date();
+  const session = detectSession_(now);
+  if (!session) return respondJSON_({ error: "Outside allowed session clock-in window" });
+
+  const idNorm = normalizeId_(id);
+  if (!idNorm) return respondJSON_({ error: "Invalid ID" });
+
+  const mark = computeMark_(now, session);
+
+  // ===== MANUAL FLOW (FAST LOG DB) =====
+  if (mode === "manual") {
+    const issue = String((bodyObj && bodyObj.issue) || "");
+
+    appendScanLogFast_([
+      logTsBrunei_(),
+      idNorm,
+      String(name || ""),
+      mark,
+      String(user || ""),
+      "manual",
+      issue,
+      "",
+      ""
+    ]);
+
+    return respondJSON_({
+      ok: true,
+      id: idNorm,
+      name: String(name || ""),
+      mark,
+      recordedBy: String(user || ""),
+      status: "logged"
+    });
+  }
+
+  // ===== SCAN FLOW (FAST LOG DB) =====
+  appendScanLogFast_([
+    logTsBrunei_(),
+    idNorm,
+    String(name || ""),
+    mark,
+    String(user || ""),
+    "scan",
+    "",
+    "",
+    ""
+  ]);
+
+  return respondJSON_({
+    ok: true,
+    id: idNorm,
+    name: String(name || ""),
+    mark,
+    recordedBy: String(user || ""),
+    status: "logged"
+  });
+}
+
+    if (mode === "status") {
+      const idNorm = normalizeId_((bodyObj && bodyObj.id) || "");
+      if (!idNorm) return respondJSON_({ ok: true, id: "", status: "unknown", lastError: "" });
+
+      const checkIds = [];
+      if (String(CONFIG.LOG_SPREADSHEET_ID || "").trim()) checkIds.push(CONFIG.LOG_SPREADSHEET_ID);
+      checkIds.push(CONFIG.SPREADSHEET_ID); // manual fallback
+
+      for (const sid of checkIds) {
+        try {
+          const ssAny = SpreadsheetApp.openById(sid);
+          const sh = ssAny.getSheetByName(CONFIG.SHEET_LOG);
+          if (!sh) continue;
+
+          const last = sh.getLastRow();
+          if (last < 2) continue;
+
+          const vals = sh.getRange(2, 1, last - 1, COL_ERROR).getValues();
+          for (let i = vals.length - 1; i >= 0; i--) {
+            if (normalizeId_(vals[i][COL_ID - 1]) === idNorm) {
+              const st = String(vals[i][COL_STATUS - 1] || "");
+              const er = String(vals[i][COL_ERROR - 1] || "");
+              return respondJSON_({ ok: true, id: idNorm, status: st || "pending", lastError: er });
+            }
+          }
+        } catch (_) {}
+      }
+
+      return respondJSON_({ ok: true, id: idNorm, status: "unknown", lastError: "" });
+    }
+
+    if (mode === "process") {
+      const token = getTokenFromRequest_(e, bodyObj);
+      const payload = verifyToken_(token);
+      if (!payload) return respondJSON_({ error: "Invalid or expired session" });
+
+      const n = processSheet1Batch();
+      return respondJSON_({ ok: true, processed: n });
+    }
+
+    return respondJSON_({ error: "Unknown mode" });
+  } catch (err) {
+    return respondJSON_({ error: String(err && err.message || err) });
+  }
+}
+
+/* ===================== Batch worker ===================== */
+function processSheet1Batch() {
+  const lock = LockService.getScriptLock();
+  if (!lock.tryLock(25000)) return 0;
+
+  try {
+    const logId = requireLogDb_();
+    const ssLog = SpreadsheetApp.openById(logId);
+    const sh = ssLog.getSheetByName(CONFIG.SHEET_LOG);
+    if (!sh) return 0;
+
+    const last = sh.getLastRow();
+    if (last < 2) return 0;
+
+    // Read A:I
+    const rng = sh.getRange(2, 1, last - 1, COL_ERROR);
+    const rows = rng.getValues();
+
+    // Pick pending (skip truly empty rows)
+    const pick = [];
+    for (let i = 0; i < rows.length; i++) {
+      if (pick.length >= BATCH_MAX_PER_RUN) break;
+
+      if (isTrulyEmptyLogRow_(rows[i])) continue; // ✅ IMPORTANT FIX
+
+      const status = String(rows[i][COL_STATUS - 1] || "").toLowerCase().trim();
+      if (!status || status === "pending") pick.push(i);
+    }
+    if (!pick.length) return 0;
+
+    // Load roster + today col (MAIN)
+    const roster = loadRosterMap_();
+    const now = new Date();
+    const dayText = todayText_(now);
+    const colAbs = findTodayColAbs_(dayText);
+
+    const data = [];
+    let processed = 0;
+
+    for (const idx of pick) {
+      const r = rows[idx];
+      const id = normalizeId_(r[COL_ID - 1]);
+      const mark = String(r[COL_MARK - 1] || "").trim();
+
+      const sheetHint = roster[id]?.sheet || "";
+      const rowAbs = roster[id]?.rowAbs || 0;
+
+      if (!id) {
+        rows[idx][COL_STATUS - 1] = "error";
+        rows[idx][COL_ERROR - 1] = "Missing ID in Sheet1";
+        processed++;
+        continue;
+      }
+      if (!mark) {
+        rows[idx][COL_STATUS - 1] = "error";
+        rows[idx][COL_ERROR - 1] = "Missing mark in Sheet1";
+        processed++;
+        continue;
+      }
+      if (!sheetHint || !rowAbs) {
+        rows[idx][COL_STATUS - 1] = "error";
+        rows[idx][COL_ERROR - 1] = "ID not found in ROSTER_INDEX";
+        processed++;
+        continue;
+      }
+
+      const a1 = `${sheetHint}!${colToLetter_(colAbs)}${rowAbs}`;
+      data.push({ range: a1, values: [[mark]] });
+
+      rows[idx][COL_STATUS - 1] = "done";
+      rows[idx][COL_ERROR - 1] = "";
+      processed++;
+    }
+
+    // Write attendance marks to MAIN
+    try {
+      if (data.length) {
+        Sheets.Spreadsheets.Values.batchUpdate(
+          { data, valueInputOption: "RAW" },
+          CONFIG.SPREADSHEET_ID
+        );
+      }
+    } catch (err) {
+      const msg = "Batch update failed: " + String(err?.message || err);
+      for (const idx of pick) {
+        rows[idx][COL_STATUS - 1] = "error";
+        rows[idx][COL_ERROR - 1] = msg;
+      }
+    }
+
+    // Write back H:I in LOG spreadsheet
+    const startRow = 2;
+    for (const idx of pick) {
+      sh.getRange(startRow + idx, COL_STATUS, 1, 2).setValues([[
+        rows[idx][COL_STATUS - 1],
+        rows[idx][COL_ERROR - 1]
+      ]]);
+    }
+
+    return processed;
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+/* ===================== Column helpers ===================== */
+function colToLetter_(col) {
+  let s = "";
+  while (col > 0) {
+    const m = (col - 1) % 26;
+    s = String.fromCharCode(65 + m) + s;
+    col = (col - 1) / 26 | 0;
+  }
+  return s;
+}
+
+/* ===================== Triggers ===================== */
+const MINUTE_TRIGGER_FN = "processSheet1Batch";
+
+function hasMinuteTrigger_() {
+  return ScriptApp.getProjectTriggers().some(t =>
+    t.getHandlerFunction() === MINUTE_TRIGGER_FN &&
+    t.getEventType() === ScriptApp.EventType.CLOCK
+  );
+}
+function ensureMinuteTrigger_() {
+  if (!hasMinuteTrigger_()) {
+    ScriptApp.newTrigger(MINUTE_TRIGGER_FN).timeBased().everyMinutes(1).create();
+  }
+}
+function removeMinuteTriggers_() {
+  ScriptApp.getProjectTriggers().forEach(tr => {
+    if (tr.getHandlerFunction() === MINUTE_TRIGGER_FN) ScriptApp.deleteTrigger(tr);
+  });
+}
+
+function scheduleAmAddDaily() {
+  ScriptApp.newTrigger("amAddBatchTrigger").timeBased().atHour(5).everyDays(1).create();
+}
+function scheduleAmRemoveDaily() {
+  ScriptApp.newTrigger("amRemoveBatchTrigger").timeBased().atHour(8).everyDays(1).create();
+}
+function schedulePmAddDaily() {
+  ScriptApp.newTrigger("pmAddBatchTrigger").timeBased().atHour(11).everyDays(1).create();
+}
+function schedulePmRemoveDaily() {
+  ScriptApp.newTrigger("pmRemoveBatchTrigger").timeBased().atHour(14).everyDays(1).create();
+}
+
+function amAddBatchTrigger() { ensureMinuteTrigger_(); }
+function amRemoveBatchTrigger() { removeMinuteTriggers_(); }
+function pmAddBatchTrigger() { ensureMinuteTrigger_(); }
+function pmRemoveBatchTrigger() { removeMinuteTriggers_(); }
+
+function scheduleRosterIndexDaily() {
+  ScriptApp.newTrigger("rebuildRosterIndex").timeBased().atHour(5).nearMinute(30).everyDays(1).create();
+}
+
+/* ===================== Maintenance ===================== */
+function listAllTriggersLog() {
+  const all = ScriptApp.getProjectTriggers();
+  const lines = all.map(t => `${t.getUniqueId()}  ${t.getHandlerFunction()}  ${t.getEventType()}`);
+  Logger.log(lines.join("\n"));
+}
+function deleteAllMinuteTriggers() {
+  removeMinuteTriggers_();
+}

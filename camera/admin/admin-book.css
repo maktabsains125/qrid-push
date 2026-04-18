@@ -1,0 +1,505 @@
+:root{
+  --purple:#8f61a5;
+  --peach:#efc0a8;
+  --ink:#111;
+  --ink-invert:#fff;
+  --grey:#eeeeef;
+  --grey-deep:#c9c9c9;
+  --radius:16px;
+  --shadow:10px 10px 30px rgba(0,0,0,.35);
+
+  --slot1:#caa6dc;   /* shift 1 */
+  --slot2:#ffffff;   /* shift 2 */
+  --slot3:#efc0a8;   /* shift 3 */
+
+  --line:rgba(0,0,0,.12);
+  --muted:#666;
+  --focus:rgba(239,192,168,.45);
+}
+
+/* ===== Global reset ===== */
+*{ box-sizing:border-box }
+html,body{ height:100% }
+body{
+  margin:0;
+  background:var(--purple);
+  color:var(--ink-invert);
+  font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  min-height:100svh;
+}
+.page{
+  min-height:100svh;
+  display:flex;
+  flex-direction:column;
+  padding:16px 14px 24px;
+  max-width:1100px;
+  margin:0 auto;
+}
+
+/* ===== Header grid 10 / 90 / 10 ===== */
+.topgrid{
+  display:grid;
+  grid-template-columns:10% 1fr 10%;
+  align-items:center;
+  justify-items:center;
+  min-height:56px;
+}
+.title{
+  margin:0;
+  text-align:center;
+  justify-items:center;
+  color:#fff;
+  font-size:18px;
+  padding-left:10px;
+}
+.closeBtn{
+  appearance:none;
+  border:0;
+  background:transparent;
+  color:#fff;
+  font-size:28px;
+  line-height:1;
+  padding:2px 6px;
+  cursor:pointer;
+  -webkit-tap-highlight-color: transparent;
+  outline:none;
+}
+.closeBtn:focus,
+.closeBtn:active{
+  outline:none;
+  transform:none;
+}
+.col{ display:flex; align-items:center; width:100%; }
+.col--r{ justify-content:flex-end; }
+.col--l{ justify-content:flex-start; }
+
+/* ===== Subhead ===== */
+.subhead{
+  text-align:center;
+  margin:6px 0 10px;
+  font-size:15px;
+  color:#fff;
+  font-weight:600;
+}
+
+/* ===== Kebab ===== */
+.head-kebab{
+  width:100%; height:100%;
+  display:grid; place-items:center;
+  background:transparent;
+  border:none;
+  cursor:pointer;
+  color:#fff;
+  font-size:24px;
+  line-height:1;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.loadingMsg{
+  min-height:22px;
+  font-weight:600;
+  font-size:15px;
+  color:#fff;
+  margin:6px 0 10px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:6px;
+  text-align:center;
+}
+
+
+/* Dots animation block */
+.dotsBox{
+  display:inline-block;
+  width:34px;
+  text-align:left;
+}
+.dots{ display:inline-block; }
+.dots::after{
+  content:".";
+  animation:dots 1s steps(3,end) infinite;
+}
+@keyframes dots{
+  0%{ content:"."; }
+  33%{ content:".."; }
+  66%{ content:"..."; }
+  100%{ content:"."; }
+}
+
+/* Session cards */
+.sessionCards{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:10px;
+  margin:10px 0 12px;
+}
+.sessCard{
+  border:none;
+  border-radius:999px;
+  background:var(--peach);
+  box-shadow:var(--shadow);
+  padding:14px 12px;
+  cursor:pointer;
+  text-align:center;
+  color:var(--ink);
+}
+.sessCard:focus{ outline:3px solid var(--focus); outline-offset:2px; }
+.sessTitle{ font-weight:800; letter-spacing:.5px; }
+
+
+/* ==== CALCULATION & CONTROL CARDS ==== */
+.card{
+  background:var(--grey);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:12px;
+  margin:12px 0;
+  color:var(--ink);
+}
+
+.cardHead{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+  margin-bottom:10px;
+}
+.cardTitle{ font-weight:800; letter-spacing:.6px; }
+.cardSub{ font-size:12px; color:var(--muted); }
+
+/* Key/Value grid */
+.kvGrid{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:10px;
+}
+
+.kv{
+  display:grid;
+  grid-template-columns: 1fr auto;
+  gap:10px;
+  padding:10px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#fff;
+  color:var(--ink);
+}
+.k{ color:var(--muted); font-weight:700; font-size:14px; }
+.v{ font-weight:800; }
+
+/* Controls layout (inside ctrlCard) */
+.ctrlGrid{
+  display:grid;
+  grid-template-columns: 1fr;
+  gap:10px;
+}
+
+/* two columns on bigger screens */
+@media (min-width: 780px){
+  .ctrlGrid{
+    grid-template-columns: 1fr 1fr;
+    align-items:start;
+  }
+}
+
+/* Row blocks */
+.row{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  padding:10px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#fff;
+  color:var(--ink);
+  margin:0; /* grid controls spacing now */
+}
+
+/* Times rows (and anything else) full width */
+.row--wide{
+  grid-column: 1 / -1;
+}
+
+/* Inputs */
+.label{ 
+ font-weight:800;
+ font-size:14px;
+ }
+.select,
+.num,
+.time{
+  width:100%;
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:10px 12px;
+  font:inherit;
+  background:#fff;
+  color:var(--ink);
+}
+
+.select{
+  padding-right: 34px;  /* arrow sit more to the left */
+}
+
+.select:focus,
+.num:focus,
+.time:focus{
+  outline:3px solid var(--focus);
+  outline-offset:2px;
+}
+
+.timePair{
+  display:grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap:10px;
+  align-items:center;
+}
+.dash{ font-weight:800; color:var(--muted); text-align:center; }
+
+/* Divider */
+.divider{
+  height:1px;
+  background:rgba(0,0,0,.18);
+  margin:0;
+}
+.divider--wide{
+  grid-column: 1 / -1;
+  margin:6px 0;
+}
+
+/* Controls + Calculations: make 2nd column lighter */
+#calcCard .v,
+#ctrlCard .v{
+  font-weight:400;  
+}
+
+
+/* ===== CENTER STATUS ===== */
+.saveOverlay[hidden]{ display:none; }
+.saveOverlay{
+  position:fixed; inset:0;
+  display:grid; place-items:center;
+  background:rgba(0,0,0,.20);
+  z-index:10001;
+}
+.saveCard{
+  background:#111;
+  color:#fff;
+  padding:14px 16px;
+  border-radius:14px;
+  box-shadow:0 18px 40px rgba(0,0,0,.35);
+}
+.saveCardText{ font-weight:800; font-size:15px; }
+
+
+/*==== TALLY TABLE FOR TEACHERS ====*/
+.tableWrap{
+  overflow:auto;
+  border-radius:12px;
+  border:1px solid var(--line);
+  background:#fff;
+}
+table.grid{
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0;
+  min-width:900px;
+  font-size:13px;      
+  line-height:1.35;
+}
+.grid th,
+.grid td{
+  padding:8px 8px;
+  border-bottom:1px solid var(--line);
+  white-space:nowrap;
+  background:#fff;
+  color:var(--ink);
+  border-right: 1px solid #fff; /* white vertical separator */
+}
+.grid th{
+  position:sticky;
+  top:0;
+  z-index:2;
+  font-weight:800;
+}
+
+.grid th:last-child,
+.grid td:last-child{
+  border-right: 0;
+}
+
+
+.grid thead th{
+  background:#C8BFE7;
+}
+
+/* Center TOTAL BOOKINGS + month columns */
+.grid th:nth-child(n+3),
+.grid td:nth-child(n+3){
+  text-align:center;
+}
+
+.stickyCol{
+  position:sticky;
+  left:0;
+  z-index:3;
+}
+.fullname{ min-width:240px; }
+
+/* Row hover (ALL columns incl. sticky CODE) */
+.grid tbody tr:hover td{
+  background:#E4DCF6;
+}
+.grid tbody tr:hover td.stickyCol{
+  background:#E4DCF6 !important;
+}
+
+
+/* Month coloring helpers */
+.month-1{
+  font-weight:800;
+  background:rgba(202,166,220,.35);
+}
+.month-gt1{
+  font-weight:800;
+  background:rgba(239,192,168,.55);
+}
+
+/* Error */
+.gridError{
+  padding:16px;
+  font-weight:800;
+  color:var(--ink);
+}
+
+/* Keep first column body cells white */
+.grid tbody td.stickyCol{
+  background:#fff !important;
+  left:0;
+  z-index:5;            /* above normal body cells */
+}
+
+/* Let first column header follow normal header color */
+.grid thead th.stickyCol{
+  background:#C8BFE7;
+  left:0;
+  z-index:6;     /* above other header cells */ 
+}
+
+
+/* ===== TEACHER POP UP CARD ===== */
+.modal[hidden]{ display:none; }
+.modal{
+  position:fixed;
+  inset:0;
+  z-index:10000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.modal-dim{
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,.45);
+}
+
+.modal-card{
+  position:relative;
+  width:min(520px, calc(100vw - 28px));
+  background:#fff;
+  color:#111;
+  border-radius:16px;
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+
+/* Header: title centered, close button on right */
+.modal-head{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;         
+  padding:12px 14px;
+  border-bottom:1px solid #eee;
+  background:#C8BFE7;
+}
+
+/* Center the header text */
+.modal-title{
+  font-weight:700;
+  text-align:center;
+  width:100%;
+}
+
+/* Keep close button at top-right without affecting centering */
+.modal-close{
+  position:absolute;
+  right:14px;
+  top:50%;
+  transform:translateY(-50%);
+  border:0;
+  background:transparent;
+  font-size:18px;
+  cursor:pointer;
+}
+
+.modal-body{
+  padding:14px;
+  font-size:13px;
+}
+
+/* Rows: 2-column grid */
+.modal-body .kv{
+  display:grid;
+  grid-template-columns:140px 1fr; /* label + value */
+  gap:8px 10px;
+
+  border:0;
+  border-bottom:0;
+  border-radius:0;
+  background:transparent;
+  padding:6px 0;
+  align-items:center;
+}
+
+/* 1st col: left aligned */
+.modal-body .k{
+  font-weight:700;
+  color:#333;
+  text-align:left;
+}
+
+/* 2nd col: centered + not bold */
+.modal-body .v{
+  font-weight:400;
+  text-align:center;
+}
+
+/* Month cell highlights (if used these classes in modal content) */
+.month-1{
+  background:#fff6f1;   /* very very light peach */
+}
+.month-gt1{
+  background:#fff0e8;   /* light peach */
+}
+
+
+/* Small screens */
+@media (max-width:520px){
+  .sessionCards{ grid-template-columns:1fr; }
+  table.grid{ min-width:780px; }
+}
+
+.ctrlGrid{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:10px;
+  align-items:start;
+}
+
+/* Time rows stay full width*/
+.row--wide{
+  grid-column: 1 / -1;
+}
+

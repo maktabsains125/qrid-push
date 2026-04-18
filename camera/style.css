@@ -1,0 +1,406 @@
+/* ===== Theme (use shared tokens) ===== */
+:root{
+  --purple:#8f61a5;
+  --purple-dark:#7a4e91;
+  --panel:#e7e7e7;
+  --peach:#efc0a8;
+  --ink:#111;
+  --ink-invert:#fff;
+  --radius-xl:28px;
+  --shadow: 0 10px 30px rgba(0,0,0,.15);
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  background:linear-gradient(180deg, var(--purple) 0, var(--purple-dark) 100%);
+  color:var(--ink);
+  font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+}
+.app{min-height:100%; display:flex; flex-direction:column}
+
+/* ===== Header ===== */
+.top{
+  display: grid;
+  grid-template-columns: 1fr auto 1fr; /* [ left ] [ title ] [ right ] */
+  align-items: center;
+  padding: 12px 14px;
+  color: var(--ink-invert);
+}
+
+/* left area */
+.left{
+  grid-column: 1;
+  display:flex;
+  align-items:center;
+}
+
+.head-kebab{
+  width:36px; height:36px;
+  display:grid; place-items:center;
+  background:transparent;
+  border:none;
+  cursor:pointer;
+  color:#fff;
+  font-size:24px;
+  line-height:1;
+  -webkit-tap-highlight-color: transparent;
+}
+
+
+/* right area: X button container */
+.right{
+  grid-column: 3;
+  justify-self: end;
+  display: flex;
+  align-items: center;
+}
+
+/* Title: centred in the middle column */
+.title{
+  grid-column: 2;
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: .4px;
+  line-height: 1.2;
+  text-align: center;
+}
+
+/* ===== Exit (X) Button ===== */
+#exitBtn {
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #fff;
+  padding: 0;
+}
+
+#exitBtn svg {
+  width: 26px;
+  height: 26px;
+}
+
+#exitBtn:active {
+  transform: scale(0.96);
+}
+
+.actions {
+  display: flex;
+  gap: 20px;
+  padding: 14px 16px;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn {
+  flex: 1;                    /* each button takes equal space */
+  height: 44px;
+  border-radius: 999px;
+  border: none;
+  background: #E8C2AB;
+  color: black;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+}
+
+.clockBtn {
+  color: white;
+  background: black;
+}
+
+/* ===== Windows block ===== */
+.windows{
+  margin:0 12px; background:#eaeaea; padding:14px; border-radius:20px; box-shadow: var(--shadow);
+}
+.windowsTitle{margin:0 0 10px 4px; font-size:12px; opacity:.9}
+.windowGrid {
+  background: #fff;
+  border-radius: 16px;
+  padding: 12px;
+  box-shadow: var(--shadow);
+}
+.winCardGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+
+}
+.winCard {
+  background: #fff;
+  border-radius: 16px;
+  padding: 5px;
+  text-align: center;
+}
+
+.winTime{font-weight:400; margin-bottom:6px; font-size:10px;}
+.build{margin-top:10px; font-size:10px; opacity:.6}
+
+/* ===== Live status & result card ===== */
+.status{
+  margin:14px 12px 0; background:#fff; border-radius:16px; padding:12px 14px;
+  box-shadow: var(--shadow); font-weight:700;
+}
+.hidden{display:none}
+.card{
+  margin:14px 12px 16px; background:#fff; border-radius:18px; padding:10px 14px;
+  box-shadow: var(--shadow);
+}
+.row{display:grid; grid-template-columns: 1fr 1fr; align-items:center; gap:8px; padding:8px 0; border-bottom:1px solid #eee}
+.row:last-child{border-bottom:none}
+.label{opacity:.7}
+.value{justify-self:end}
+.value.bold{font-weight:900; justify-self:start}
+.cardActions{display:flex; justify-content:center; padding-top:8px}
+
+.closeCard {
+  color: white;
+  background: black;
+}
+
+/* Camera-only card actions */
+.cardActionsCamera{
+  display: flex;
+  gap: 12px;
+  padding-top: 10px;
+}
+
+.cardActionsCamera .btn{
+  flex: 1;
+}
+
+/* Close = black */
+.cardActionsCamera .closeCard{
+  background: #000;
+  color: #fff;
+}
+
+/* Next = peach */
+.cardActionsCamera .nextBtn{
+  background: #E8C2AB;
+  color: #000;
+}
+
+
+
+/* ===== Camera dialog ===== */
+.camDlg{border:none; padding:0; width:min(640px,96vw); border-radius:18px; box-shadow: var(--shadow)}
+.camDlg::backdrop{background:rgba(0,0,0,.55)}
+.camHead{display:flex; align-items:center; justify-content:space-between; padding:10px 12px; background:#fff; border-radius:18px 18px 0 0}
+.camTitle{font-weight:800}
+.camBody{background:#000}
+#preview{width:100%; height:auto; display:block}
+
+/* ===== Footer spacer ===== */
+.bottom{height:24px}
+
+/* Stack “AM/PM” on small screens */
+@media (max-width:420px){
+  .windowGrid{grid-template-columns:1fr}
+}
+
+/* ===== Form controls theme (dropdown + text field) ===== */
+.formCard select,
+.formCard input[type="text"] {
+  width: 100%;
+  height: 48px;
+  border-radius: 16px;
+  padding: 0 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  background: #fff;
+  box-shadow: var(--shadow);
+  display: block;
+}
+
+/* ===== Form controls theme (dropdown + text field) ===== */
+.formCard select,
+.formCard input[type="text"],
+.comboInput {
+  width: 100%;
+  height: 48px;
+  border-radius: 16px;
+  padding: 0 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  background: #fff;
+  box-shadow: var(--shadow);
+  display: block;
+}
+
+/* ===== Themed Combobox ===== */
+.combo {
+  position: relative;
+  overflow: visible;
+  z-index: 5;
+}
+
+.comboInput {
+  width: 100%;
+  height: 48px;
+  border-radius: 16px;
+  padding: 0 42px 0 12px; /* right space for caret */
+  font-size: 16px;
+  border: 1px solid #ccc;
+  background: #fff;
+  box-shadow: var(--shadow);
+  display: block;
+}
+
+.comboCaret {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 32px;
+  min-width: 32px;
+  border: 0;
+  background: transparent;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  z-index: 2;
+}
+
+.comboCaret:active {
+  transform: translateY(-50%) scale(.98);
+}
+
+.comboList {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  margin: 6px 0 0;
+  padding: 6px;
+  list-style: none;
+  background: #fff;
+  border: 1px solid #e6e6e6;
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  max-height: 44vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: none;
+  font-size: 12px;
+  line-height: 1.25;
+}
+
+.comboList.open {
+  display: block;
+}
+
+.comboOption {
+  padding: 8px 10px;
+  min-height: 36px;
+  border-radius: 10px;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.comboOption:hover {
+  background: #f5f5f5;
+}
+
+.comboOption.active {
+  background: #eedfd7;
+  outline: 2px solid #efc0a8;
+}
+
+@media (max-width: 380px){
+  .comboList {
+    font-size: 12px;
+  }
+
+  .comboOption {
+    padding: 6px 10px;
+    min-height: 32px;
+  }
+}
+
+/* ==== slower wifi ==== */
+
+.note {
+  text-align: center;
+  margin: 8px 0 12px 0;
+}
+
+.note .info {
+  color: #ffffff;
+  font-size: 13px;
+  font-style: italic;
+  font-weight: bold;
+}
+
+/* ===== Legal footer (use on pages that trigger OAuth, e.g., Camera) ===== */
+.legal{
+  margin-top: 14px;
+  padding: 10px 14px 18px;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  font-size: 12px;
+  color: rgba(255,255,255,.85);
+  opacity: .9;
+}
+.legal a{
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.legal a:focus,
+.legal a:hover{ text-decoration-thickness: 2px; }
+
+/* Keep page structure consistent to device bottom safe area */
+.bottom{
+  height: env(safe-area-inset-bottom, 0);
+}
+
+/* Optional: ensure .app fills the viewport neatly with footers */
+html, body { height: 100%; }
+.app{
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.app > .bottom,
+.app > .legal{ flex: 0 0 auto; }
+
+/* Utility: hide/show status */
+.hidden{ display: none !important; }
+
+/* ===== Hardware QR scanner block ===== */
+.scanner{
+  margin: 8px 12px 8px;
+}
+.scannerTitle{
+  margin: 0px 0 6px 4px;
+  font-size: 12px;
+  opacity: .9;
+}
+.scannerInner{
+  background:#fff;
+  border-radius:10px;
+  box-shadow:var(--shadow);
+  padding:4px 10px;
+}
+#scannerInput{
+  width:100%;
+  border:0;
+  outline:none;
+  background:transparent;
+  font-size:14px;
+  text-align: center;
+  line-height:1.4;
+  color: var(--ink);
+}
