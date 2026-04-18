@@ -257,8 +257,12 @@
   }
 
   async function enablePushNotifications() {
-    if (!("Notification" in window)) throw new Error("Notifications are not supported on this device.");
-    if (!("PushManager" in window)) throw new Error("Push notifications are not supported on this device.");
+    if (!("Notification" in window)) {
+      throw new Error("Notifications are not supported on this device/browser.");
+    }
+    if (!("PushManager" in window)) {
+      throw new Error("Push notifications are not available in this browser view. Open the app in the main browser or from Home Screen.");
+    }
 
     const reg = await ensureServiceWorker();
 
@@ -287,19 +291,38 @@
   function showPushCardIfNeeded() {
     if (!pushCard) return;
     if (localStorage.getItem(PUSH_STATE_KEY) === "1") return;
-    if (!("Notification" in window)) return;
-    if (Notification.permission === "granted") return;
 
-    // iPhone/iPad: show card first, even if PushManager is not available yet
+    const hasNotification = ("Notification" in window);
+    const hasSW = ("serviceWorker" in navigator);
+    const hasPushManager = ("PushManager" in window);
+
+    if (hasNotification && Notification.permission === "granted") return;
+
+    // iPhone/iPad not opened from Home Screen
     if (isIosLike() && !isStandalonePwa()) {
       pushCardText.textContent =
-        "To receive notifications on iPhone/iPad, add this app to Home Screen first, open it from Home Screen, then enable notifications.";
+        "To receive notifications on iPhone/iPad, add this app to Home Screen first, then open it from Home Screen.";
       pushCard.hidden = false;
       return;
     }
 
-    if (!("serviceWorker" in navigator) || !("PushManager" in window)) return;
+    // Browser does not support notifications at all
+    if (!hasNotification) {
+      pushCardText.textContent =
+        "This phone/browser does not support notifications here. Try opening the app in Chrome or Safari, or install it to Home Screen.";
+      pushCard.hidden = false;
+      return;
+    }
 
+    // Browser supports notifications but not push/service worker
+    if (!hasSW || !hasPushManager) {
+      pushCardText.textContent =
+        "Notifications are not available in this browser view. Open this app in the main browser or from Home Screen.";
+      pushCard.hidden = false;
+      return;
+    }
+
+    // Normal supported case
     pushCardText.textContent =
       "Get a reminder on the day when there is a greeting duty.";
     pushCard.hidden = false;
@@ -389,9 +412,7 @@
     shownRows.forEach((r, idx)=>{
       const day = String(r.day || "").trim().toUpperCase();
 
-      if (idx === 0) {
-        // first row starts week 1
-      } else if (day === "MON" && wk.length) {
+      if (idx !== 0 && day === "MON" && wk.length) {
         pushWeek();
       }
 
@@ -446,7 +467,7 @@
   // ===== Render ONLY selected week =====
   function renderWeek(){
     calGrid.innerHTML = "";
-	
+    
     const gateHeaderRow = document.createElement("div");
     gateHeaderRow.className = "gateHeaderRow";
 
@@ -495,7 +516,7 @@
           const shiftRow = document.createElement("div");
           shiftRow.className = "shiftRow";
 
-          const n = (shift === 1 ? slotCounts.s1 : shift === 2 ? slotCounts.s2 : slotCounts.s3);
+          const n = (shift === 1 ? slotCounts.s1 : shift === 2 ? slotCounts.s2 : shift === 3 ? slotCounts.s3 : 1);
           shiftRow.style.gridTemplateColumns = `repeat(3, minmax(0,1fr))`;
 
           const allCols = SLOT_MAP[gate][shift];
@@ -536,10 +557,6 @@
 
       calGrid.appendChild(row);
     });
-  }
-
-  function cleanSlotValue(v){
-    return String(v || "").trim().toUpperCase();
   }
 
   // ===== Slot interactions =====
@@ -691,7 +708,6 @@
       return;
     }
 
-    // ===== Show push card as early as possible =====
     try { await ensureServiceWorker(); } catch (_) {}
     showPushCardIfNeeded();
 
@@ -798,7 +814,7 @@
     localStorage.setItem(PUSH_STATE_KEY, "1");
     pushCard.hidden = true;
   });
-  
+
   // ===== Start =====
   loadInit().catch(err => {
     console.error(err);
