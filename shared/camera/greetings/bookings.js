@@ -38,6 +38,7 @@
 
   // ===== API =====
   const API = "/.netlify/functions/bookings-netlify";
+  const PUSH_API = "/.netlify/functions/push-subscribe";
 
   // ===== DOM =====
   const pageTitle = document.getElementById("pageTitle");
@@ -107,6 +108,7 @@
   // ===== Push notifications =====
   const PUSH_PUBLIC_KEY = "BIjJvyTjSAwpqPNrMiczDwHUQ8T0v_-ITLvPPMTTPv-mq9Eg0Q79kaJkCFqK1vxmoMOjovQ3GNasnPwYKbWqIvo";
   const PUSH_SW_URL = "/sw.js";
+  const PUSH_LINK_KEY_PREFIX = "greet_push_linked_";
 
   // ===== State =====
   let who = null;
@@ -204,6 +206,25 @@
     return String(sess?.code || sess?.uid || "").trim().toUpperCase();
   }
 
+  function getPushLinkKey() {
+    return `${PUSH_LINK_KEY_PREFIX}${userCode || ""}`;
+  }
+
+  function getLocalPushLinked() {
+    try {
+      return localStorage.getItem(getPushLinkKey()) === "1";
+    } catch (_) {
+      return false;
+    }
+  }
+
+  function setLocalPushLinked(v) {
+    try {
+      if (v) localStorage.setItem(getPushLinkKey(), "1");
+      else localStorage.removeItem(getPushLinkKey());
+    } catch (_) {}
+  }
+
   async function apiGet(params) {
     const url = `${API}?${new URLSearchParams(params).toString()}`;
     const res = await fetch(url, { method: "GET" });
@@ -279,17 +300,55 @@
   }
 
   async function savePushSubscription(subscription) {
-    const res = await fetch("/.netlify/functions/push-subscribe", {
+    const res = await fetch(PUSH_API, {
       method: "POST",
       headers: { "Content-Type":"application/json" },
       body: JSON.stringify({
+        mode: "savePushSubscription",
         code: userCode,
         subscription
       })
     });
 
-    const data = await res.json();
-    if (!res.ok || !data.ok) throw new Error(data.error || "Failed to save subscription");
+    const text = await res.text();
+    let data = null;
+
+    try {
+      data = JSON.parse(text);
+    } catch {
+      throw new Error("Bad JSON from push save endpoint");
+    }
+
+    if (!res.ok || !data.ok) {
+      throw new Error((data && data.error) || "Failed to save subscription");
+    }
+
+    return data;
+  }
+
+  async function checkPushSubscription() {
+    const res = await fetch(PUSH_API, {
+      method: "POST",
+      headers: { "Content-Type":"application/json" },
+      body: JSON.stringify({
+        mode: "checkPushSubscription",
+        code: userCode
+      })
+    });
+
+    const text = await res.text();
+    let data = null;
+
+    try {
+      data = JSON.parse(text);
+    } catch {
+      return { ok: false, saved: false, active: false };
+    }
+
+    if (!res.ok || !data.ok) {
+      return { ok: false, saved: false, active: false };
+    }
+
     return data;
   }
 
@@ -306,12 +365,6 @@
       pushEnableBtn.textContent = buttonLabel || "Enable notifications";
       pushEnableBtn.disabled = !!buttonDisabled;
     }
-  }
-
-  async function getExistingPushSubscription() {
-    const reg = await navigator.serviceWorker.getRegistration();
-    if (!reg) return null;
-    return reg.pushManager.getSubscription();
   }
 
   async function refreshPushCard() {
@@ -349,36 +402,61 @@
     }
 
     if (Notification.permission === "denied") {
+      setLocalPushLinked(false);
       setPushCardState({
-        text: "Notifications are blocked for this app. Please allow notifications in browser/app settings, then return here.",
+        text: "Notifications are blocked in browser/site settings. Please allow them there first, then return here.",
         buttonLabel: "Blocked",
         buttonDisabled: false
       });
       return;
     }
 
+    let existingSub = null;
     try {
       const reg = await ensureServiceWorker();
-      const existingSub = await reg.pushManager.getSubscription();
+      existingSub = await reg.pushManager.getSubscription();
+    } catch (_) {
+      existingSub = null;
+    }
 
-      if (Notification.permission === "granted" && existingSub) {
-        setPushCardState({
-          text: "Notifications are enabled for greeting duty reminders.",
-          buttonLabel: "On",
-          buttonDisabled: true
-        });
-        return;
-      }
+    let serverSaved = false;
+    try {
+      const check = await checkPushSubscription();
+      serverSaved = !!(check && check.saved && check.active);
+      if (serverSaved) setLocalPushLinked(true);
+    } catch (_) {
+      serverSaved = false;
+    }
 
-      if (Notification.permission === "granted" && !existingSub) {
-        setPushCardState({
-          text: "Notifications are allowed on this browser. Press Enable notifications to turn on greeting duty reminders for this app.",
-          buttonLabel: "Enable notifications",
-          buttonDisabled: false
-        });
-        return;
-      }
-    } catch (_) {}
+    const localLinked = getLocalPushLinked();
+    const linked = serverSaved || localLinked;
+
+    if (Notification.permission === "granted" && existingSub && linked) {
+      setPushCardState({
+        text: "Notifications are enabled for greeting duty reminders.",
+        buttonLabel: "On",
+        buttonDisabled: true
+      });
+      return;
+    }
+
+    if (Notification.permission === "granted" && existingSub && !linked) {
+      setPushCardState({
+        text: "Notifications are allowed on this device, but greeting duty reminders are not linked yet. Press Enable notifications.",
+        buttonLabel: "Enable notifications",
+        buttonDisabled: false
+      });
+      return;
+    }
+
+    if (Notification.permission === "granted" && !existingSub) {
+      setPushCardState({
+        text: "Notifications are allowed on this device. Press Enable notifications to turn on greeting duty reminders for this app.",
+        buttonLabel: "Enable notifications",
+        buttonDisabled: false
+      });
+      return;
+    }
 
     setPushCardState({
       text: "Get a reminder on the day when there is a greeting duty.",
@@ -407,7 +485,7 @@
     let permission = Notification.permission;
 
     if (permission === "denied") {
-      throw new Error("Notifications were blocked before. Please enable them in browser/app settings.");
+      throw new Error("Notifications were blocked before. Please enable them in browser/site settings first.");
     }
 
     if (permission === "default") {
@@ -429,6 +507,8 @@
     }
 
     await savePushSubscription(sub.toJSON());
+    setLocalPushLinked(true);
+
     await refreshPushCard();
     showPopup("Notifications enabled.");
   }
@@ -521,9 +601,7 @@
     shownRows.forEach((r, idx) => {
       const day = String(r.day || "").trim().toUpperCase();
 
-      if (idx === 0) {
-        // first row starts week 1
-      } else if (day === "MON" && wk.length) {
+      if (idx !== 0 && day === "MON" && wk.length) {
         pushWeek();
       }
 
