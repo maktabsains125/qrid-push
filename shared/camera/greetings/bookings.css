@@ -425,6 +425,7 @@ body{
   font-weight:900;
   text-align:center
   margin:0 0 8px;
+  padding-bottom: 20px;
 }
 
 .pushCardText{
@@ -442,6 +443,9 @@ body{
 }
 
 .pushBtn{
+  appearance:none;
+  border:none;        
+  outline:none;      
   flex:1;                
   max-width:220px;        
   height:44px;
@@ -454,7 +458,6 @@ body{
   box-shadow:0 6px 12px rgba(0,0,0,.15);
   text-align:center;
 }
-
 .pushBtn--ghost{
   background:#ececef;
   color:#111;
