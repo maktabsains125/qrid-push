@@ -315,7 +315,27 @@
     const hasSW = ("serviceWorker" in navigator);
     const hasPushManager = ("PushManager" in window);
 
-    if (hasNotification && Notification.permission === "granted") {
+    async function refreshPushCard() {
+  if (!pushCard) return;
+
+  const hasNotification = ("Notification" in window);
+  const hasSW = ("serviceWorker" in navigator);
+  const hasPushManager = ("PushManager" in window);
+
+  if (!hasNotification || !hasSW || !hasPushManager) {
+    setPushCardState({
+      text: "Notifications may not be supported on this device.",
+      buttonLabel: "Enable notifications",
+      buttonDisabled: false
+    });
+    return;
+  }
+
+  try {
+    const reg = await navigator.serviceWorker.getRegistration();
+    const sub = reg ? await reg.pushManager.getSubscription() : null;
+
+    if (Notification.permission === "granted" && sub) {
       setPushCardState({
         text: "Notifications are enabled for greeting duty reminders.",
         buttonLabel: "On",
@@ -323,6 +343,16 @@
       });
       return;
     }
+
+  } catch (_) {}
+
+  // default state
+  setPushCardState({
+    text: "Get a reminder on the day when there is a greeting duty.",
+    buttonLabel: "Enable notifications",
+    buttonDisabled: false
+  });
+}
 
     if (isIosLike() && !isStandalonePwa()) {
       setPushCardState({
