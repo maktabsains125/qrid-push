@@ -1,0 +1,288 @@
+<!-- user.html — USER CONTROLS -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+  <meta name="theme-color" content="#8f61a5"/>
+  <title>USER CONTROLS</title>
+
+  <!-- Prevent “glimpse” -->
+  <style>html{visibility:hidden;}</style>
+
+  <!-- Shared styles -->
+  <link rel="stylesheet" href="/shared/attendance/style.css">
+  <link rel="stylesheet" href="/shared/stylesheet/left-kebab.css">
+  <link rel="stylesheet" href="./user.css">
+
+  <!-- Material Symbols: radio icons (for kebab consistency) -->
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=radio_button_checked,radio_button_unchecked"/>
+
+  <style>
+    .material-symbols-outlined{
+      font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;
+    }
+  </style>
+
+  <!-- JS (order matters) -->
+  <script src="/auth.js"></script>
+  <script src="/shared/attendance/reports/kebab.js"></script>
+  <script>
+    /* 🔐 HARD GUARD — blocks direct URL access */
+    LeftKebab.guard({ key:"userControl", redirectTo:"/shared/attendance/reports/reports.html" });
+    /* ✅ Reveal ONLY if guard passed */
+    document.documentElement.style.visibility = "visible";
+  </script>
+
+  <script src="./user.js" defer></script>
+</head>
+
+<body class="page">
+
+  <!-- ===== Header ===== -->
+  <header class="topgrid" role="banner">
+    <div class="col col--l">
+      <button id="kebabBtn" class="kebab-btn" type="button" aria-label="Open menu">⋮</button>
+    </div>
+
+    <div class="col col--c">
+      <h1 class="title"><span id="yy"></span>USER CONTROLS</h1>
+    </div>
+
+    <div class="col col--r">
+      <button id="btnClose" class="closeBtn" aria-label="Return to dashboard" type="button">×</button>
+    </div>
+  </header>
+
+  <!-- ===== EDIT CURRENT USER ===== -->
+  <section class="card card--form" aria-label="Edit current user">
+  
+   <div class="title" style="color:#111; text-align:left;">Edit current user</div>
+  
+    <div class="logWrap" aria-live="polite">
+
+  <div id="statusInfo" class="statusInfo">
+    Password request is limited to twice per day to avoid spam. 
+	<br>Click edit&gt;clear tally to reset request to 0.<br>
+  </div>
+
+  <div class="statusRow">
+    <div id="statusText" class="statusText">Please wait</div>
+    <div class="dotsBox"><span id="statusDots">...</span></div>
+  </div>
+
+  <pre id="logBox" class="log"></pre>
+</div>
+
+
+
+    <!-- User code combobox -->
+    <div class="field combo">
+      <div class="label">User code</div>
+
+      <input id="codeInput"
+             class="input"
+             type="text"
+             autocomplete="off"
+             placeholder="Select user code"
+             role="combobox"
+             aria-autocomplete="list"
+             aria-expanded="false"
+             aria-controls="codeList" />
+
+      <div id="codeList" class="comboList" role="listbox" hidden></div>
+
+      <div class="hint">Start typing to filter, then click a code.</div>
+    </div>
+
+    <div class="field">
+      <div class="label">Full name</div>
+      <input id="fullName" class="input upper" type="text" placeholder="FULL NAME" disabled>
+    </div>
+	
+	<div class="field">
+  	  <div class="label">Mobile phone</div>
+  	  <div class="phoneWrap">
+        <span class="phonePrefix">+673</span>
+        <input id="phone" class="phoneInput" type="text" inputmode="numeric" maxlength="7" placeholder="7 digits" disabled>
+  	  </div>
+	</div>
+
+    <div class="row2col">
+      <div class="col">
+        <div class="field">
+          <div class="label">Password received</div>
+          <label class="radioOpt" style="gap:10px;">
+            <input id="received" type="checkbox" disabled>
+            <span>Received</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="field">
+          <div class="label">Session</div>
+          <div class="radioRow">
+            <label class="radioOpt">
+              <input type="radio" name="session" id="sessAM" value="AM" disabled>
+              <span>AM</span>
+            </label>
+            <label class="radioOpt">
+              <input type="radio" name="session" id="sessPM" value="PM" disabled>
+              <span>PM</span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<div class="row2col">
+  <div class="col">
+    <div class="field">
+      <div class="label">Email</div>
+      <input id="email" class="input" type="text" placeholder="username" disabled>
+    </div>
+  </div>
+
+  <div class="col">
+  <div class="field combo">
+    <div class="label">Email domain</div>
+
+    <input id="emailDomain"
+           class="input"
+           type="text"
+           autocomplete="off"
+           placeholder="@"
+           disabled>
+
+    <div id="emailDomainList" class="comboList" role="listbox" hidden>
+      <div class="comboItem" role="option" data-value="@teacher.maktabsains.edu.moe.bn">@teacher.maktabsains.edu.moe.bn</div>
+      <div class="comboItem" role="option" data-value="@maktabsains.edu.moe.bn">@maktabsains.edu.moe.bn</div>
+    </div>
+  </div>
+ </div>
+</div>
+ 
+    <div class="row2col">
+      <div class="col">
+        <div class="field">
+          <div class="label">Password token tally</div>
+          <input id="tally" class="input" type="text" placeholder="0" disabled>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="field">
+          <div class="label">&nbsp;</div>
+          <button id="btnClearTally" class="btn" type="button" disabled>Clear tally</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="btnRow">
+      <button id="btnEdit" class="btn" type="button" disabled>Edit</button>
+      <button id="btnSave" class="btn" type="button" disabled>Save</button>
+    </div>
+
+    <div class="mutedNote" id="note"></div>
+  </section>
+
+<!-- ===== KEBAB OVERLAY ===== -->
+    <div id="kebabOverlay" class="overlay" hidden>
+      <div class="overlay-dim" id="overlayDim" aria-hidden="true"></div>
+
+      <aside class="overlay-panel" role="dialog" aria-modal="true" aria-label="Data Control">
+        <div class="panel-head">
+          <div class="panel-title">Data Control</div>
+          <button class="panel-close"
+                  id="kebabClose"
+                  type="button"
+                  aria-label="Close menu">✕</button>
+        </div>
+
+        <nav class="panel-list" aria-label="Attendance tools">
+
+          <div class="panel-row kebab-row" data-key="archive">
+            <button class="radioToggle" type="button" data-for="archiveLink">
+              <span class="material-symbols-outlined radioIcon">radio_button_unchecked</span>
+            </button>
+            <a class="panel-item" id="archiveLink" href="/shared/attendance/archive/archive.html">
+              Archive data
+            </a>
+          </div>
+
+          <div class="panel-row kebab-row" data-key="basicNames">
+            <button class="radioToggle" type="button" data-for="basicNamesLink">
+              <span class="material-symbols-outlined radioIcon">radio_button_unchecked</span>
+            </button>
+            <a class="panel-item" id="basicNamesLink" href="/shared/attendance/basic-names/index.html">
+              Annual daily reports
+            </a>
+          </div>
+
+          <div class="panel-row kebab-row" data-key="addCls">
+            <button class="radioToggle" type="button" data-for="addClsLink">
+              <span class="material-symbols-outlined radioIcon">radio_button_unchecked</span>
+            </button>
+            <a class="panel-item" id="addClsLink" href="/shared/attendance/add-cls/add-cls.html">
+              Add cls to database
+            </a>
+          </div>
+		  
+		  <div class="panel-row kebab-row" data-key="massChange">
+            <button class="radioToggle" type="button" data-for="masschangeLink">
+              <span class="material-symbols-outlined radioIcon">radio_button_unchecked</span>
+            </button>
+            <a class="panel-item" id="masschangeLink" href="/shared/attendance/mass-change/mass-change.html">
+              Change reports
+            </a>
+          </div>
+
+          <div class="panel-row kebab-row" data-key="autocopy">
+            <button class="radioToggle" type="button" data-for="autocopyLink">
+              <span class="material-symbols-outlined radioIcon">radio_button_unchecked</span>
+            </button>
+            <a class="panel-item" id="autocopyLink" href="/shared/attendance/autocopy/autocopy.html">
+              Autocopy dates
+            </a>
+          </div>
+		  
+		  <div class="panel-row kebab-row" data-key="holiday">
+            <button class="radioToggle" type="button" data-for="holidayLink">
+              <span class="material-symbols-outlined radioIcon">radio_button_unchecked</span>
+            </button>
+            <a class="panel-item" id="holidayLink" href="/shared/attendance/holiday/holiday.html">
+              Holiday dates
+            </a>
+          </div>
+		  
+		  <div class="panel-row kebab-row" data-key="userControl">
+            <button class="radioToggle" type="button" data-for="userLink">
+              <span class="material-symbols-outlined radioIcon">radio_button_unchecked</span>
+            </button>
+            <a class="panel-item" id="userLink" href="/shared/attendance/user/user.html">
+              User controls
+            </a>
+          </div>
+
+          <div class="panel-row kebab-row" data-key="manual">
+            <button class="radioToggle" type="button" data-for="manualLink">
+              <span class="material-symbols-outlined radioIcon">radio_button_unchecked</span>
+            </button>
+            <a class="panel-item" id="manualLink"
+               href="https://docs.google.com/document/d/14OQwpafrM10KgmatFP08GkvNc3W8kUN29bClifCz9tI/edit?usp=drive_link"
+               target="_blank" rel="noopener">
+              Regis manual
+            </a>
+          </div>
+
+        </nav>
+      </aside>
+    </div>
+	
+  <!-- ===== END OF KEBAB OVERLAY ===== -->
+
+</body>
+</html>

@@ -1,0 +1,342 @@
+:root{
+  --purple:#8f61a5;
+  --peach:#efc0a8;
+  --ink:#111;
+  --ink-invert:#fff;
+  --grey:#eeeeef;
+  --grey-deep:#c9c9c9;
+  --radius:16px;
+  --shadow:0 10px 30px rgba(0,0,0,.12);
+
+  --head-h:64px;
+  --title-size:26px;s
+}
+
+/* Base */
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  background:var(--purple);
+  color:var(--ink-invert);
+  font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  min-height:100svh;
+}
+.page{
+  min-height:100svh;
+  display:flex;
+  flex-direction:column;
+  padding:18px 14px 14px;
+}
+
+/* Header 5% 90% 5% */
+.head{
+  display:grid;
+  grid-template-columns: 5% 90% 5%;
+  align-items:center;
+  justify-items:center;
+  min-height:var(--head-h);
+}
+.head-title{
+  margin:0;
+  font-size:var(--title-size);
+  text-align:center;
+  color:#fff;
+}
+
+/* Left vertical kebab */
+.head-kebab{
+  width:100%;
+  height:100%;
+  display:grid;
+  place-items:center;
+  background:transparent;
+  border:none;
+  cursor:pointer;
+  color:#fff;
+  font-size:24px;
+  line-height:1;
+}
+
+/* Right X */
+.head-x{
+  width:100%;
+  height:100%;
+  display:grid;
+  place-items:center;
+}
+.head-x svg{
+  width:26px;
+  height:26px;
+  fill:#fff;
+}
+
+/* Subhead + status */
+.subhead{
+  text-align:center;
+  margin:6px 0 10px;
+  font-size:15px;
+  color:#fff;
+}
+
+/* Status row (centered, with animated dots) */
+.centerStatus{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:6px 0 10px;
+  font-size:13px;
+  color:#fff;
+}
+
+/* Optional wrapper around message + dots */
+.statusText{}
+
+/* Dots: fixed width so text doesn't shift */
+.centerStatus .dots{
+  display:inline-block;
+  width:3ch;                 /* space for up to "..." */
+  text-align:left;
+  vertical-align:bottom;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Courier New", monospace;
+  font-kerning:none;
+  font-variant-ligatures:none;
+  letter-spacing:0;
+}
+
+/* 3-dot animation using content frames */
+.centerStatus .dots::after{
+  content:"";
+  animation:dots-step 1.2s steps(4, end) infinite;
+}
+
+@keyframes dots-step{
+  0%   { content:"";   }
+  25%  { content:".";  }
+  50%  { content:".."; }
+  100% { content:"..."; }
+}
+
+/* Grey container */
+.card{
+  background:var(--grey);
+  color:var(--ink);
+  border-radius:var(--radius);
+  padding:10px 4px;
+  box-shadow:var(--shadow);
+  min-height:200px;
+}
+.tableWrap{
+  overflow:auto;
+  max-height:calc(100svh - 220px);
+  border-radius:calc(var(--radius) - 2px);
+  position:relative;
+}
+
+/* Render error box (inside card) */
+.gridError{
+  position:absolute;
+  inset:10px 8px auto 8px;
+  background:#fff3f3;
+  color:#9b1c1c;
+  border:1px solid #f1c7c7;
+  border-radius:12px;
+  padding:10px 12px;
+  font-size:13px;
+}
+
+/* Table */
+.grid{
+  border-collapse:separate;
+  border-spacing:0;
+  width:max-content;
+  min-width:100%;
+  background:#fff;
+  color:#111;
+  font-size:14px;
+}
+
+/* Center all table text by default */
+.grid th,
+.grid td{
+  padding:8px 10px;
+  border-bottom:1px solid #e9e9ee;
+  border-right:1px solid #f1f1f4;
+  white-space:nowrap;
+  text-align:center;
+}
+
+/* Column F should NOT be centered (it's col 2 in displayed E..R range) */
+.grid th:nth-child(2),
+.grid td:nth-child(2){
+  text-align:left;
+}
+
+/* Two sticky header rows (light purple) */
+.grid thead th{
+  position:sticky;
+  top:0;
+  z-index:2;
+  background:#C8BFE7;
+  color:#111;
+  font-weight:600;
+  border-bottom:1px solid #bbb4d6;
+}
+.grid thead tr:nth-child(2) th{
+  top:32px;
+}
+
+/* Sticky Column G (3rd col within E..R) pinned left */
+.grid th:nth-child(3),
+.grid td:nth-child(3){
+  position:sticky;
+  left:0;
+  z-index:1;
+  background:#fff;
+  box-shadow:2px 0 0 #f1f1f4;
+}
+.grid thead th:nth-child(3){
+  z-index:3;
+  background:#C8BFE7;
+}
+
+/* ===== Left-side panel + dark right overlay ===== */
+.overlay[hidden]{ display:none; }
+.overlay{
+  position:fixed;
+  inset:0;
+  display:flex;
+  pointer-events:auto;
+  z-index:9999;
+}
+
+/* Right side becomes dim overlay */
+.overlay-dim{
+  flex:1 1 50%;
+  background:rgba(0,0,0,.40);
+  cursor:pointer;
+}
+
+/* Left panel */
+.overlay-panel{
+  flex:1 1 50%;
+  max-width:50vw;
+  background:#fff;
+  color:#111;
+  display:flex;
+  flex-direction:column;
+  box-shadow:12px 0 30px rgba(0,0,0,.35);
+  order:-1;
+}
+
+.panel-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:14px 16px;
+  border-bottom:1px solid #eee;
+}
+.panel-title{ font-weight:600; }
+.panel-close{
+  border:none;
+  background:transparent;
+  font-size:18px;
+  cursor:pointer;
+}
+
+.panel-list{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  padding:16px;
+}
+
+.panel-item{
+  padding:12px 14px;
+  border-radius:10px;
+  border:1px solid #e6e6ef;
+  background:#f7f7fb;
+  cursor:pointer;
+  text-align:center;
+  font-size:15px;
+}
+.panel-item:hover{
+  background:#efeff8;
+}
+
+/* ===== Hover highlight for data rows ===== */
+.grid tbody tr:hover{
+  background:#E4DCF6 !important;
+  cursor:pointer;
+}
+/* keep sticky col aligned on hover */
+.grid tbody tr:hover td:nth-child(3){
+  background:#E4DCF6 !important;
+  box-shadow:2px 0 0 #d8d0ec;
+}
+
+/* ===== Student Card (center modal) ===== */
+.stuCard[hidden]{ display:none; }
+.stuCard{
+  position:fixed;
+  inset:0;
+  z-index:10000;
+  display:grid;
+  place-items:center;
+}
+.stuCard-dim{
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,.45);
+}
+.stuCard-panel{
+  position:relative;
+  background:#fff;
+  color:#111;
+  width:min(560px, 92vw);
+  border-radius:16px;
+  box-shadow:0 20px 60px rgba(0,0,0,.35);
+  overflow:hidden;
+}
+.stuCard-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:14px 16px;
+  border-bottom:1px solid #eee;
+}
+.stuCard-title{
+  font-weight:700;
+  font-size:16px;
+}
+.stuCard-close{
+  border:none;
+  background:transparent;
+  cursor:pointer;
+  font-size:18px;
+  line-height:1;
+  padding:6px 8px;
+  border-radius:8px;
+}
+.stuCard-close:hover{
+  background:#f1f1f5;
+}
+.stuCard-body{
+  padding:14px 16px 18px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.stuRow{
+  display:grid;
+  grid-template-columns: 100px 1fr;
+  gap:10px;
+}
+.stuLabel{
+  color:#555;
+  font-weight:600;
+}
+.stuValue{
+  color:#111;
+  word-break:break-word;
+}

@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+  <title>Mass Change</title>
+  <meta name="theme-color" content="#8f61a5"/>
+
+  <!-- ✅ Material Symbols (ONE correct link, no icon_names, no duplicates) -->
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"/>
+
+  <!-- Pickr theme -->
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/classic.min.css"/>
+
+  <!-- Page styles -->
+  <link rel="stylesheet" href="./mass-change.css"/>
+  <link rel="stylesheet" href="/shared/stylesheet/left-kebab.css"/>
+
+  <!-- JS (order matters) -->
+  <script src="/auth.js"></script>
+  <script src="/shared/attendance/reports/kebab.js"></script>
+
+  <!-- Pickr -->
+  <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"></script>
+
+  <script src="./mass-change.js" defer></script>
+</head>
+
+<body>
+  <div class="page">
+
+    <!-- ===== Header ===== -->
+    <header class="topgrid" role="banner">
+      <div class="col col--l">
+        <button id="kebabBtn" class="kebab-btn" type="button" aria-label="Open menu">⋮</button>
+      </div>
+
+      <div class="col col--c">
+        <h1 class="title">CHANGE DAILY AND MONTHLY REPORTS</h1>
+      </div>
+
+      <div class="col col--r">
+        <button id="btnClose" class="closeBtn" aria-label="Return to dashboard" type="button">×</button>
+      </div>
+    </header>
+
+    
+  <!-- ===== KEBAB OVERLAY ===== -->
+    <div id="kebabOverlay" class="overlay" hidden>
+      <div class="overlay-dim" id="overlayDim" aria-hidden="true"></div>
+
+      <aside class="overlay-panel" role="dialog" aria-modal="true" aria-label="Data Control">
+        <div class="panel-head">
+          <div class="panel-title">Data Control</div>
+          <button class="panel-close"
+                  id="kebabClose"
+                  type="button"
+                  aria-label="Close menu">✕</button>
+        </div>
+
+        <nav class="panel-list" aria-label="Attendance tools">
+
+          <div class="panel-row kebab-row" data-key="archive">
+            <button class="radioToggle" type="button" data-for="archiveLink">
+              <span class="material-symbols-outlined radioIcon">radio_button_unchecked</span>
+            </button>
+            <a class="panel-item" id="archiveLink" href="/shared/attendance/archive/archive.html">
+              Archive data
+            </a>
+          </div>
+
+          <div class="panel-row kebab-row" data-key="basicNames">
+            <button class="radioToggle" type="button" data-for="basicNamesLink">
+              <span class="material-symbols-outlined radioIcon">radio_button_unchecked</span>
+            </button>
+            <a class="panel-item" id="basicNamesLink" href="/shared/attendance/basic-names/index.html">
+              Annual daily reports
+            </a>
+          </div>
+
+          <div class="panel-row kebab-row" data-key="addCls">
+            <button class="radioToggle" type="button" data-for="addClsLink">
+              <span class="material-symbols-outlined radioIcon">radio_button_unchecked</span>
+            </button>
+            <a class="panel-item" id="addClsLink" href="/shared/attendance/add-cls/add-cls.html">
+              Add cls to database
+            </a>
+          </div>
+		  
+		  <div class="panel-row kebab-row" data-key="massChange">
+            <button class="radioToggle" type="button" data-for="masschangeLink">
+              <span class="material-symbols-outlined radioIcon">radio_button_unchecked</span>
+            </button>
+            <a class="panel-item" id="masschangeLink" href="/shared/attendance/mass-change/mass-change.html">
+              Change reports
+            </a>
+          </div>
+
+          <div class="panel-row kebab-row" data-key="autocopy">
+            <button class="radioToggle" type="button" data-for="autocopyLink">
+              <span class="material-symbols-outlined radioIcon">radio_button_unchecked</span>
+            </button>
+            <a class="panel-item" id="autocopyLink" href="/shared/attendance/autocopy/autocopy.html">
+              Autocopy dates
+            </a>
+          </div>
+		  
+		  <div class="panel-row kebab-row" data-key="holiday">
+            <button class="radioToggle" type="button" data-for="holidayLink">
+              <span class="material-symbols-outlined radioIcon">radio_button_unchecked</span>
+            </button>
+            <a class="panel-item" id="holidayLink" href="/shared/attendance/holiday/holiday.html">
+              Holiday dates
+            </a>
+          </div>
+		  
+		  <div class="panel-row kebab-row" data-key="userControl">
+            <button class="radioToggle" type="button" data-for="userLink">
+              <span class="material-symbols-outlined radioIcon">radio_button_unchecked</span>
+            </button>
+            <a class="panel-item" id="userLink" href="/shared/attendance/user/user.html">
+              User controls
+            </a>
+          </div>
+
+          <div class="panel-row kebab-row" data-key="manual">
+            <button class="radioToggle" type="button" data-for="manualLink">
+              <span class="material-symbols-outlined radioIcon">radio_button_unchecked</span>
+            </button>
+            <a class="panel-item" id="manualLink"
+               href="https://docs.google.com/document/d/14OQwpafrM10KgmatFP08GkvNc3W8kUN29bClifCz9tI/edit?usp=drive_link"
+               target="_blank" rel="noopener">
+              Regis manual
+            </a>
+          </div>
+
+        </nav>
+      </aside>
+    </div>
+	
+ <!-- ===== END OF KEBAB OVERLAY ===== -->
+
+  <!-- ===== BLACK BOX ===== --> 
+   <section class="card" aria-label="logger">
+    <div class="logger-title">PROGRAM</div>
+	
+    <!-- ===== Black description + log box (grows downward) ===== -->
+    <section class="blackBox" aria-label="Description and log">
+      <div class="blackTitle">Description</div>
+      <pre id="logBox" class="blackContent"></pre>
+    </section>
+
+    <!-- ===== Start button ===== -->
+      <button id="startBtn" class="pill" type="button">Start</button>
+   </section>    
+
+<!-- ===== INFORMATION ===== -->
+<section class="card" aria-label="Information">
+  <div class="cardTitle">INFORMATION</div>
+
+  <div class="infoGrid">
+
+    <div class="infoItem">
+      <div class="label">Report:</div>
+      <div class="field">
+        <div class="selectWrap">
+          <select id="reportSel">
+            <option value=""></option>
+            <option>Daily</option>
+            <option>Monthly</option>
+          </select>
+          <span class="material-symbols-outlined dropIcon">keyboard_arrow_down</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="infoItem">
+      <div class="label">Level:</div>
+      <div class="field">
+        <div class="selectWrap">
+          <select id="levelSel">
+            <option value=""></option>
+            <option>Year 7</option>
+            <option>Year 8</option>
+            <option>Year 9</option>
+            <option>Year 10</option>
+            <option>Year 12</option>
+            <option>Year 13</option>
+          </select>
+          <span class="material-symbols-outlined dropIcon">keyboard_arrow_down</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="infoItem">
+      <div class="label">Sheet:</div>
+      <div class="field">
+        <input id="sheetInput" type="text" autocomplete="off" spellcheck="false"/>
+      </div>
+    </div>
+
+    <div class="infoItem">
+      <div class="label">Range:</div>
+      <div class="field">
+        <div class="rangeWrap">
+          <input id="rangeInput" type="text" autocomplete="off" spellcheck="false"/>
+          <button id="rangeHelpBtn" class="iconBtn" type="button" aria-label="Range info">
+            <span class="material-symbols-outlined">help</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+    <!-- ===== CHANGES ===== -->
+<section class="card" aria-label="Changes">
+  <div class="cardTitle">CHANGES</div>
+
+  <div class="infoGrid">
+
+    <div class="infoItem">
+      <div class="label">Type of change:</div>
+      <div class="field">
+        <div class="selectWrap">
+          <select id="changeTypeSel">
+            <option value=""></option>
+            <option>Formula</option>
+            <option>Set values</option>
+            <option>Clear contents</option>
+            <option>Delete rows</option>
+            <option>Insert a row below</option>
+            <option>Hide rows</option>
+            <option>Delete columns</option>
+            <option>Insert a column after</option>
+            <option>Hide columns</option>
+			<option>Format type</option>
+            <option>Font color</option>
+            <option>Cell color</option>
+            <option>Bold font</option>
+            <option>Font size</option>
+          </select>
+          <span class="material-symbols-outlined dropIcon">keyboard_arrow_down</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="infoItem">
+  <div class="label">Set formula:</div>
+  <div class="field">
+    <div class="multiRow">
+      <div id="formulaList" class="multiList"></div>
+      <div class="pmCol">
+        <button id="formulaMinus" class="pmBtn" type="button" aria-label="Remove formula field">
+          <span class="material-symbols-outlined">do_not_disturb_on</span>
+        </button>
+        <button id="formulaPlus" class="pmBtn" type="button" aria-label="Add formula field">
+          <span class="material-symbols-outlined">add_circle</span>
+        </button>
+      </div>
+    </div>
+    <div class="hintText">Do not put = or ' '</div>
+  </div>
+</div>
+
+    <div class="infoItem">
+      <div class="label">Set value:</div>
+      <div class="field">
+        <div class="multiRow">
+          <div id="valueList" class="multiList"></div>
+          <div class="pmCol">
+            <button id="valueMinus" class="pmBtn" type="button" aria-label="Remove value field">
+              <span class="material-symbols-outlined">do_not_disturb_on</span>
+            </button>
+            <button id="valuePlus" class="pmBtn" type="button" aria-label="Add value field">
+              <span class="material-symbols-outlined">add_circle</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<div class="infoItem">
+  <div class="label">Font colour:</div>
+  <div class="field">
+    <div class="pairGrid">
+      <input id="fontColorInput" type="text" autocomplete="off" spellcheck="false"/>
+      <button id="fontPickBtn" class="colorBtn" type="button" aria-label="Pick font color"></button>
+    </div>
+  </div>
+</div>
+
+<div class="infoItem">
+  <div class="label">Cell colour:</div>
+  <div class="field">
+    <div class="pairGrid">
+      <input id="cellColorInput" type="text" autocomplete="off" spellcheck="false"/>
+      <button id="cellPickBtn" class="colorBtn" type="button" aria-label="Pick cell color"></button>
+    </div>
+  </div>
+</div>
+
+    <div class="infoItem">
+      <div class="label">Font size:</div>
+      <div class="field">
+        <input id="fontSizeInput" type="number" min="1" step="1"/>
+      </div>
+    </div>
+
+  </div>
+</section>
+    
+    <div class="bottomPad"></div>
+  </div>
+</body>
+</html>
