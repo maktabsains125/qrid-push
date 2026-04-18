@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+  <title>Attendances</title>
+  <meta name="theme-color" content="#8f61a5"/>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/shared/stylesheet/mainpage-btn.css"/>
+
+  <!-- Auth FIRST so app.js can read Auth.who()/routeFor() -->
+  <script src="/auth.js"></script>
+
+  <!-- Page logic -->
+  <script defer src="./app.js"></script>
+</head>
+<body>
+  <div class="page home">
+
+    <!-- ===== Header (10% / 80% / 10%) ===== -->
+    <header class="topgrid" role="banner">
+      <div class="col col--l"></div>
+      <div class="col col--c">
+        <h1 class="title"><span id="yy"></span> CONTACTS</h1>
+      </div>
+      <div class="col col--r">
+        <!-- Option A: JS-handled button that routes to role dashboard -->
+        <button id="closeBtn" class="closeBtn" aria-label="Return to dashboard" type="button">×</button>
+        <!-- Option B: direct link fallback -->
+      </div>
+    </header>
+
+    <!-- ===== Grey container ===== -->
+    <main class="panel" role="navigation" aria-label="Attendance sections">
+      <div class="btnGrid">
+        <a href="/shared/contacts/ft/ft.html" class="pill linkBtn" id="btnFt" aria-label="Review">Form teachers</a>
+        <a href="/shared/contacts/regis/regis.html" class="pill linkBtn" id="btnRegis" aria-label="Class">Registration</a>
+        <a href="/shared/contacts/all/all.html" class="pill linkBtn" id="btnAll" aria-label="Individual">All teachers</a>
+         </div>
+    </main>
+
+  </div>
+</body>
+</html>

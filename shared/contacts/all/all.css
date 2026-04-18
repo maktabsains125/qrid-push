@@ -1,0 +1,147 @@
+:root{
+  --purple:#8f61a5;
+  --peach:#efc0a8;
+  --ink:#111;
+  --ink-invert:#fff;
+  --grey:#eeeeef;
+  --radius:16px;
+  --shadow:0 10px 30px rgba(0,0,0,.12);
+  --head-h:64px;
+  --title-size:18px;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  background:var(--purple);
+  color:var(--ink-invert);
+  font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  min-height:100svh;
+}
+.page{
+  display:flex;
+  flex-direction:column;
+  min-height:100svh;
+  padding:18px 14px 14px;
+}
+
+/* ===== Header ===== */
+.head{
+  display:grid;
+  grid-template-columns:5% 90% 5%;
+  align-items:center;
+  justify-items:center;
+  min-height:var(--head-h);
+}
+.head-title{
+  margin:0;
+  font-size:var(--title-size);
+  font-weight:600;
+  text-align:center;
+  color:#fff;
+}
+.head-x{
+  width:100%; height:100%;
+  display:grid; place-items:center;
+  padding-right: 20px;
+}
+.head-x svg{
+  width:20px;
+  height:20px;
+  fill:#fff;
+  font-weight: 650;
+}
+
+
+/* ===== Loading text ===== */
+.loadingMsg{
+  text-align:center;
+  font-size:15px;
+  color:#fff;
+  font-weight:500;
+  margin-bottom:10px;
+  min-height:20px;
+}
+
+/* ===== Card/Table ===== */
+.card{
+  background:var(--grey);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:10px 4px;
+  color:var(--ink);
+}
+.tableWrap{
+  overflow:auto;
+  max-height:calc(100svh - 220px);
+  border-radius:calc(var(--radius) - 2px);
+  position:relative;
+}
+.gridError{
+  position:absolute;
+  inset:10px 8px auto 8px;
+  background:#fff3f3;
+  color:#9b1c1c;
+  border:1px solid #f1c7c7;
+  border-radius:12px;
+  padding:10px 12px;
+  font-size:13px;
+}
+
+/* ===== Table look ===== */
+.grid{
+  border-collapse:separate;
+  border-spacing:0;
+  width:max-content;
+  min-width:100%;
+  background:#fff;
+  color:#111;
+  font-size:14px;
+}
+.grid th,
+.grid td{
+  padding:8px 10px;
+  border-bottom:1px solid #e9e9ee;
+  border-right:1px solid #f1f1f4;
+  text-align:center;
+  white-space:nowrap;
+  vertical-align:middle;
+}
+.grid th:nth-child(2),
+.grid td:nth-child(2){ text-align:left; }
+
+.grid thead th{
+  position:sticky;
+  top:0;
+  background:#C8BFE7;
+  border-bottom:1px solid #bbb4d6;
+  font-weight:600;
+}
+.grid tbody tr:hover{ background:#E4DCF6; }
+
+.whatsapp-icon{
+  width:18px; height:18px;
+  vertical-align:middle;
+  margin-right:6px;
+  filter:brightness(0) saturate(100%) invert(54%) sepia(96%)
+         saturate(443%) hue-rotate(84deg) brightness(90%) contrast(90%);
+  transition:transform .15s ease;
+}
+.whatsapp-icon:hover{ transform:scale(1.1); }
+.phone-num{
+  vertical-align:middle;
+  color:#111;
+  text-decoration:none;
+  font-weight:500;
+}
+.grid a[href^="https://wa.me"]{
+  text-decoration:none;
+  color:inherit;
+}
+
+.dotsBox{
+  display:inline-block;
+  width:18px;           /* fits "...", fixed size */
+  text-align:left;      /* keep dots aligned */
+}

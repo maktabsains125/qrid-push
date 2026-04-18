@@ -1,0 +1,170 @@
+:root{
+  --purple:#8f61a5;
+  --peach:#efc0a8;
+  --ink:#111;
+  --ink-invert:#fff;
+  --grey:#eeeeef;
+  --grey-deep:#c9c9c9;
+  --radius:16px;
+  --shadow:10px 10px 30px rgba(0,0,0,.35);
+}
+
+/* ===== Global reset ===== */
+*{ box-sizing:border-box }
+html,body{ height:100% }
+body{
+  margin:0;
+  background:var(--purple);
+  color:var(--ink-invert);
+  font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  min-height:100svh;
+}
+.page{
+  min-height:100svh;
+  display:flex;
+  flex-direction:column;
+  padding:16px 14px 24px;
+}
+
+/* ===== Header grid 10 / 90 / 10 ===== */
+.topgrid{
+  display:grid;
+  grid-template-columns:10% 1fr 10%;
+  align-items:center;
+  justify-items:center;
+  min-height:56px;
+}
+.title{
+  margin:0;
+  text-align:center;
+  justify-items:center;
+  color:#fff;
+  font-size:18px;
+  padding-left:10px;
+}
+.closeBtn{
+  appearance:none;
+  border:0;
+  background:transparent;
+  color:#fff;
+  font-size:28px;
+  line-height:1;
+  padding:2px 6px;
+  cursor:pointer;
+  -webkit-tap-highlight-color: transparent;
+  outline:none;
+}
+.closeBtn:focus,
+.closeBtn:active{
+  outline:none;
+  transform:none;
+}
+.col{ display:flex; align-items:center; width:100%; }
+.col--l{ justify-content:flex-start; }
+.col--r{ justify-content:flex-end; }
+
+.subTitle{
+  margin:0;
+  text-align:center;
+  justify-items:center;
+  color:#fff;
+  font-size:18px;
+}
+
+/* ===== Loading message below title ===== */
+.loadingMsg{
+  min-height:22px;
+  font-weight:600;
+  font-size:15px;
+  color:#fff;
+  margin:6px 0 10px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:6px;
+  text-align:center;
+}
+.loadingMsg .msgText{ white-space:nowrap; }
+.loadingMsg .dotsBox{
+  display:inline-block;
+  width:18px;              /* fixed width so it never shifts */
+  text-align:left;
+  font-weight:700;
+}
+
+/* animated dots (kept gentle + fixed width) */
+@keyframes dotCycle{
+  0%{ content:" ."; }
+  33%{ content:" . ."; }
+  66%{ content:" . . ."; }
+  100%{ content:" ."; }
+}
+
+
+/* ===== Grid card ===== */
+.gridCard{
+  background:var(--grey);
+  border-radius:16px;
+  padding:10px;
+}
+
+/* 11 rows x 4 cols */
+.schedGrid{
+  display:grid;
+  grid-template-columns: 70px 1fr 1fr 1fr;
+  gap:8px;
+}
+
+/* Month cell */
+.monthCell{
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  padding:8px 8px;
+  color:#000;
+  font-size:12px;
+  font-weight:400;
+}
+
+/* Date cells (white boxes with 5px margin-ish feel) */
+.dateCell{
+  background:#fff;
+  border-radius:9px;
+  padding:8px 8px;
+  color:#000;
+  font-size:12px;
+  font-weight:400;
+  min-height:34px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+
+/* empty date cell still white */
+.dateCell.isEmpty{
+  color:#000;
+  opacity:.55;
+}
+
+/* ===== Totals card ===== */
+.totalsCard{
+  margin-top:12px;
+  background:#fff;
+  border-radius:16px;
+  padding:12px 12px;
+  color:#000;
+  font-size:14px;
+  font-weight:500;
+}
+.totLine{ margin:4px 0; }
+
+.shiftWrap{
+  margin-top:10px;
+}
+.shiftLine{
+  margin:6px 0 0;
+  font-size:14px;    
+  color:#000;
+  font-weight:500;
+}

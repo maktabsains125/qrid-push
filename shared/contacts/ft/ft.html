@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+  <title>Form Teachers' Contacts</title>
+
+  <meta name="theme-color" content="#8f61a5" />
+  <link rel="stylesheet" href="./ft.css"/>
+  <link rel="stylesheet" href="/shared/stylesheet/left-kebab.css"/>
+  
+  <script src="/auth.js"></script>
+  <script defer src="./ft.js"></script>
+
+</head>
+<body>
+  <div class="page">
+
+    <!-- Header: 3-col grid (5% 90% 5%) -->
+    <header class="head">
+      <!-- LEFT: vertical kebab -->
+      <button id="kebabBtn" class="kebab-btn" aria-label="Open menu" title="Menu">⋮</button>
+
+      <!-- CENTER: title -->
+      <h1 class="head-title">CONTACTS OF FT</h1>
+
+      <!-- RIGHT: X (26px) -->
+      <a class="head-x" href="/shared/contacts/index.html" aria-label="Back">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M18.3 5.7a1 1 0 0 0-1.4 0L12 10.6 7.1 5.7A1 1 0 1 0 5.7 7.1L10.6 12l-4.9 4.9a1 1 0 1 0 1.4 1.4L12 13.4l4.9 4.9a1 1 0 0 0 1.4-1.4L13.4 12l4.9-4.9a1 1 0 0 0 0-1.4Z"/>
+        </svg>
+      </a>
+    </header>
+
+    <!-- Subheading -->
+    <div class="subhead" id="subhead">Year 7</div>
+
+    <!-- Loading message (non-flashing dots) -->
+    <div id="loadingMsg" class="loadingMsg" hidden>
+     <span id="loadingText">Loading Year 7</span>
+     <span class="dotsBox"><span id="dots">.</span></span>
+    </div>
+
+    <!-- Grey container with the rendered table inside -->
+    <section class="card">
+      <div class="tableWrap">
+        <table id="grid" class="grid"></table>
+        <div id="gridError" class="gridError" hidden></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Left half panel (menu) + dark right overlay -->
+  <div class="overlay" id="overlay" hidden>
+    <div class="overlay-dim" id="overlayDim"></div>
+    <aside class="overlay-panel" role="dialog" aria-modal="true" aria-label="Select Year">
+      <div class="panel-head">
+        <div class="panel-title">Levels</div>
+ 		<button class="panel-close" id="kebabClose" type="button">✕</button>
+      </div>
+      <nav class="panel-list">
+        <button class="panel-item" data-level="7">Year 7</button>
+        <button class="panel-item" data-level="8">Year 8</button>
+        <button class="panel-item" data-level="9">Year 9</button>
+        <button class="panel-item" data-level="10">Year 10</button>
+        <button class="panel-item" data-level="12">Year 12</button>
+        <button class="panel-item" data-level="13">Year 13</button>
+
+        <!-- Default WhatsApp message section -->
+        <div class="wa-section">
+          <label class="wa-toggle">
+            <input type="checkbox" id="waToggle">
+            <span>Use the default WhatsApp message below when sending to FT/AFT.</span>
+          </label>
+          <!-- White container, no border radius -->
+          <div class="wa-box">
+            Salam/Greetings Ckg <span class="wa-code-placeholder">[teacher code],</span><br/>
+            Please check your class attendance and verify it with a tick. Thank you. 😊 
+          </div>
+        </div>
+      </nav>
+    </aside>
+  </div>
+</body>
+</html>

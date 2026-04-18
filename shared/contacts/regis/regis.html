@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+  <title>REGIS COMMITTEE</title>
+
+  <meta name="theme-color" content="#8f61a5" />
+  <link rel="stylesheet" href="./regis.css"/>
+
+  <!-- auth guard if you want role-based lock -->
+  <script src="/auth.js"></script>
+
+  <!-- page logic -->
+  <script defer src="./regis.js"></script>
+</head>
+<body>
+  <div class="page">
+
+    <!-- ===== Header ===== -->
+    <header class="head">
+      <!-- LEFT: (no kebab in REGIS, but grid is 5/90/5 keep empty span) -->
+      <div class="head-kebab" aria-hidden="true"></div>
+
+      <!-- CENTER: title -->
+      <h1 class="head-title">REGISTRATION COMMITTEE</h1>
+
+      <!-- RIGHT: X back button -->
+      <a class="head-x" href="/shared/contacts/index.html" aria-label="Back">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M18.3 5.7a1 1 0 0 0-1.4 0L12 10.6 7.1 5.7A1 1 0 1 0 5.7 7.1L10.6 12l-4.9 4.9a1 1 0 1 0 1.4 1.4L12 13.4l4.9 4.9a1 1 0 0 0 1.4-1.4L13.4 12l4.9-4.9a1 1 0 0 0 0-1.4Z"/>
+        </svg>
+      </a>
+    </header>
+
+    <!-- ===== Loading message ===== -->
+    <div id="loadingMsg" class="loadingMsg" hidden>
+      <span id="loadingText">Loading committee</span>
+      <span class="dotsBox"><span id="dots">.</span></span>
+    </div>
+
+    <!-- ===== Grey rounded card with table ===== -->
+    <section class="card">
+      <div class="tableWrap">
+        <table id="grid" class="grid"></table>
+        <div id="gridError" class="gridError" hidden></div>
+      </div>
+    </section>
+
+  </div>
+</body>
+</html>

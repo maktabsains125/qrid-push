@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+  <title>All Teachers' Contacts</title>
+
+  <meta name="theme-color" content="#8f61a5" />
+  <link rel="stylesheet" href="./all.css"/>
+  <script src="/auth.js"></script>
+  <script defer src="./all.js"></script>
+</head>
+<body>
+  <div class="page">
+
+    <header class="head">
+      <div class="head-kebab" aria-hidden="true"></div>
+      <h1 class="head-title">ALL TEACHERS' CONTACTS</h1>
+      <a class="head-x" href="/shared/contacts/index.html" aria-label="Back">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M18.3 5.7a1 1 0 0 0-1.4 0L12 10.6 7.1 5.7A1 1 0 1 0 5.7 7.1L10.6 12l-4.9 4.9a1 1 0 1 0 1.4 1.4L12 13.4l4.9 4.9a1 1 0 0 0 1.4-1.4L13.4 12l4.9-4.9a1 1 0 0 0 0-1.4Z"/>
+        </svg>
+      </a>
+    </header>
+
+<div id="loadingMsg" class="loadingMsg" hidden>
+  <span id="loadingText">Loading. Please wait...</span>
+  <span class="dotsBox"><span id="dots">.</span></span>
+</div>
+
+
+    <section class="card">
+      <div class="tableWrap">
+        <table id="grid" class="grid"></table>
+        <div id="gridError" class="gridError" hidden></div>
+      </div>
+    </section>
+
+  </div>
+</body>
+</html>

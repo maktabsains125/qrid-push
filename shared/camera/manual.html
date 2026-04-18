@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+  <meta name="theme-color" content="#8f61a5">
+  <title>Manual attendance</title>
+
+  <!-- Reuse the camera page styles -->
+  <link rel="stylesheet" href="./style.css"/>
+  <link rel="stylesheet" href="/shared/stylesheet/left-kebab.css"/>
+
+  <!-- Session + role helpers -->
+  <script src="/auth.js" defer></script>
+
+  <!-- Manual page logic (combobox version with no-Enter flow) -->
+  <script src="./manual.js" defer></script>
+
+  <style>
+    /* ====== Page-specific tweaks ====== */
+    .formCard .row { align-items:flex-start }
+    .formCard .row .value { justify-self:start; width:100% }
+    .formActions { display:flex; gap:12px; justify-content:center; padding-top:8px }
+
+    /* Top margin for the Clock in button: visual spacing below ID/Issue row */
+    .formActions .btn { min-width:120px; margin-top:20px }
+
+    .hint { font-size:12px; opacity:.7; margin-top:4px }
+    .idBadge { font-weight:900; letter-spacing:.5px }
+
+    /* Two-column row for ID + Issue (½ + ½) */
+    .row.twoCols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;   /* half/half */
+      gap: 12px;
+      align-items: start;
+    }
+    .row.twoCols .field {
+      display: grid;
+      grid-template-rows: auto auto;    /* label, value */
+      gap: 6px;
+    }
+    .row.twoCols .label { opacity: .7 }
+    .row.twoCols .value { width: 100% }
+
+    /* ID read-only box (matches select height) */
+    .row.twoCols .idBox {
+      display: grid; align-items: center;
+      min-height: 48px;
+      padding: 12px;
+      border-radius: 16px;
+      background: #fff;
+      border: 1px solid #e6e6e6;
+      box-shadow: var(--shadow);
+      font-weight: 900;
+      letter-spacing: .5px;
+    }
+
+    /* ===== Combo (search) layout & behavior ===== */
+    .combo { position:relative; }
+    .comboInput{
+      padding-right: 40px;               /* keep space for caret so text doesn’t cover it */
+      white-space: nowrap;               /* long names don't wrap */
+      overflow: hidden;                  /* clip overflowed name */
+      text-overflow: ellipsis;           /* show … when long */
+    }
+    .comboCaret{
+      position:absolute;
+      right:8px; top:50%; transform:translateY(-50%);
+      z-index:2;
+      background:transparent; border:0; cursor:pointer;
+      width: 28px; height: 28px; line-height: 28px; text-align:center;
+      border-radius: 6px;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+      font-size: 20px; /* visual parity with select caret */
+    }
+    .comboCaret:active { opacity: .7; }
+
+    /* Dropdown list: hidden by default, scrollable when open */
+    .comboList{
+      position:absolute; left:0; right:0; top:100%;
+      margin-top:6px;
+      display:none;
+      max-height: 260px;                 /* allows internal scroll */
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch; /* smooth iOS scroll */
+      overscroll-behavior: contain;      /* keep page from scrolling at edges */
+      z-index: 5;                        /* above surrounding UI */
+      background: #fff;
+      color: #111;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      padding: 6px 0;
+    }
+    .comboList.open{ display:block; }
+    .comboOption{
+      padding: 10px 14px;
+      cursor: pointer;
+      line-height: 1.3;
+      user-select: none;
+      -webkit-user-select: none;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+    .comboOption:hover, .comboOption.active { background: #f0f0f0; }
+
+    /* ===== Match Card issue dropdown to Name combo style ===== */
+    .selectWrap { position: relative; }
+
+    /* Hide native arrow and match height/radius/shadow */
+    #issue {
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      height: 48px;                     /* same as .comboInput */
+      border-radius: 16px;
+      padding: 0 42px 0 12px;           /* right space for fake caret */
+      font-size: 16px;
+      border: 1px solid #ccc;
+      background: #fff;
+      box-shadow: var(--shadow);
+      width: 100%;
+      display: block;
+    }
+
+    /* Custom caret to mirror .comboCaret (size/placement) */
+    .selectWrap::after{
+      content: "▾";
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 20px;                  /* same visual size as Name caret */
+      color: #555;
+      pointer-events: none;
+      width: 28px; height: 28px; line-height: 28px; text-align: center;
+      border-radius: 6px;
+    }
+
+    /* Small screens: keep 2 columns (as requested “stacked horizontally 1/2”) */
+    @media (max-width: 380px){
+      .row.twoCols { gap: 10px }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="app">
+
+<header class="top">
+  <div class="left">
+    <!-- Kebab menu -->
+    <button class="kebab-btn" id="kebabBtn" aria-label="Menu" type="button">⋮</button>
+  </div>
+
+  <h1 class="title">QR-ID ATTENDANCE</h1>
+
+  <div class="right">
+    <!-- Exit (X) button -->
+    <button id="exitBtn" class="closeBtn" aria-label="Exit to dashboard" title="Exit" type="button">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M6 6 L18 18 M18 6 L6 18" stroke="white" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+  </div>
+</header>
+
+    <section class="note">
+	  <div class="info">Using the school Wi-Fi will be slower.</div>
+	</section>
+
+    <!-- Actions: 3 modes -->
+    <section class="actions">
+      <button id="cameraBtn"  class="btn primary">Camera</button>
+      <button id="scannerBtn" class="btn">Scanner</button>
+      <button id="manualBtn"  class="btn">Manual</button>
+    </section>
+
+    <!-- Windows -->
+    <section class="windows">
+      <h2 class="windowsTitle">Clock-in windows</h2>
+      <div class="winCardGrid">
+        <div class="winCard"><div class="winTime" id="amTime">06:25–08:00 (L: 07:31)</div></div>
+        <div class="winCard"><div class="winTime" id="pmTime">11:25–14:00 (L: 13:01)</div></div>
+      </div>
+    </section>
+
+
+    <!-- Manual Form -->
+    <section class="card formCard" id="manualForm">
+
+      <!-- NAME (top, full width) -->
+      <div class="row">
+        <div class="label" style="grid-column:1 / -1">Name</div>
+        <div class="value" style="grid-column:1 / -1">
+          <div class="combo" id="nameCombo">
+            <input id="nameInput"
+                   class="comboInput"
+                   type="text"
+                   placeholder="Type part of name"
+                   autocomplete="off"
+                   role="combobox"
+                   aria-autocomplete="list"
+                   aria-expanded="false"
+                   aria-controls="nameList"
+                   aria-activedescendant=""
+            />
+            <button type="button" class="comboCaret" aria-label="Show suggestions" tabindex="-1">▾</button>
+            <ul id="nameList" class="comboList" role="listbox"></ul>
+          </div>
+          <div class="hint">Click ▾ to reopen list.</div>
+        </div>
+      </div>
+
+      <!-- ID + ISSUE (½ + ½ in same row) -->
+      <div class="row twoCols">
+        <!-- ID (read-only box) -->
+        <div class="field">
+          <div class="label">ID</div>
+          <div class="value">
+            <div class="idBox" id="idOut">—</div>
+          </div>
+        </div>
+
+        <!-- Issue (select, themed to match Name caret) -->
+        <div class="field">
+          <div class="label">Card issue</div>
+          <div class="value selectWrap">
+            <select id="issue" aria-label="Card issue">
+              <option value="">— Select —</option>
+              <option>Left card</option>
+              <option>Lost card</option>
+              <option>Damaged card</option>
+              <option>Waiting for replacement</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Buttons -->
+      <div class="formActions">
+        <button id="clockBtn" class="btn" disabled>Clock in</button>
+      </div>
+    </section>
+
+    <!-- Live status -->
+    <div id="status" class="status hidden" aria-live="polite">Recording …</div>
+
+    <!-- Result card -->
+    <section id="result" class="card hidden" aria-live="polite" aria-atomic="true">
+      <div class="row"><div class="label">Name</div><div class="value bold" id="resName">—</div></div>
+      <div class="row"><div class="label">ID</div><div class="value" id="resId">—</div></div>
+      <div class="row"><div class="label">Mark</div><div class="value" id="resMark">—</div></div>
+      <div class="row"><div class="label">Clock-in time</div><div class="value" id="resTime">—</div></div>
+      <div class="cardActions">
+        <button id="closeCard" class="btn">Close</button>
+      </div>
+    </section>
+
+    <!-- Bottom spacing (safe area if use it elsewhere) -->
+    <footer class="bottom"></footer>
+	
+	<!-- ===== Kebab panel (left side panel + dim right side) ===== -->
+    <div class="overlay" id="overlay" hidden>
+      <div class="overlay-panel">
+        <div class="panel-head">
+          <div class="panel-title">Greetings</div>
+          <button class="panel-close" id="panelCloseBtn" type="button">✕</button>
+        </div>
+
+        <div class="panel-list">
+          <button class="panel-item" id="goBookGreetings" type="button">Book greetings</button>
+          <button class="panel-item" id="goMySchedule" type="button">Personal schedule</button>
+          <button class="panel-item" id="goAdmin" type="button">Admin</button>
+        </div>
+      </div>
+
+      <div class="overlay-dim" id="overlayDim"></div>
+    </div>
+
+  </div>
+</body>
+</html>

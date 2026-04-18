@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>GREETINGS SETTINGS</title>
+
+  <meta name="theme-color" content="#8f61a5">
+
+  <!-- Page styles -->
+  <link rel="stylesheet" href="./admin-book.css?v=5" />
+  <link rel="stylesheet" href="/shared/stylesheet/left-kebab.css"/>
+
+  <!-- Auth + logic -->
+  <script src="/auth.js" defer></script>
+  <script src="./admin-book.js" defer></script>
+</head>
+
+<body>
+  <div class="page">
+
+    <!-- ===== HEADER ===== -->
+    <div class="topgrid">
+      <div class="col col--l">
+        <button class="kebab-btn" id="kebabBtn" aria-label="Menu" type="button">⋮</button>
+      </div>
+
+      <h1 class="title">GREETINGS SETTINGS</h1>
+
+      <div class="col col--r">
+        <button class="closeBtn" id="xBtn" aria-label="Close" type="button">×</button>
+      </div>
+    </div>
+
+    <!-- Status -->
+    <div class="loadingMsg" id="statusMsg"></div>
+
+    <!-- ===== SESSION BUTTONS ===== -->
+    <div class="sessionCards">
+      <button class="sessCard" id="amBtn" type="button">
+        <span class="sessTitle">AM Session</span>
+      </button>
+
+      <button class="sessCard" id="pmBtn" type="button">
+        <span class="sessTitle">PM Session</span>
+      </button>
+    </div>
+
+    <!-- ===== TABLE CARD ===== -->
+    <div class="card" id="tableCard" hidden>
+      <div class="tableWrap" id="tableWrap">
+        <!-- injected table -->
+      </div>
+    </div>
+
+    <!-- ===== CALCULATIONS ===== -->
+    <div class="card" id="calcCard">
+      <div class="cardHead">
+        <div class="cardTitle">CALCULATIONS</div>
+        <div class="cardSub">Auto-calculated</div>
+      </div>
+
+      <div class="kvGrid">
+        <div class="kv"><div class="k">Total AM teachers</div><div class="v" id="c_pmTeachersTotal">—</div></div>
+        <div class="kv"><div class="k">Total PM teachers</div><div class="v" id="c_amTeachersTotal">—</div></div>
+
+        <div class="kv"><div class="k">Total SHIFT 1 slots</div><div class="v" id="c_shift1SlotsTotal">—</div></div>
+        <div class="kv"><div class="k">Total SHIFT 2 slots</div><div class="v" id="c_shift2SlotsTotal">—</div></div>
+        <div class="kv"><div class="k">Total SHIFT 3 slots</div><div class="v" id="c_shift3SlotsTotal">—</div></div>
+
+        <div class="kv"><div class="k">Total SHIFT 1 + SHIFT 2 slots</div><div class="v" id="c_shift1and3Total">—</div></div>
+        <div class="kv"><div class="k">Total shifts</div><div class="v" id="c_shiftsTotal">—</div></div>
+
+        <div class="kv"><div class="k">AM shifts / teacher (year)</div><div class="v" id="c_amPerYear">—</div></div>
+        <div class="kv"><div class="k">AM shifts / teacher (month)</div><div class="v" id="c_amPerMonth">—</div></div>
+
+        <div class="kv"><div class="k">PM shifts / teacher (year)</div><div class="v" id="c_pmPerYear">—</div></div>
+        <div class="kv"><div class="k">PM shifts / teacher (month)</div><div class="v" id="c_pmPerMonth">—</div></div>
+      </div>
+    </div>
+
+    <!-- ===== CONTROLS ===== -->
+    <div class="card" id="ctrlCard">
+      <div class="cardHead">
+        <div class="cardTitle">CONTROLS</div>
+        <div class="cardSub">Control settings</div>
+      </div>
+
+      <div class="ctrlGrid">
+
+        <div class="row">
+          <div class="label">Month opened in BOOKINGS</div>
+          <select class="select" id="openMonth">
+            <option value="">—</option>
+            <option>JAN</option><option>FEB</option><option>MAR</option><option>APR</option>
+            <option>MAY</option><option>JUN</option><option>JUL</option><option>AUG</option>
+            <option>SEP</option><option>OCT</option><option>NOV</option>
+          </select>
+        </div>
+
+        <div class="row">
+          <div class="label">Number of slots for SHIFT 1</div>
+          <input class="num" id="slotsShift1" type="number" min="0" max="3"/>
+        </div>
+
+        <div class="row">
+          <div class="label">Number of slots for SHIFT 2</div>
+          <input class="num" id="slotsShift2" type="number" min="0" max="3"/>
+        </div>
+
+        <div class="row">
+          <div class="label">Number of slots for SHIFT 3</div>
+          <input class="num" id="slotsShift3" type="number" min="0" max="3"/>
+        </div>
+
+        <div class="row">
+          <div class="label">Max slots per month per AM teacher</div>
+          <input class="num" id="maxPerMonthAM" type="number" min="0"/>
+        </div>
+
+        <div class="row">
+          <div class="label">Max slots per month per PM teacher</div>
+          <input class="num" id="maxPerMonthPM" type="number" min="0"/>
+        </div>
+
+        <div class="row">
+          <div class="label">Set average (AM)</div>
+		  <input class="num" id="setAvgAM" type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off"/>
+        </div>
+
+        <div class="row">
+          <div class="label">Set average (PM)</div>
+          <input class="num" id="setAvgPM" type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off"/>
+        </div>
+
+        <div class="divider divider--wide"></div>
+
+        <div class="row row--wide">
+          <div class="label">Time of SHIFT 1</div>
+          <div class="timePair">
+            <input class="time" id="shift1Start" type="time"/>
+            <span class="dash">-</span>
+            <input class="time" id="shift1End" type="time"/>
+          </div>
+        </div>
+
+        <div class="row row--wide">
+          <div class="label">Time of SHIFT 2</div>
+          <div class="timePair">
+            <input class="time" id="shift2Start" type="time"/>
+            <span class="dash">-</span>
+            <input class="time" id="shift2End" type="time"/>
+          </div>
+        </div>
+
+        <div class="row row--wide">
+          <div class="label">Time of SHIFT 3</div>
+          <div class="timePair">
+            <input class="time" id="shift3Start" type="time"/>
+            <span class="dash">-</span>
+            <input class="time" id="shift3End" type="time"/>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== KEBAB OVERLAY ===== -->
+  <div class="overlay" id="overlay" hidden>
+    <div class="overlay-panel">
+      <div class="panel-head">
+        <div class="panel-title">Greetings</div>
+        <button class="panel-close" id="panelClose" type="button">✕</button>
+      </div>
+
+      <div class="panel-list">
+        <button class="panel-item" id="goBook" type="button">Book greetings</button>
+        <button class="panel-item" id="goMine" type="button">Personal schedule</button>
+        <button class="panel-item" id="goAdmin" type="button">Admin</button>
+      </div>
+    </div>
+
+    <div class="overlay-dim" id="overlayDim"></div>
+  </div>
+
+  <!-- ===== MODAL ===== -->
+  <div class="modal" id="modal" hidden>
+    <div class="modal-dim" id="modalDim"></div>
+    <div class="modal-card">
+      <div class="modal-head">
+        <div class="modal-title" id="modalTitle">Teacher</div>
+        <button class="modal-close" id="modalClose" type="button">✕</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+
+  <!-- Center status overlay (Saving.../Saved) -->
+  <div class="saveOverlay" id="saveOverlay" hidden>
+    <div class="saveCard">
+      <div class="saveCardText" id="saveCardText">Saving...</div>
+    </div>
+  </div>
+
+
+</body>
+</html>

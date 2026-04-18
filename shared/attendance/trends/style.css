@@ -1,0 +1,666 @@
+:root{
+  --purple:#8f61a5;
+  --peach:#efc0a8;
+  --ink:#111;
+  --ink-invert:#fff;
+  --grey:#adadad;
+  --radius:16px;
+  --shadow: 10px 10px 30px rgba(0,0,0,.35);
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  background:var(--purple);
+  color:var(--ink-invert);
+  font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  min-height:100svh;
+}
+.page{
+  min-height:100svh;
+  display:flex;
+  flex-direction:column;
+  padding:18px 14px 14px;
+}
+
+/* Legacy header (no longer used but kept in case) */
+.head{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:8px 40px;
+}
+.head h1{
+  margin:0;
+  font-size:18px;
+  letter-spacing:.6px;
+  text-align:center;
+}
+.exit{
+  position:absolute;
+  right:6px;
+  top:4px;
+  width:36px;
+  height:36px;
+  display:grid;
+  place-items:center;
+  border:0;
+  border-radius:10px;
+  color:#fff;
+  background:transparent;
+  cursor:pointer;
+}
+
+/* Tabs */
+.tabs{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:0;
+  border-top-left-radius:var(--radius);
+  border-top-right-radius:var(--radius);
+  overflow:hidden;
+  box-shadow:var(--shadow);
+}
+.tab{
+  appearance:none;
+  border:0;
+  background:var(--peach);
+  color:var(--ink);
+  padding:12px 10px;
+  font-weight:700;
+  letter-spacing:.2px;
+  border-left:2px solid #fff;
+  cursor:pointer;
+}
+.tab:first-child{border-left:0}
+#tabAm{border-top-left-radius:var(--radius)}
+.tab--overall{
+  background:#000;
+  color:#fff;
+  border-left:2px solid #fff;
+  border-top-right-radius:var(--radius);
+}
+.tab.active{
+  position:relative;
+  z-index:1;
+  box-shadow:0 -2px 12px rgba(0,0,0,.35);
+  filter:saturate(1.05);
+}
+.tab--overall.active{
+  background:#000;
+  color:#fff;
+  box-shadow:0 -2px 12px rgba(0,0,0,.45);
+}
+.tab:not(.active){opacity:.92}
+
+/* Grey panel (flush to tabs) */
+.panel{
+  margin:0;
+  background:var(--grey);
+  color:var(--ink);
+  border-bottom-left-radius:var(--radius);
+  border-bottom-right-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:12px;
+}
+
+/* Card grid */
+.wrap{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:12px;
+}
+@media (min-width:720px){
+  .wrap{grid-template-columns:1fr 1fr}
+}
+
+/* Card */
+.card{
+  background:#fff;
+  color:var(--ink);
+  border-radius:12px;
+  box-shadow:2px 2px 10px rgba(0,0,0,.25);
+  overflow:hidden;
+}
+.cardHead{
+  padding:10px 12px;
+  background:#f4f4f4;
+  border-bottom:1px solid #e8e8e8;
+  font-weight:700;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.cardBody{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:8px;
+  padding:10px 10px 12px;
+}
+@media (min-width:720px){
+  .cardBody{grid-template-columns:1fr 1fr} /* Late | Absent side-by-side */
+}
+
+/***** CHARTS ********/
+.chartBox{
+  position: relative;
+  background:#fff;
+  border:1px solid #eee;
+  border-radius:10px;
+  padding:8px;
+  height:260px;              /* fixed height */
+  overflow:hidden;  
+}
+
+.chartTitle{
+  font-size:14px;
+  font-weight:600;
+  margin:0 0 4px;
+  color:#333;
+}
+
+.chartBox canvas{
+  display:block;               /* avoids inline baseline gaps */
+  width:100% !important;
+  height:100% !important;      /* fill the 260px box; no growth */
+}
+
+/* Util */
+.hidden{
+  display:none !important;
+}
+
+/* Status row (loading text) */
+.statusRow{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:8px 8px 4px;
+  font-weight:700;
+  font-size:12px;
+  color:#fff;
+  min-height:24px;             /* reserve vertical space */
+}
+
+/* Keep height even when "hidden" to avoid grey panel jumping up */
+.statusRow.hidden{
+  display:flex !important;     /* override .hidden */
+  opacity:0;
+  visibility:hidden;
+}
+
+.refreshNote{
+  font-size:14px;
+  font-weight:600;
+  color:#000;
+  text-align:center;
+  margin:4px 8px 8px;
+}
+.refreshLink{
+  color:#99D9EA;
+  text-decoration:underline;
+  cursor:pointer;
+}
+
+/* ===== Top bar (kebab | heading | X) ===== */
+.topbar{
+  position:relative;
+  width:100%;
+  margin-bottom:8px;           /* spacing below header */
+}
+
+.topgrid{
+  display:flex;
+  align-items:center;
+  justify-content:center;      /* center the title */
+  padding:8px 0;
+}
+
+/* Centered title, responsive size */
+.title{
+  margin:0;
+  text-align:center;
+  font-size:clamp(18px, 3vw, 22px);
+  font-weight:600;
+  color:#fff;
+  line-height:1.2;
+}
+
+/* Base button look */
+.topBtn{
+  background:none;
+  border:0;
+  color:var(--ink-invert);
+  font-size:26px;
+  line-height:1;
+  text-decoration:none;
+  text-align:center;
+  cursor:pointer;
+  padding:4px;
+}
+
+.closeBtn{
+  font-weight:700;
+  text-decoration:none;
+}
+
+/* Kebab + X fixed 10px from screen edge */
+#kebabBtn,
+#exitBtn{
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  background:none;
+  border:none;
+  color:var(--ink-invert);
+  cursor:pointer;
+  padding:4px;
+}
+#kebabBtn{left:10px;}
+#exitBtn{right:10px;}
+
+/* 3-dot vertical kebab */
+.kebabDots{
+  display:block;
+  width:4px;
+  height:4px;
+  border-radius:50%;
+  background:currentColor;
+  margin:3px auto;
+}
+
+
+/* ===== Mode toggle (Late/Absent vs On Time/Present) ===== */
+
+.modeToggle{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  padding:8px 16px 16px;
+  justify-content: flex-end;
+}
+
+.modeLabel{
+  font-size:0.85rem;
+  text-transform:uppercase;
+  letter-spacing:0.03em;
+}
+
+.modeLabel--left{
+  color:#070714;        /* text for Late/Absent */
+}
+
+.modeLabel--right{
+  color:#070714;        /* text for On Time/Present */
+}
+
+/* Emphasise active side, mute the other */
+.modeToggle.lateAbsent .modeLabel--left{
+  font-weight:600;
+}
+
+.modeToggle.lateAbsent .modeLabel--right{
+  opacity:0.5;
+}
+
+.modeToggle.onTime .modeLabel--right{
+  font-weight:600;
+}
+
+.modeToggle.onTime .modeLabel--left{
+  opacity:0.5;
+}
+
+/* Switch button */
+.modeSwitch{
+  border:0;
+  background:none;
+  padding:0;
+  cursor:pointer;
+}
+
+.modeSwitch-track{
+  width:54px;
+  height:26px;
+  border-radius:13px;
+  background:#ccc;
+  display:inline-block;
+  position:relative;
+  box-shadow:0 0 0 1px rgba(0,0,0,0.15) inset;
+  transition:background-color 0.18s ease;
+}
+
+.modeSwitch-thumb{
+  position:absolute;
+  top:2px;
+  left:2px;
+  width:22px;
+  height:22px;
+  border-radius:50%;
+  background:#fdfdfd;
+  box-shadow:0 1px 2px rgba(0,0,0,0.4);
+  transition:transform 0.18s ease;
+}
+
+/* Track colours for each mode */
+.modeToggle.lateAbsent .modeSwitch-track{
+  background:#f4a3c4;   /* pink */
+}
+
+.modeToggle.onTime .modeSwitch-track{
+  background:#7ac77a;   /* green */
+}
+
+/* Thumb slide */
+.modeToggle.onTime .modeSwitch-thumb{
+  transform:translateX(28px);
+}
+
+/* Caption under toggle */
+.modeCaption{
+  margin:4px 16px 0;
+  font-size:0.8rem;
+  opacity:0.6;
+  text-align:center;
+}
+
+
+
+/* ===== Kebab slideout overlay ===== */
+
+.overlay[hidden]{display:none;}
+
+.overlay{
+  position:fixed;
+  inset:0;
+  display:flex;
+  pointer-events:auto;
+  z-index:9999;
+}
+
+/* Dim (right side) */
+.overlay-dim{
+  flex:1 1 50%;
+  background:rgba(0,0,0,.40);
+  cursor:pointer;
+}
+
+/* Panel (left side) */
+.overlay-panel{
+  flex:1 1 50%;
+  max-width:50vw;
+  min-width:160px;
+  background:#fff;
+  color:#111;
+  display:flex;
+  flex-direction:column;
+  box-shadow:12px 0 30px rgba(0,0,0,.35);
+  order:-1;
+  border-top-right-radius:var(--radius);
+  border-bottom-right-radius:var(--radius);
+}
+
+/* Panel header */
+.panel-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:14px 16px;
+  border-bottom:1px solid #c9c9c9;
+  background:#eeeeef;
+  border-top-right-radius:var(--radius);
+}
+
+.panel-title{
+  font-weight:700;
+  font-size:16px;
+  color:var(--ink);
+}
+
+.panel-close{
+  border:none;
+  background:transparent;
+  font-size:18px;
+  line-height:1;
+  cursor:pointer;
+  color:var(--ink);
+  padding:4px;
+  min-width:24px;
+  text-align:right;
+}
+
+/* Panel list */
+.panel-list{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  padding:16px;
+}
+
+.panel-item{
+  padding:12px 14px;
+  border-radius:10px;
+  border:1px solid #e6e6ef;
+  background:#f7f7fb;
+  cursor:pointer;
+  text-align:center;
+  font-size:15px;
+  font-weight:600;
+  line-height:1.3;
+  color:var(--ink);
+}
+
+.panel-item:hover{
+  background:#efeff8;
+}
+
+/* ========================= */
+/* Download dialog           */
+/* ========================= */
+
+.dlOverlay[hidden]{display:none;}
+
+.dlOverlay{
+  position:fixed;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:10000;
+}
+
+.dlOverlay-dim{
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,.45);
+}
+
+.dlPanel{
+  position:relative;
+  z-index:1;
+  background:#fff;
+  color:var(--ink);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:16px 18px 14px;
+  max-width:320px;
+  width:90%;
+}
+
+.dlHead{
+  margin-bottom:6px;
+}
+
+.dlHead h2{
+  margin:0;
+  font-size:16px;
+  font-weight:700;
+  color:var(--purple);
+}
+
+.dlMessage{
+  margin:0 0 10px;
+  font-size:14px;
+  color:var(--ink);
+}
+
+.dlActions{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:8px;
+}
+
+.dlBtn{
+  padding:8px 10px;
+  border-radius:10px;
+  border:1px solid #ddd;
+  background:#f7f7fb;
+  cursor:pointer;
+  font-size:14px;
+  font-weight:600;
+  color:var(--ink);
+}
+
+.dlBtn--highlight{
+  background:var(--peach);
+  border-color:var(--peach);
+}
+
+/* ========================= */
+/* Attendance Table page     */
+/* ========================= */
+
+.tableMain{
+  margin-top:4px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.tableCard{
+  background:var(--grey);
+  color:var(--ink);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:10px 10px 12px;
+}
+
+.tableCardHead{
+  font-weight:700;
+  margin-bottom:6px;
+  font-size:15px;
+}
+
+.tableCardBody{
+  background:#fff;
+  border-radius:12px;
+  box-shadow:2px 2px 8px rgba(0,0,0,.16) inset;
+  overflow:hidden;
+}
+
+/* Scroll container for sticky header/col */
+.tableScroll{
+  max-height:65vh;
+  overflow:auto;
+}
+
+/* Data table */
+.dataTable{
+  border-collapse:separate;
+  border-spacing:0;
+  width:100%;
+  min-width:100%;
+  font-size:13px;
+  color:var(--ink);
+}
+
+.dataTable th,
+.dataTable td{
+  padding:6px 8px;
+  border-bottom:1px solid #eee;
+  border-right:1px solid #eee;
+  background:#fff;
+  white-space:nowrap;
+}
+
+/* ===== STICKY ROWS (class-based, added by JS) ===== */
+
+.dataTable .sticky-row-1 > th,
+.dataTable .sticky-row-1 > td{
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  background: #f4f4f7;
+}
+
+.dataTable .sticky-row-2 > th,
+.dataTable .sticky-row-2 > td{
+  position: sticky;
+  /* "top" is set inline via JS */
+  z-index: 3;
+  background: #f4f4f7;
+}
+
+
+/* Sticky first column (both tables) */
+.dataTable th:first-child,
+.dataTable td:first-child{
+  position: sticky;
+  left: 0;
+  z-index: 4;
+  background: #f4f4f7;
+}
+
+/* Top-left corners above everything */
+.dataTable .sticky-row-1 > th:first-child,
+.dataTable .sticky-row-1 > td:first-child,
+.dataTable .sticky-row-2 > th:first-child,
+.dataTable .sticky-row-2 > td:first-child{
+  z-index: 5;
+}
+
+/* ===== Center values in table except first column ===== */
+table{
+  border-collapse:collapse;
+  width:100%;
+}
+
+th,td{
+  padding:8px 10px;
+  border:1px solid #ddd;
+}
+
+/* Left-align + bold first column */
+th:first-child,
+td:first-child{
+  text-align:left;
+  font-weight:700;
+}
+
+/* Center all other columns */
+th:not(:first-child),
+td:not(:first-child){
+  text-align:center;
+}
+
+/* ---- 4-row banding in body (both tables) ---- */
+/* Every block of 8 rows:
+   - rows 1-4: very light blue
+   - rows 5-8: very light purple
+*/
+.dataTable tbody tr:nth-child(8n+1) td:not(:first-child),
+.dataTable tbody tr:nth-child(8n+2) td:not(:first-child),
+.dataTable tbody tr:nth-child(8n+3) td:not(:first-child),
+.dataTable tbody tr:nth-child(8n+4) td:not(:first-child){
+  background:#eaf5ff;           /* very light blue */
+}
+
+.dataTable tbody tr:nth-child(8n+5) td:not(:first-child),
+.dataTable tbody tr:nth-child(8n+6) td:not(:first-child),
+.dataTable tbody tr:nth-child(8n+7) td:not(:first-child),
+.dataTable tbody tr:nth-child(8n+8) td:not(:first-child){
+  background:#f5e9ff;           /* very light purple */
+}

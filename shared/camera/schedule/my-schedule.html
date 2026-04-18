@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Personal Greeting Schedule</title>
+
+  <link rel="stylesheet" href="./my-schedule.css" />
+  <link rel="stylesheet" href="/shared/stylesheet/left-kebab.css"/>
+  
+  <script src="/auth.js" defer></script>
+  <script src="./my-schedule.js" defer></script>
+</head>
+
+<body>
+  <div class="page">
+
+    <!-- Header: kebab / title / X -->
+    <header class="topgrid" aria-label="Header">
+      <div class="col col--l">
+        <button class="kebab-btn" id="kebabBtn" aria-label="Menu" type="button">⋮</button>
+      </div>
+
+	  <h1 class="title">PERSONAL GREETING SCHEDULE</h1>
+      <div class="col col--r">
+        <button class="closeBtn" id="closeBtn" aria-label="Close" type="button">×</button>
+      </div>
+    </header>
+	
+	<!-- User -->
+	<div class="subTitle" id="subTitle"></div>
+
+    <!-- Loading status below heading -->
+    <div class="loadingMsg" id="loadingMsg" aria-live="polite">
+      <span class="msgText" id="msgText"></span>
+      <span class="dotsBox" aria-hidden="true"><span id="dots">...</span></span>
+    </div>
+
+    <!-- 11 x 4 grid card -->
+    <section class="gridCard" aria-label="Personal schedule grid">
+      <div class="schedGrid" id="schedGrid"></div>
+    </section>
+
+    <!-- Totals card -->
+    <section class="totalsCard" aria-label="Totals">
+      <div class="totLine" id="totBookings">Total of bookings made: -</div>
+      <div class="totLine" id="totTarget">Target total of bookings: -</div>
+
+      <div class="shiftWrap">
+        <div class="shiftLine" id="amS1">SHIFT 1: -</div>
+        <div class="shiftLine" id="amS2">SHIFT 2: -</div>
+        <div class="shiftLine" id="pmS">SHIFT 3: -</div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Overlay menu -->
+  <div class="overlay" id="overlay" hidden>
+    <div class="overlay-panel" role="dialog" aria-modal="true" aria-label="Menu panel">
+      <div class="panel-head">
+        <div class="panel-title">Greetings</div>
+        <button class="panel-close" id="panelClose" type="button">✕</button>
+      </div>
+      <div class="panel-list">
+        <button class="panel-item" id="goBook" type="button">Book greetings</button>
+        <button class="panel-item" id="goMe" type="button" disabled aria-current="page">Personal schedule</button>
+        <button class="panel-item" id="goAdmin" type="button">Admin</button>
+      </div>
+    </div>
+    <div class="overlay-dim" id="overlayDim" aria-hidden="true"></div>
+  </div>
+</body>
+</html>
