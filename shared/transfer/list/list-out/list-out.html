@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+  <title>LIST OF TRANSFERRED OUT</title>
+
+  <meta name="theme-color" content="#8f61a5"/>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="./list-out.css"/>
+  <link rel="stylesheet" href="/shared/stylesheet/left-kebab.css"/>
+
+  <!-- Auth + logic -->
+  <script src="/auth.js" defer></script>
+  <script src="./list-out.js" defer></script>
+</head>
+<body>
+  <div class="page">
+
+    <!-- ===== Top header ===== -->
+    <header class="topbar">
+      <div class="topgrid">
+        <div class="col col--l">
+		  <button class="kebab-btn" id="kebabBtn" aria-label="Menu">⋮</button>
+		</div>
+        <div class="col col--c">
+          <h1 class="title">LIST OF TRANSFERRED OUT</h1>
+        </div>
+        <div class="col col--r">
+          <button id="closeTop" class="topBtn closeBtn" type="button">&times;</button>
+        </div>
+      </div>
+
+      <!-- Status line: QRID standard (text + JS dots) -->
+      <p id="status" class="status">
+        <span class="status-text">Loading. Please wait</span>
+        <span class="status-dots"></span>
+      </p>
+    </header>
+	
+	<!-- ===== Kebab slideout menu (overlay style) ===== -->
+    <div id="kebabPanel" class="overlay" hidden aria-hidden="true">
+      <div id="kebabDim" class="overlay-dim" role="button" tabindex="0" aria-label="Close menu"></div>
+
+      <div class="overlay-panel" role="dialog" aria-modal="true" aria-label="Menu">
+        <div class="panel-head">
+          <div class="panel-title">OUT LIST</div>
+          <button class="panel-close" id="panelCloseBtn" aria-label="Close menu" type="button">✕</button>
+        </div>
+
+        <div class="panel-list" aria-label="list-out">
+         <a class="panel-item"
+   			id="googleSh"
+   			href="https://docs.google.com/spreadsheets/d/1WhXW8yRIYE5VO_SRanOiJVJxkXD5ZD9SbDukyY7FhWo/edit?usp=sharing"
+   			target="_blank"
+   			rel="noopener">
+  			Google Sheet
+		 </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== FORM CARD (grey) ===== -->
+    <section class="card card--form">
+
+      <!-- Level select -->
+      <div class="field">
+        <span class="label">Level</span>
+        <select class="input" id="levelSelect" required>
+          <option value="">Level</option>
+          <option value="Year 7">Year 7</option>
+          <option value="Year 8">Year 8</option>
+          <option value="Year 9">Year 9</option>
+          <option value="Year 10">Year 10</option>
+          <option value="Year 12">Year 12</option>
+          <option value="Year 13">Year 13</option>
+        </select>
+      </div>
+
+      <!-- Name dropdown -->
+      <div class="field">
+        <span class="label">Name</span>
+        <select class="input" id="nameSelect" required disabled>
+          <option value="">Select level first</option>
+        </select>
+      </div>
+
+      <!-- id + gender -->
+      <div class="row2col">
+        <div class="col">
+          <label class="label" for="stuId">ID</label>
+          <input class="input" id="stuId" type="text" readonly>
+        </div>
+
+        <div class="col">
+          <label class="label">Gender</label>
+          <label class="radioOpt">
+            <input type="radio" name="gender" id="genderM" value="M" disabled>
+            <span>M</span>
+          </label>
+          <label class="radioOpt">
+            <input type="radio" name="gender" id="genderF" value="F" disabled>
+            <span>F</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Transfer To / From -->
+      <div class="field">
+        <label class="label" for="fromClass">From</label>
+        <input class="input" id="fromClass" type="text" readonly>
+      </div>
+      <div class="field">
+        <label class="label" for="toClass">To</label>
+        <input class="input" id="toClass" type="text" readonly>
+      </div>
+
+      <!-- Transfer date -->
+      <div class="field">
+        <label class="label" for="transferDate">Transfer date</label>
+        <input class="input" id="transferDate" type="text" readonly>
+      </div>
+
+    </section>
+
+    <!-- ===== SECOND CARD: Attendance viewer ===== -->
+    <section class="card card--actions" id="tableCard">
+      <div class="btnRow">
+        <button class="btn btn--primary" id="attendBtn">Attendance</button>
+        <button class="btn btn--primary" id="downloadBtn" disabled>Download CSV</button>
+      </div>
+
+      <p id="attStatus" class="attStatus">
+        Select a student above and click <strong>Attendance</strong> to load their record.
+      </p>
+
+      <div class="tableWrap" id="tableWrap" hidden>
+        <table id="attTable" class="attTable" aria-describedby="attStatus">
+          <thead>
+            <tr id="attHead1"></tr>
+            <tr id="attHead2"></tr>
+          </thead>
+          <tbody id="attBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+  </div>
+</body>
+</html>

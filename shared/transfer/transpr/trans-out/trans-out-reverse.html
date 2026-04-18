@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+  <title>TRANSFER OUT — REVERSE</title>
+
+  <meta name="theme-color" content="#8f61a5"/>
+
+  <link rel="stylesheet" href="/shared/transfer/transpr/transfer.css"/>
+  <link rel="stylesheet" href="/shared/stylesheet/left-kebab.css"/>
+
+  <!-- auth first -->
+  <script src="/auth.js"></script>
+
+  <!-- same JS file (but it must support reverse mode) -->
+  <script>
+    // flag for the same JS file
+    window.TRANS_OUT_PAGE_MODE = "reverse";
+  </script>
+  <script defer src="./trans-out.js"></script>
+</head>
+
+<body>
+  <div class="page">
+
+    <!-- ===== Top bar (kebab | heading | X) ===== -->
+    <header class="topbar">
+      <div class="topgrid">
+        <button class="kebab-btn" id="kebabBtn" aria-label="Menu" type="button">⋮</button>
+
+        <h1 class="title">REVERSE TRANSFER OUT</h1>
+
+        <a class="topBtn closeBtn" id="closeBtn"
+           href="/shared/transfer/index.html"
+           aria-label="Close">×</a>
+      </div>
+    </header>
+
+    <!-- ===== Kebab slideout menu (overlay style) ===== -->
+    <div id="kebabPanel" class="overlay" hidden aria-hidden="true">
+      <div id="kebabDim" class="overlay-dim" role="button" tabindex="0" aria-label="Close menu"></div>
+
+      <div class="overlay-panel" role="dialog" aria-modal="true" aria-label="Menu">
+        <div class="panel-head">
+          <div class="panel-title">Action</div>
+          <button class="panel-close" id="panelCloseBtn" aria-label="Close menu" type="button">✕</button>
+        </div>
+
+        <div class="panel-list" aria-label="Transfer navigation">
+          <button class="panel-item" id="navInto"  data-page="transfer-into"  type="button">Transfer into</button>
+          <button class="panel-item" id="navOut"   data-page="transfer-out"   type="button">Transfer out</button>
+          <button class="panel-item" id="navClass" data-page="transfer-class" type="button">Transfer class</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== FORM CARD (grey) ===== -->
+    <section class="card card--form" aria-label="Reverse transfer out form">
+
+      <!-- Logger box -->
+      <div class="field">
+        <span class="label">Log</span>
+        <div class="logBox" id="logBox" aria-live="polite"></div>
+      </div>
+
+      <!-- Filter (optional but useful): Year + Class -->
+      <div class="field">
+        <span class="label">Level</span>
+        <div class="row2col">
+          <div class="col">
+            <select class="input" id="levelSelect" required>
+              <option value="">Level</option>
+              <option value="7">Year 7</option>
+              <option value="8">Year 8</option>
+              <option value="9">Year 9</option>
+              <option value="10">Year 10</option>
+              <option value="12">Year 12</option>
+              <option value="13">Year 13</option>
+            </select>
+          </div>
+
+          <div class="col">
+            <select class="input" id="classSelect" required disabled>
+              <option value="">Class</option>
+            </select>
+          </div>
+        </div>
+        <div class="hint">Select level + class to filter names from TRANS OUT.</div>
+      </div>
+
+      <!-- Name (from TRANS OUT col F) -->
+      <div class="field">
+        <label class="label" for="nameInput">Name</label>
+
+        <div class="combo" id="nameCombo">
+          <input class="input upper"
+                 id="nameInput"
+                 type="text"
+                 autocomplete="off"
+                 autocapitalize="characters"
+                 spellcheck="false"
+                 required
+                 disabled>
+
+          <div class="comboList" id="nameList" hidden aria-label="Name suggestions"></div>
+        </div>
+
+        <div class="hint">Type to filter then select (from TRANS OUT).</div>
+      </div>
+
+      <!-- ID (autofill from TRANS OUT col H) -->
+      <div class="field">
+        <label class="label" for="idField">ID</label>
+        <div class="inputWithBtn">
+          <input class="input upper" id="idField" type="text" readonly aria-readonly="true">
+          <button class="inputIconBtn" id="idActionBtn" type="button" aria-label="Copy ID"></button>
+        </div>
+        <div class="hint">Autofilled</div>
+      </div>
+
+      <!-- Gender (autofill from TRANS OUT col G) -->
+      <div class="field">
+        <span class="label">Gender</span>
+        <div class="radioRow" role="radiogroup" aria-label="Gender">
+          <label class="radioOpt">
+            <input type="radio" name="gender" id="gM" value="M" disabled>
+            <span>M</span>
+          </label>
+          <label class="radioOpt">
+            <input type="radio" name="gender" id="gF" value="F" disabled>
+            <span>F</span>
+          </label>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ===== ACTION / PROGRESS CARD (white) ===== -->
+    <section class="card card--actions" aria-label="Actions and progress">
+
+      <div class="btnRow">
+        <button class="btn btn--primary" id="goBtn" type="button">Reverse</button>
+        <button class="btn btn--primary" id="googleBtn" type="button">Google Sheet</button>
+      </div>
+
+      <!-- Progress bar -->
+      <div class="progressWrap" aria-label="Progress">
+        <div class="progressBar" aria-hidden="true">
+          <div class="progressFill" id="progressFill" style="width:0%"></div>
+        </div>
+        <div class="progressPct" id="progressPct">0%</div>
+      </div>
+
+      <!-- Steps list (reverse steps) -->
+      <ol class="stepsList">
+        <li id="s1">Step 1: Restore Monthly report <span class="tick" id="t1"></span></li>
+        <li id="s2">Step 2: Restore Daily report <span class="tick" id="t2"></span></li>
+        <li id="s3">Step 3: Clear TRANSFERRED in profile <span class="tick" id="t3"></span></li>
+      </ol>
+
+      <div class="msg" id="finalMsg" aria-live="polite"></div>
+    </section>
+
+  </div>
+</body>
+</html>

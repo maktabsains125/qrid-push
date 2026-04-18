@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+  <meta name="theme-color" content="#8f61a5">
+  <title>Review</title>
+
+  <!-- Base styles -->
+  <link rel="stylesheet" href="./style.css"/>
+
+  <!-- Material Symbol for disabled icon (Verify lock) -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=disabled_by_default" />
+
+  <!-- Page-only tweaks -->
+  <style>
+    body { background:#8F61A5; margin:0; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+    .page { min-height:100dvh; display:flex; flex-direction:column; gap:0; padding:12px; } /* ← gap:0 */
+    /* Material symbols base settings (you requested this) */
+    .material-symbols-outlined {
+      font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24;
+    }
+  </style>
+
+  <!-- auth + shared role nav -->
+  <script src="/auth.js" defer></script>
+
+  <!-- Page logic -->
+  <script defer src="./app.js"></script>
+</head>
+
+<body>
+  <div class="page">
+
+    <!-- ===== Mast (Heading + X in a centered layout) ===== -->
+    <header class="mast">
+
+      <!-- Centered heading; X is absolutely positioned on the right -->
+      <div class="mastHead">
+        <div class="mastTitle">
+          <!-- REVIEW heading -->
+          <div class="reviewHeader" id="reviewHeader">
+            <h1 class="h20">REVIEW AND VERIFY</h1>
+            <div class="subHead">
+              <strong id="classLabel">Class: –</strong>
+              <span id="monthSpan"></span>
+            </div>
+          </div>
+
+          <!-- REASONS heading -->
+          <div class="reviewHeader hidden" id="remarksHeader">
+            <h1 class="h20">REASONS</h1>
+          </div>
+        </div>
+
+        <button id="closeBtn" class="closeX" title="Back to Dashboard" aria-label="Back">×</button>
+      </div>
+
+      <!-- Status line sits BELOW heading and ABOVE peach nav -->
+      <div id="reviewStatus" class="centerStatus hidden"></div>
+      <div id="remarksStatus" class="centerStatus hidden"></div>
+
+      <!-- Peach Nav -->
+      <nav class="tabs" aria-label="Review navigation">
+        <button id="tabReview" class="tab tab--left" aria-selected="true" type="button">Review</button>
+        <button id="tabReason" class="tab tab--right" aria-selected="false" type="button">Reason</button>
+      </nav>
+    </header>
+
+    <!-- ===== REVIEW PAGE (white container) ===== -->
+    <div class="card" id="reviewCard">
+      <!-- Toolbar: 3 equal invisible grid columns (Verify | Save | Refresh) -->
+      <div class="toolbar toolbarGrid">
+
+        <div class="tcol tcol--left">
+          <!-- ✅ Verify label:
+               - id="verifyLbl" so JS can toggle .isLocked
+               - lock icon element present (shown/hidden by CSS)
+          -->
+       <label class="verifyLbl" id="verifyLbl">
+        <span class="verifyText">Verify</span>
+
+         <span class="verifyBox" aria-hidden="true">
+         <input type="checkbox" id="verifyChk"/>
+         <span class="verifyLockIcon material-symbols-outlined" hidden>disabled_by_default</span>
+        </span>
+       </label>
+
+        </div>
+
+        <div class="tcol tcol--mid">
+          <button id="saveBtn" class="btn-peach" title="Save changes" type="button">Save</button>
+        </div>
+
+        <div class="tcol tcol--right">
+          <button id="refreshBtn" class="btn-peach" type="button">Refresh</button>
+        </div>
+
+      </div>
+
+      <div class="sheet">
+        <div id="tableWrap"></div>
+      </div>
+    </div>
+
+    <!-- ===== REASONS PAGE (white container) ===== -->
+    <div class="card hidden" id="remarksCard">
+      <p class="examples">
+        <em>Examples:</em>
+        <em>Naeyl - Netball Tournament (P); Hanif - Malaysia (N); Azirah - Fever (M); Alim - Unknown (0); Bradley - Visit family in Malaysia (WA)</em>
+      </p>
+
+      <div class="sheet remarks">
+        <table id="remarksTable">
+          <thead>
+            <tr>
+              <th class="headCell">Date</th>
+              <th class="headCell">Day</th>
+              <th class="headCell">Remarks</th>
+            </tr>
+          </thead>
+          <tbody id="remarksBody"></tbody>
+        </table>
+      </div>
+
+      <div class="toolbar">
+        <span id="remarksMsg" class="msg"></span>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>

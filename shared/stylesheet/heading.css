@@ -1,0 +1,77 @@
+/* ===== HEADING ===== */
+
+/*  <link rel="stylesheet" href="./style.css">  */
+
+/* ======================================================
+   ROOT VARIABLES
+====================================================== */
+:root{
+  --purple:#8f61a5;
+  --peach:#efc0a8;
+  --ink:#111;
+  --ink-invert:#fff;
+  --grey:#eeeeef;
+  --grey-deep:#c9c9c9;
+  --radius:16px;
+  --shadow:10px 10px 30px rgba(0,0,0,.35);
+}
+
+/* ======================================================
+   GLOBAL RESET & BASE
+====================================================== */
+*{ box-sizing:border-box; }
+
+html,body{ height:100%; }
+
+body{
+  margin:0;
+  background:var(--purple);
+  color:var(--ink-invert);
+  font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  min-height:100svh;
+}
+
+.page{
+  min-height:100svh;
+  display:flex;
+  flex-direction:column;
+  padding:16px 14px 24px;
+}
+
+.bottomPad{ height:24px; }
+
+/* ======================================================
+   HEADER (10 / 80 / 10)
+====================================================== */
+.topgrid{
+  display:grid;
+  grid-template-columns:10% 1fr 10%;
+  align-items:center;
+  min-height:56px;
+  column-gap:8px;
+}
+
+.col{ display:flex; align-items:center; }
+.col--l{ justify-content:flex-start; }
+.col--c{ justify-content:center; }
+.col--r{ justify-content:flex-end; }
+
+.title{
+  margin:0;
+  text-align:center;
+  color:#fff;
+  font-size:18px;
+}
+
+/* Standard X button */
+.closeBtn{
+  appearance:none;
+  border:0;
+  background:transparent;
+  color:#fff;
+  font-size:28px;
+  line-height:1;
+  padding:2px 6px;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}

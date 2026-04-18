@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+  />
+  <title>Welfare</title>
+
+  <meta name="theme-color" content="#8f61a5"/>
+  <link rel="stylesheet" href="./style.css"/>
+  
+  <!-- auth + shared role nav -->
+  <script src="/auth.js" defer></script>
+  
+  <script defer src="./app.js"></script>
+</head>
+<body>
+  <div class="page">
+    <!-- ===== Header grid 10 / 80 / 10 (mimic other page) ===== -->
+    <header class="topbar">
+      <div class="topgrid">
+        <div class="col"></div>
+        <div class="col">
+          <h1 class="title">WELFARE</h1>
+        </div>
+        <div class="col col--r">
+          <button id="closeTop" class="closeBtn" aria-label="Close and return" title="Close">×</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Shared container to align tabs + slab edges -->
+    <div class="container">
+      <!-- ===== Tabs (peach) ===== -->
+      <nav class="tabsWrap" role="tablist" aria-label="Welfare views">
+        <button id="tabLevel" class="tab tab--left tab--active" type="button" role="tab" aria-selected="true" aria-controls="levelPane">Level</button>
+        <button id="tabAll"   class="tab tab--right" type="button" role="tab" aria-selected="false" aria-controls="allPane">All</button>
+      </nav>
+
+      <!-- ===== Grey slab (flush to tabs) ===== -->
+      <main class="slab">
+        <!-- ===== LEVEL pane ===== -->
+        <section id="levelPane" class="pane" role="tabpanel" aria-labelledby="tabLevel">
+
+          <!-- 2-col grid: Level + Welfare -->
+          <form class="filtersGrid" onsubmit="return false;">
+            <label class="filterCell">
+              <span class="lab">Level:</span>
+              <select id="levelSel" class="ctl" aria-label="Select level">
+                <option value="" selected disabled>Select level</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="12">12</option>
+                <option value="13">13</option>
+              </select>
+            </label>
+
+            <label class="filterCell">
+              <span class="lab">Welfare:</span>
+              <select id="welfareSel" class="ctl" aria-label="Select welfare type">
+                <option value="" selected>All types</option>
+                <option value="Allowance">Allowance</option>
+                <option value="Bus">Bus</option>
+                <option value="Hostel">Hostel</option>
+              </select>
+            </label>
+          </form>
+
+          <!-- 3-col grid: Columns / Wrap / Compact -->
+          <div class="controlsGrid">
+            <button id="btnColumns" class="pill pill--peach" type="button" title="Show/hide columns">Columns</button>
+            <button id="btnWrap" class="pill pill--peach" type="button" aria-pressed="false" title="Toggle text wrapping">Wrap</button>
+            <button id="btnDensity" class="pill pill--peach" type="button" aria-pressed="false" title="Toggle compact density">Compact</button>
+          </div>
+
+          <!-- Data table -->
+          <div class="tableWrap">
+            <div id="levelStatus" class="status" aria-live="polite">Please select Level and Welfare type to view records.</div>
+            <table class="table sticky" aria-describedby="levelStatus">
+              <thead id="levelThead"></thead>
+              <tbody id="levelTbody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ===== ALL pane ===== -->
+        <section id="allPane" class="pane" role="tabpanel" aria-labelledby="tabAll" hidden>
+
+          <!-- 3-col grid for All too -->
+          <div class="controlsGrid">
+            <button id="btnColumnsAll" class="pill pill--peach" type="button" title="Show/hide columns">Columns</button>
+            <button id="btnWrapAll" class="pill pill--peach" type="button" aria-pressed="false" title="Toggle text wrapping">Wrap</button>
+            <button id="btnDensityAll" class="pill pill--peach" type="button" aria-pressed="false" title="Toggle compact density">Compact</button>
+          </div>
+
+          <div class="tableWrap">
+            <div id="allStatus" class="status" aria-live="polite"></div>
+            <table class="table sticky" aria-describedby="allStatus">
+              <thead id="allThead"></thead>
+              <tbody id="allTbody"></tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <footer class="bottomPad" aria-hidden="true"></footer>
+  </div>
+
+  <!-- Row details modal (mobile-friendly full record) -->
+  <div id="rowModal" class="modal" hidden>
+    <div class="modal__card" role="dialog" aria-modal="true" aria-labelledby="rowModalTitle">
+      <header class="modal__head">
+        <h2 id="rowModalTitle" class="modal__title">Details</h2>
+        <button id="modalClose" class="modal__close" aria-label="Close">×</button>
+      </header>
+      <div id="modalBody" class="modal__body"></div>
+    </div>
+    <div class="modal__backdrop"></div>
+  </div>
+</body>
+</html>

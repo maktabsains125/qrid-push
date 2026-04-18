@@ -1,0 +1,284 @@
+:root{
+  --purple:#8f61a5;
+  --purple-700:#7b4f92;
+  --peach:#f4cbb3;
+  --peach-grad:linear-gradient(#f6d4c2,#edc1a3);
+  --grey-slab:#eeeeef;
+  --text:#111;
+  --muted:#666;
+  --white:#fff;
+  --radius:16px;
+  --shadow:0 8px 20px rgba(0,0,0,.08);
+}
+
+/* ===== Page ===== */
+html,body{height:100%;margin:0;}
+body{
+  background:var(--purple);
+  color:var(--text);
+  font:14px/1.4 system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial,"Noto Sans","Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+}
+.page{min-height:100%;display:flex;flex-direction:column;}
+
+/* ===== Header (mimic your other page) ===== */
+.topbar{padding:8px 0 6px;color:#fff;}
+.topgrid{
+  display:grid;
+  grid-template-columns:10% 80% 10%;
+  align-items:center;
+  justify-items:center;
+  min-height:48px;
+}
+.title{
+  margin:0;
+  text-align:center;
+  color:#fff;
+  font-size:18px;
+  padding-left:10px;
+  letter-spacing:.5px;
+}
+.closeBtn{
+  appearance:none;
+  border:0;
+  background:transparent;
+  color:#fff;
+  font-size:28px;
+  line-height:1;
+  padding:2px 6px;
+  cursor:pointer;
+}
+.col{display:flex;align-items:center;}
+.col--r{justify-content:flex-end;}
+
+/* ===== Shared container (align tabs + slab) ===== */
+.container{
+  width:min(1060px,96vw);
+  margin-inline:auto;
+  display:flex;
+  flex-direction:column;
+}
+
+/* ===== Tabs (match other page: solid peach bar, active = translucent white) ===== */
+.tabsWrap{
+  display:flex;
+  gap:0;
+  background:var(--peach);
+  border-top-left-radius:var(--radius);
+  border-top-right-radius:var(--radius);
+  border-radius:16px 16px 0 0;
+  overflow:hidden;
+}
+.tab{
+  flex:1;
+  height:44px;
+  border:0;
+  background:transparent; /* no gradient */
+  color:#111;
+  font-weight:700;
+  cursor:pointer;
+}
+.tab--left{ border-radius:16px 0 0 0; }
+.tab--right{ border-radius:0 16px 0 0; }
+/* Active tab gets a soft white overlay like the other page */
+.tab--active{
+  background:rgba(255,255,255,.35);
+  filter:none; /* remove previous contrast filter */
+  box-shadow:none; /* remove inset highlight */
+}
+
+/* ===== Slab (grey, flush to tabs) ===== */
+.slab{
+  background:var(--grey-slab);
+  border-radius:var(--radius);
+  border-top-left-radius:0;
+  border-top-right-radius:0;
+  box-shadow:var(--shadow);
+  padding:10px 14px 16px;
+}
+
+/* ===== Form row ===== */
+.rowWrap{display:flex;gap:16px;flex-wrap:wrap;align-items:center;}
+.row{display:flex;align-items:center;gap:8px;}
+.lab{font-weight:700;}
+.ctl{min-width:140px;padding:8px 10px;border-radius:10px;border:1px solid #ddd;background:#fff;}
+
+/* ===== Status ===== */
+.status{margin:8px 0 10px;padding:10px 12px;background:#fff;border-radius:12px;color:#333;}
+
+/* ===== Controls ===== */
+.tableControls{display:flex;gap:8px;margin:8px 0 10px;}
+/* Match pill buttons to other page: solid peach, white border/text */
+.pill{
+  width:100%;
+  justify-self:stretch;
+  border-radius:999px;
+  padding:10px 14px;
+  font-weight:800;
+  cursor:pointer;
+  box-shadow:0 1px 2px rgba(0,0,0,.08);
+  transition:filter .15s ease;
+  border:2px solid #fff;
+  background:var(--peach); /* solid, no gradient */
+  color:#fff;
+}
+.pill--peach{
+  background:var(--peach); /* keep same solid color */
+  color:#fff;
+}
+.pill[aria-pressed="true"]{ filter:contrast(105%); }
+
+/* ===== Table ===== */
+.table{
+  border-collapse:separate;border-spacing:0;width:100%;font-size:14px;
+}
+.table thead th{
+  position:sticky;top:0;z-index:2;
+  background:#f5eef7;text-align:left;padding:10px 12px;border-bottom:1px solid #e7e7e7;
+  white-space:nowrap;
+}
+.table tbody td{
+  padding:10px 12px;border-bottom:1px solid #f1f1f1;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+
+/* ===== Sticky columns ===== */
+/* Left sticky (NO.) */
+.table.sticky thead th:first-child{
+  position:sticky;left:0;z-index:3;
+  background:#f5eef7;                  /* header color same as others */
+  box-shadow:1px 0 0 rgba(0,0,0,.08);
+}
+.table.sticky tbody td:first-child{
+  position:sticky;left:0;z-index:2;
+  background:#fff;                      /* body cells stay white */
+  box-shadow:1px 0 0 rgba(0,0,0,.06);
+}
+
+/* Right sticky (STUDENT'S NAME, 4th) — desktop only */
+@media (min-width: 900px){
+  .table.sticky thead th:nth-child(4){
+    position:sticky; right:0; z-index:3;
+    background:#f5eef7;
+    box-shadow:-1px 0 0 rgba(0,0,0,.08);
+    text-align:left;
+  }
+  .table.sticky tbody td:nth-child(4){
+    position:sticky; right:0; z-index:2;
+    background:#fff;
+    box-shadow:-1px 0 0 rgba(0,0,0,.06);
+    text-align:left;
+  }
+}
+
+/* ===== Compact & Wrap ===== */
+.table.compact thead th,.table.compact tbody td{padding:6px;}
+.table.compact{font-size:13px;}
+.table.wrap thead th,.table.wrap tbody td{white-space:normal;text-overflow:clip;overflow:visible;}
+
+/* ===== Column hide ===== */
+.col-hidden{display:none;}
+
+/* ===== Row hover (spans across sticky cells) ===== */
+.table tbody tr:hover td{ background:#faf7fd; }
+.table tbody tr:hover td:first-child,
+.table tbody tr:hover td:nth-child(4){
+  background:#f3eff9; /* slight tint on sticky cells for continuity */
+}
+
+/* ===== Modal ===== */
+/* Make overlay sit behind the card; card remains fully scrollable/touchable */
+.modal{
+  position:fixed;inset:0;display:grid;place-items:center;z-index:50;
+  pointer-events:none; /* container doesn't intercept events */
+}
+.modal[hidden]{display:none;}
+.modal__backdrop{
+  position:absolute;inset:0;background:rgba(0,0,0,.35);
+  z-index:1;
+  pointer-events:auto; /* allow clicking backdrop to close */
+}
+.modal__card{
+  position:relative;
+  width:min(92vw,720px);
+  max-height:80vh;
+  overflow:auto;                     /* scroll inside the card */
+  -webkit-overflow-scrolling:touch;  /* momentum on iOS */
+  background:#fff;color:#111;border-radius:16px;box-shadow:var(--shadow);
+  z-index:2;
+  pointer-events:auto;               /* card receives interactions */
+}
+.modal__head{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid #eee;}
+.modal__title{margin:0;font-size:16px;}
+.modal__close{border:0;background:transparent;font-size:28px;line-height:1;cursor:pointer;}
+.modal__body{padding:12px 14px;}
+.modal__body dl{display:grid;grid-template-columns:140px 1fr;gap:8px 12px;}
+.modal__body dt{font-weight:700;color:#333;}
+.modal__body dd{margin:0;}
+
+/* ===== Footer spacer ===== */
+.bottomPad{height:24px;}
+
+/* ===== Mobile niceties ===== */
+@media (max-width:520px){
+  .table tbody tr{cursor:pointer;}
+  .lab{min-width:64px;}
+}
+
+/* ===== Filters: Level + Welfare ===== */
+.filtersGrid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px;
+  align-items:end;
+  margin-bottom:8px;
+}
+.filterCell{
+  display:grid;
+  grid-template-rows:auto auto;
+  gap:6px;
+}
+.filterCell .lab{font-weight:700;color:#333;}
+
+/* ===== Controls: 3 equal buttons ===== */
+.controlsGrid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin:8px 0 10px;
+}
+
+/* ===== Scroll fix (vertical + horizontal) ===== */
+.tableWrap{
+  display:flex;
+  flex-direction:column;
+  overflow:auto;
+  max-height:70vh;                  /* vertical scroll region */
+  overscroll-behavior:contain;
+  touch-action:auto;                /* free natural scroll both ways */
+  -webkit-overflow-scrolling:touch;
+  background:#fff;
+  border-radius:12px;
+  box-shadow:inset 0 0 0 1px #eee;
+}
+.tableWrap table{
+  flex:0 0 auto;
+  min-width:100%;                   /* maintain horizontal scroll */
+}
+
+/* ===== Dialog (Columns chooser) ===== */
+dialog{
+  border:2px solid var(--peach);
+  border-radius:12px;
+  background:#fff;
+  box-shadow:var(--shadow);
+  padding:14px;
+  max-width:420px;
+}
+dialog h3{margin-bottom:6px;color:var(--purple-700);}
+dialog button.pill{
+  background:var(--peach);
+  color:#fff;
+  font-weight:700;
+  border:2px solid #fff;
+  width:100%;
+}

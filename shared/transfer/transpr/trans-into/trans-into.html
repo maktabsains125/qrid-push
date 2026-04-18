@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+  <title>TRANSFER INTO</title>
+
+  <meta name="theme-color" content="#8f61a5"/>
+
+  <link rel="stylesheet" href="/shared/transfer/transpr/transfer.css"/>
+  <link rel="stylesheet" href="/shared/stylesheet/left-kebab.css"/>
+
+  <!-- auth + shared role nav -->
+  <script src="/auth.js" defer></script>
+
+  <script defer src="./trans-into.js"></script>
+</head>
+<body>
+  <div class="page">
+
+    <!-- ===== Top bar (kebab | heading | X) ===== -->
+    <header class="topbar">
+      <div class="topgrid">
+      <button class="kebab-btn" id="kebabBtn" aria-label="Menu">⋮</button>
+
+        <h1 class="title">TRANSFER INTO</h1>
+
+        <a class="topBtn closeBtn" id="closeBtn" href="/shared/transfer/index.html" aria-label="Close">
+          ×
+        </a>
+      </div>
+    </header>
+	
+	 <!-- ===== Kebab slideout menu (overlay style) ===== -->
+<div id="kebabPanel" class="overlay" hidden aria-hidden="true">
+  <!-- dim area on the right -->
+  <div id="kebabDim" class="overlay-dim" role="button" tabindex="0" aria-label="Close menu"></div>
+
+  <!-- left panel -->
+  <div class="overlay-panel">
+    <div class="panel-head">
+      <div class="panel-title">Action</div>
+      <button class="panel-close" id="panelCloseBtn" aria-label="Close menu">✕</button>
+    </div>
+
+    <div class="panel-list">
+      <button class="panel-item" id="navInto">Transfer into</button>
+      <button class="panel-item" id="navOut">Transfer out</button>
+      <button class="panel-item" id="navClass">Transfer class</button>
+    </div>
+  </div>
+</div>
+
+	
+
+    <!-- ===== FORM CARD (grey) ===== -->
+    <section class="card card--form">
+      
+	  <div class="field">
+        <label class="label" for="fromClass">Transfer from</label>
+        <input class="input" id="fromClass" type="text" placeholder="Previous school" required>
+      </div>
+
+      <!-- Transfer into -->
+      <div class="field">
+        <span class="label">Transfer into</span>
+        <div class="row2col">
+          <div class="col">
+            <select class="input" id="levelSelect" required>
+              <option value="">Level</option>
+              <option value="Year 7">Year 7</option>
+              <option value="Year 8">Year 8</option>
+              <option value="Year 9">Year 9</option>
+              <option value="Year 10">Year 10</option>
+              <option value="Year 12">Year 12</option>
+              <option value="Year 13">Year 13</option>
+            </select>
+          </div>
+          <div class="col">
+            <select class="input" id="classSelect" required disabled>
+              <option value="">Class</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label" for="dateIn">Transfer date</label>
+        <input class="input" id="dateIn" type="date" required>
+      </div>
+	  
+	  
+	  <div class="field">
+        <label class="label" for="stuId">ID</label>
+        <input class="input" id="stuId" type="text" inputmode="numeric"
+               maxlength="5" placeholder="5-digit ID" required>
+        <div class="hint" id="idHint">Must be exactly 5 digits, e.g. 12345</div>
+      </div>
+	  
+	
+	<div class="field">
+        <label class="label" for="stuName">Name</label>
+        <input class="input" id="stuName" type="text" placeholder="Full name" required>
+      </div>
+
+      <div class="field">
+        <span class="label">Gender</span>
+        <div class="radioRow">
+          <label class="radioOpt">
+            <input type="radio" name="gender" value="M" required>
+            <span>M</span>
+          </label>
+          <label class="radioOpt">
+            <input type="radio" name="gender" value="F" required>
+            <span>F</span>
+          </label>
+        </div>
+      </div>
+
+    </section> 
+
+    <!-- ===== ACTION / PROGRESS CARD (white) ===== -->
+    <section class="card card--actions">
+      <div class="btnRow">
+        <button class="btn btn--primary" id="goBtn">Transfer</button>
+        <button class="btn btn--primary" id="cancelBtn">Cancel</button>
+      </div>
+	  
+	  <div class="mutedNote" id="closeNote">Opening: 3pm onwards. All day on Fri and Sun.</div>
+
+      <!-- Steps list -->
+      <ol class="stepsList">
+        <li id="s1">Step 1: Adding student to transfer list <span class="tick"></span></li>
+        <li id="s2">Step 2: Adding student to monthly report <span class="tick"></span></li>
+        <li id="s3">Step 3: Placing X in prior months <span class="tick"></span></li>
+        <li id="s4">Step 4: Adding student to current report <span class="tick"></span></li>
+        <li id="s5">Step 5: Placing X in prior days <span class="tick"></span></li>
+      </ol>
+
+      <div class="msg" id="finalMsg" aria-live="polite"></div>
+    </section>
+
+  </div>
+</body>
+</html>

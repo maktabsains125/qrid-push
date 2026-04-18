@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+  <meta name="theme-color" content="#8f61a5"/>
+  <title>TRANSFERRED LIST</title>
+
+  <link rel="stylesheet" href="./list.css"/>
+  <link rel="stylesheet" href="/shared/stylesheet/left-kebab.css"/>
+
+  <script src="/auth.js" defer></script>
+  <script src="./list.js" defer></script>
+</head>
+
+<body>
+  <div class="page">
+
+    <!-- ===== Header ===== -->
+    <header class="head" role="banner">
+      <button class="head-kebab" id="" aria-label="Menu" type="button"></button>
+      <h1 class="head-title">TRANSFERRED LIST</h1>
+		<a
+  		id="closeBtn"
+  		class="head-x"
+  		href="/shared/transfer/index.html"
+  		aria-label="Return to transfer"
+		>×</a>
+    </header>
+
+    <!-- status below heading -->
+    <div class="loadStatus" id="loadStatus">
+      <span id="statusText">Ready</span><span class="dotsBox" id="dotsBox"></span>
+    </div>
+
+    <!-- ===== Card 1: filters ===== -->
+    <section class="card" aria-label="Filters">
+      <div class="formRow">
+        <label class="lbl" for="typeSel">Transfer type:</label>
+        <select id="typeSel" class="sel">
+          <option value="Out">Out</option>
+          <option value="Into">Into</option>
+          <option value="Class">Class</option>
+        </select>
+      </div>
+
+      <div class="formRow">
+        <label class="lbl" for="levelSel">Level:</label>
+        <select id="levelSel" class="sel">
+          <option>Year 7</option>
+          <option>Year 8</option>
+          <option>Year 9</option>
+          <option>Year 10</option>
+          <option>Year 12</option>
+          <option>Year 13</option>
+        </select>
+      </div>
+    </section>
+
+    <div style="height:12px"></div>
+
+    <!-- ===== Card 2: actions + table ===== -->
+    <section class="card" aria-label="List and Download">
+      <div class="btnRow">
+        <button class="pillBtn" id="listBtn" type="button">List</button>
+		<a
+  		class="pillBtn"
+  		id="dlBtn"
+  		href="/shared/transfer/list/list-out/list-out.html">
+  		Attendance
+       </a>
+      </div>
+
+      <div class="tableWrap" id="tableWrap" style="margin-top:10px;">
+        <!-- table injected here -->
+      </div>
+    </section>
+
+  </div>
+</body>
+</html>

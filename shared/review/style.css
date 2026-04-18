@@ -1,0 +1,433 @@
+/* ===== base bits for this page ===== */
+*{ box-sizing:border-box }
+html,body{ height:100% }
+
+body{
+  margin:0;
+  font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  color:#111;
+  background:#fafafa;
+}
+
+.page{
+  max-width:980px;
+  margin:0 auto;
+  padding:12px;
+}
+
+/* (legacy bits kept for compatibility) */
+.head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:8px;
+}
+.titleBlock h1{ margin:0 0 2px; font-size:20px }
+.sub{ font-size:12px; color:#666 }
+
+.kebab{
+  font-size:22px;
+  line-height:1;
+  background:#fff;
+  border:1px solid #ccc;
+  border-radius:8px;
+  width:36px;
+  height:36px;
+}
+
+.menuPane{
+  position:absolute;
+  margin-top:6px;
+  right:12px;
+  background:#fff;
+  border:1px solid #ddd;
+  border-radius:10px;
+  padding:8px 10px;
+  box-shadow:0 10px 30px rgba(0,0,0,.15);
+}
+.menuPane a{
+  display:block;
+  text-decoration:none;
+  color:#111;
+  padding:6px 10px;
+  border-radius:8px;
+}
+.menuPane a:hover{ background:#f3f3f3 }
+
+/* ===== Shared tokens ===== */
+:root{
+  --b:#d0d0d0;
+  --hdr:#f3f3f3;
+  --today:#fff3b0;
+  --blue:#e8f1ff;
+  --pink:#ffe8f1;
+  --purple:#D9D2E9;
+  --peach:#efc0a8;
+}
+
+.msg{ margin-left:8px; font-size:.95em; opacity:.8 }
+.muted{ color:#666; font-size:12px }
+.hidden{ display:none }
+.h20{ font-size:20px; margin:0 }
+
+/* ===== Mast / Header ===== */
+.mastHead{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:8px 40px;
+}
+
+.mastTitle{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+}
+
+.mastTitle h1,
+.mastTitle .subHead{
+  color:#fff !important;
+}
+
+.reviewHeader{
+  max-width:100%;
+  margin:4px 0 6px;
+  padding:0 2px;
+}
+
+.reviewHeader .subHead{
+  display:flex;
+  gap:12px;
+  align-items:center;
+  justify-content:center;
+  margin-top:2px;
+  font-size:12px;
+}
+
+/* ===== Close (X) button ===== */
+.closeX{
+  appearance:none;
+  border:0;
+  background:transparent;
+  color:#fff;
+  font-size:28px;
+  line-height:1;
+  padding:2px 6px;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+  outline:none;
+  position:absolute;
+  right:6px;
+  top:8px;
+}
+.closeX:focus,
+.closeX:active{
+  outline:none;
+  transform:none;
+}
+
+/* ===== Status line ===== */
+.centerStatus{
+  text-align:center;
+  margin:6px 0 10px;
+  font-size:13px;
+  color:#fff;
+  font-weight:700;
+}
+
+/* ===== Fixed-width loading dots (no layout shift) ===== */
+.dots{
+  display:inline-block;
+  width:3ch;
+  text-align:left;
+  vertical-align:bottom;
+  font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+.dots::after{
+  content:"";
+  animation:dots-step 1.2s steps(4,end) infinite;
+}
+@keyframes dots-step{
+  0%{ content:"" }
+  25%{ content:"." }
+  50%{ content:".." }
+  100%{ content:"..." }
+}
+
+/* ===== Tabs ===== */
+.tabs{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:0;
+  margin:0 0 -1px;
+}
+.tab{
+  background:var(--peach);
+  border:none;
+  padding:12px;
+  font-weight:700;
+  cursor:pointer;
+  user-select:none;
+}
+.tab + .tab{ border-left:2px solid #fff }
+.tab--left{ border-top-left-radius:16px }
+.tab--right{ border-top-right-radius:16px }
+.tab[aria-selected="true"]{
+  z-index:2;
+  position:relative;
+}
+.tab[aria-selected="false"]{
+  z-index:1;
+  position:relative;
+  box-shadow:inset 0 -4px 10px rgba(0,0,0,.1);
+}
+
+/* ===== Card ===== */
+.card{
+  background:#fff;
+  border:1px solid #ddd;
+  border-radius:12px;
+  padding:10px;
+  box-shadow:0 10px 30px rgba(0,0,0,.06);
+  border-top-left-radius:0;
+  border-top-right-radius:0;
+  margin-top:0;
+}
+
+/* ===== Toolbar ===== */
+.toolbarGrid{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  align-items:center;
+  text-align:center;
+  margin-bottom:10px;
+}
+
+.tcol{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:8px;
+  padding:0 4px;
+}
+
+.tcol--mid button,
+.tcol--right button{
+  width:100%;
+}
+
+.btn-peach{
+  background:var(--peach);
+  border:1px solid #d4a48e;
+  padding:8px 12px;
+  border-radius:6px;
+  font-weight:700;
+}
+.btn-peach:hover{ filter:brightness(0.98) }
+
+/* ===== Verify (single box only, NO double during load) ===== */
+.verifyLbl{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-weight:700;
+}
+
+/* Box slot that always occupies the same space */
+.verifyBox{
+  display:inline-grid;
+  place-items:center;
+  width:28px;
+  height:28px;
+}
+
+/* Normal checkbox visible by default */
+#verifyChk{
+  width:20px;
+  height:20px;
+  margin:0;
+}
+
+/* ✅ IMPORTANT:
+   icon should be hidden by DEFAULT using [hidden] in HTML
+   so it never flashes during page load */
+.verifyLockIcon[hidden]{
+  display:none !important;
+}
+
+/* When NOT locked, icon stays hidden */
+.verifyLockIcon{
+  font-size:22px;
+  line-height:1;
+  opacity:.85;
+}
+
+/* Locked look */
+.verifyLbl.isLocked{
+  opacity:.55;
+  cursor:not-allowed;
+}
+
+/* ✅ KEY: when locked, hide checkbox and show the icon (override hidden) */
+.verifyLbl.isLocked #verifyChk{
+  display:none;
+}
+.verifyLbl.isLocked .verifyLockIcon{
+  display:inline-block !important;
+}
+.verifyLbl.isLocked .verifyLockIcon[hidden]{
+  display:inline-block !important;
+}
+
+/* ===== Sheet container ===== */
+.sheet{
+  border:1px solid var(--b);
+  overflow:auto;
+  max-height:75vh;
+  -webkit-overflow-scrolling:touch;
+  touch-action:pan-x pan-y;
+}
+
+/* Table */
+table{
+  border-collapse:collapse;
+  width:max-content;
+  min-width:100%;
+  table-layout:fixed;
+}
+
+th,td{
+  border:1px solid var(--b);
+  padding:0;
+  background:#fff;
+  font-size:12px;
+  text-align:center;
+  vertical-align:middle;
+}
+
+/* Sticky columns */
+.c0{
+  position:sticky;
+  left:0;
+  z-index:5;
+  background:#fff;
+}
+.c4{
+  position:sticky;
+  left:30px;
+  z-index:5;
+  background:#fff;
+}
+.c0::after,
+.c4::after{
+  content:"";
+  position:absolute;
+  top:0;
+  right:-1px;
+  width:1px;
+  height:100%;
+  background:var(--b);
+}
+
+/* Sticky row 4 */
+.r4{
+  background:var(--purple) !important;
+  position:sticky;
+  top:0;
+  z-index:7;
+  box-shadow:0 1px 0 rgba(0,0,0,.08);
+}
+.r4 > .clip{ background:var(--purple) !important }
+.r4.c0,
+.r4.c4{
+  background:var(--purple) !important;
+  z-index:8;
+}
+
+/* Cell content */
+.clip{
+  display:block;
+  padding:4px 6px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  font-size:12px;
+}
+
+.nameCol .clip{ text-align:left }
+
+/* Editing */
+.editable .clip{ background:transparent }
+.editable:focus-within .clip{
+  outline:2px solid #a5c9ff;
+  background:#fff;
+}
+
+/* Gender colours */
+.gender-male .clip{ background:var(--blue) !important }
+.gender-female .clip{ background:var(--pink) !important }
+
+/* ===== Remarks ===== */
+.remarks .headCell{ background:var(--purple) }
+.remarks thead th{
+  position:sticky;
+  top:0;
+  z-index:3;
+  background:var(--purple);
+}
+.remarks table{ width:100% }
+.remarks th,
+.remarks td{ font-size:13px }
+
+.remarks .rclip{
+  display:block;
+  padding:6px 8px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.remarks .col2{
+  width:150px;
+  min-width:150px;
+}
+
+/* Editable remarks should wrap */
+.remarks td.editable .rclip{
+  white-space:normal;
+  overflow:visible;
+  text-overflow:clip;
+}
+
+.remarks td.editable:focus-within .rclip{
+  outline:2px solid #a5c9ff;
+  background:#fff;
+}
+
+.examples{ font-size:10px }
+
+/* ===== Totals ===== */
+.totalHdr,
+.totalHdr > .clip{
+  background-color:#D9EAD3 !important;
+}
+
+.colTotal,
+.colTotalPct{
+  width:80px;
+  min-width:80px;
+  max-width:80px;
+}
+
+/* Buttons */
+button,
+[role="button"]{
+  cursor:pointer;
+}
+button[disabled],
+[aria-disabled="true"]{
+  cursor:not-allowed;
+}

@@ -1,0 +1,361 @@
+*{ box-sizing:border-box; }
+html,body{ height:100%; }
+body{
+  margin:0;
+  font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  background:#8f61a5;
+  color:#111;
+}
+
+:root{
+  --purple:#8f61a5;
+  --peach:#efc0a8;
+  --border:#d0d0d0;
+  --hdr:#D9D2E9;
+  --today:#FFFDCA;
+}
+
+.page{
+  max-width:1200px;
+  margin:0 auto;
+  padding:12px;
+  min-height:100dvh;
+}
+
+.h20{ font-size:20px; margin:0; color:#fff; }
+
+.mast{ margin-bottom:10px; }
+.mastInner{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:8px 40px;
+}
+.mastTitle{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+}
+.subHead{
+  display:flex;
+  gap:12px;
+  align-items:center;
+  justify-content:center;
+  margin-top:4px;
+  font-size:12px;
+  color:#fff;
+}
+.closeX{
+  appearance:none;
+  border:0;
+  background:transparent;
+  color:#fff;
+  font-size:28px;
+  line-height:1;
+  padding:2px 6px;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+  outline:none;
+  position:absolute;
+  right:6px;
+  top:8px;
+}
+.closeX:focus,
+.closeX:active{ outline:none; transform:none; }
+
+.statusLine{
+  text-align:center;
+  margin:6px 0 0;
+  font-size:13px;
+  font-weight:700;
+  color:#fff;
+  min-height:18px;
+}
+
+/* Layout */
+.layout{
+  display:grid;
+  grid-template-columns: 280px 1fr;
+  gap:12px;
+}
+.layout > *{ min-width:0; }
+
+@media (max-width: 900px){
+  .layout{ grid-template-columns:1fr; }
+}
+
+/* Panel */
+.panel{
+  background:#fff;
+  border:1px solid #ddd;
+  border-radius:12px;
+  padding:10px;
+  box-shadow:0 10px 30px rgba(0,0,0,.06);
+}
+.panelTitle{
+  font-weight:800;
+  margin:8px 0 6px;
+}
+
+.levelRow{
+  display:grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap:8px;
+  align-items:center;
+}
+
+.chip{
+  border:1px solid #d4a48e;
+  background:var(--peach);
+  aspect-ratio: 1 / 1;
+  width:100%;
+  max-width:56px;
+  height:auto;
+  display:grid;
+  place-items:center;
+  padding:0;
+  line-height:1;
+  border-radius:999px;
+  font-weight:900;
+  cursor:pointer;
+  user-select:none;
+}
+
+.chip.isActive{
+  outline:2px solid rgba(143,97,165,.35);
+}
+
+.classGrid{
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap:8px;
+}
+.classBtn{
+  border:1px solid #ddd;
+  background:#fff;
+  padding:10px 8px;
+  border-radius:10px;
+  font-weight:900;
+  cursor:pointer;
+}
+.classBtn:hover{ filter:brightness(0.98); }
+.empty{ color:#555; font-size:13px; padding:6px 0; }
+
+/* Viewer */
+.viewer{
+  background:transparent;
+  min-width:0;
+}
+
+.tabs{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:0;
+  margin:0 0 -1px;
+}
+.tab{
+  background:var(--peach);
+  border:none;
+  padding:12px;
+  font-weight:900;
+  cursor:pointer;
+  user-select:none;
+}
+.tab + .tab{ border-left:2px solid #fff; }
+.tab[aria-selected="true"]{
+  position:relative;
+  z-index:2;
+}
+.tab[aria-selected="false"]{
+  position:relative;
+  z-index:1;
+  box-shadow:inset 0 -4px 10px rgba(0,0,0,.10);
+}
+
+.tab:first-child{ border-top-left-radius:12px; }
+.tab:last-child{ border-top-right-radius:12px; }
+
+.card{
+  background:#fff;
+  border:1px solid #ddd;
+  border-radius:12px;
+  border-top-left-radius:0;
+  border-top-right-radius:0;
+  padding:10px;
+  box-shadow:0 10px 30px rgba(0,0,0,.06);
+  min-width:0;
+}
+.hidden{ display:none; }
+
+.toolbar{
+  display:grid;
+  grid-auto-flow:column;
+  grid-auto-columns:1fr;
+  gap:10px;
+  width:max-content;
+  margin-left:auto;
+}
+
+.btn{
+  width:100%;
+  padding:8px 16px;
+  border:1px solid #d4a48e;
+  background:var(--peach);
+  border-radius:8px;
+  font-weight:900;
+  cursor:pointer;
+  margin-bottom:10px;
+}
+
+.btn[disabled]{
+  opacity:.55;
+  cursor:not-allowed;
+}
+
+/* Make the scroll happen INSIDE the sheet */
+.sheet{
+  border:1px solid var(--border);
+  overflow:auto;
+  max-height:75vh;
+  max-width:100%;
+  -webkit-overflow-scrolling:touch;
+  touch-action:pan-x pan-y;
+}
+
+#tableWrap{ min-width:0; }
+
+/* Table */
+table{
+  border-collapse:collapse;
+  width:max-content;
+  min-width:100%;
+  table-layout:fixed;
+}
+td,th{
+  border:1px solid var(--border);
+  padding:0;
+  background:#fff;
+  font-size:12px;
+  text-align:center;
+  vertical-align:middle;
+}
+.clip{
+  display:block;
+  padding:4px 6px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+/* Sticky columns + sticky header */
+#tableWrap table{ --c0w: 56px; }
+
+td.c0{
+  position: sticky;
+  left: 0;
+  z-index: 6;
+  background: #fff;
+}
+
+td.c4{
+  position: sticky;
+  left: var(--c0w);
+  z-index: 6;
+  background: #fff;
+}
+
+td.c0::after,
+td.c4::after{
+  content:"";
+  position:absolute;
+  top:0;
+  right:-1px;
+  width:1px;
+  height:100%;
+  background:var(--border);
+}
+
+td.r4{
+  position: sticky;
+  top: 0;
+  z-index: 8;
+  background: var(--hdr) !important;
+  box-shadow: 0 1px 0 rgba(0,0,0,.08);
+}
+
+td.r4.c0,
+td.r4.c4{
+  z-index: 10;
+  background: var(--hdr) !important;
+}
+
+/* Highlight today */
+.isToday{ background:var(--today) !important; }
+
+/* Editing */
+.editable .clip{ background:transparent; }
+.editable:focus-within .clip{
+  outline:2px solid rgba(165,201,255,.9);
+  background:#fff;
+}
+
+/* Red-ish font for flagged F col */
+.fRed .clip{ color:#EA4335; font-weight:900; }
+
+/* Remarks */
+.remarks table{ width:100%; }
+.remarks th{
+  position:sticky;
+  top:0;
+  z-index:3;
+  background:var(--hdr);
+}
+.rclip{
+  display:block;
+  padding:8px 10px;
+  white-space:normal;
+  overflow:visible;
+}
+.remarks td.editable:focus-within .rclip{
+  outline:2px solid rgba(165,201,255,.9);
+  background:#fff;
+}
+.remarks td.readonly{ opacity:.8; }
+
+/* ===============================
+   TOTAL columns (last 2) — FIXED
+   =============================== */
+
+/* Keep widths the same, but DO NOT color body cells */
+td.totalCol,
+td.totalPctCol{
+  width:78px;
+  min-width:78px;
+  max-width:78px;
+  background:#fff !important; /* force body back to white */
+}
+
+/* Color ONLY the header (row 4) cells */
+td.r4.totalCol,
+td.r4.totalPctCol{
+  background:#BCEBD7 !important;
+  font-weight:900;
+}
+
+/* 2nd column (B) — body left aligned */
+#tableWrap td:nth-child(2){
+  text-align:left;
+}
+#tableWrap td:nth-child(2) .clip{
+  padding-left:8px;
+}
+
+/* But keep header row centered for column B */
+#tableWrap td.r4:nth-child(2){
+  text-align:center;
+}
+#tableWrap td.r4:nth-child(2) .clip{
+  padding-left:6px; /* normal padding */
+}

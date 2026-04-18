@@ -1,0 +1,395 @@
+/* =========================
+   TRANSFER stylesheet
+   Covers: trans-out.css, trans-into.css, trans-class.css
+   ========================= */
+
+:root{
+  --purple:#8f61a5;
+  --peach:#efc0a8;
+  --ink:#111;
+  --ink-invert:#fff;
+  --grey:#eeeeef;
+  --grey-deep:#c9c9c9;
+  --radius:16px;
+  --shadow:0 10px 30px rgba(0,0,0,.12);
+
+  --title-size:18px;
+  --btn-h:clamp(44px,6vh,56px);
+  --gap:16px;
+  --font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+}
+
+*{ box-sizing:border-box; }
+
+html,body{
+  min-height:100%;
+  margin:0;
+  background:var(--purple);
+  color:var(--ink-invert);
+  font:var(--font);
+}
+
+.page{
+  min-height:100svh;
+  display:flex;
+  flex-direction:column;
+  padding:18px 14px 24px;
+  gap:16px;
+}
+
+/* =========================
+   Top bar
+   ========================= */
+.topbar{ width:100%; }
+
+.topgrid{
+  width:100%;
+  max-width:500px;
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:10% 1fr 10%;
+  align-items:center;
+  color:var(--ink-invert);
+}
+
+.topBtn{
+  background:none;
+  border:0;
+  color:var(--ink-invert);
+  font-size:28px;
+  line-height:1;
+  text-decoration:none;
+  text-align:center;
+  cursor:pointer;
+  padding:4px;
+}
+
+.closeBtn{
+  font-weight:700;
+  text-decoration:none;
+}
+
+.kebabDots{
+  display:block;
+  width:4px;
+  height:4px;
+  border-radius:50%;
+  background:var(--ink-invert);
+  margin:3px auto;
+}
+
+.title{
+  margin:0;
+  text-align:center;
+  font-size:var(--title-size);
+  font-weight:600;
+  color:#fff;
+  line-height:1.2;
+}
+
+/* =========================
+   Cards
+   ========================= */
+.card{
+  width:100%;
+  max-width:500px;
+  margin:0 auto;
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:16px;
+}
+
+.card--form{
+  background:var(--grey);
+  color:var(--ink);
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+
+.card--actions{
+  background:#fff;
+  color:var(--ink);
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+  border-radius:var(--radius);
+}
+
+/* =========================
+   Fields
+   ========================= */
+.field{
+  display:flex;
+  flex-direction:column;
+}
+
+.label{
+  color:var(--ink);
+  font-size:16px;
+  font-weight:500;
+  margin:0 0 6px;
+}
+
+.input{
+  width:100%;
+  background:#fff;
+  color:var(--ink);
+  border:1px solid var(--grey-deep);
+  border-radius:var(--radius);
+  font-size:16px;
+  line-height:1.4;
+  padding:10px 12px;
+  min-height:44px;
+}
+
+.input:disabled{
+  background:#f5f5f5;
+  color:#888;
+}
+
+.hint{
+  font-size:12px;
+  font-style:italic;
+  color:#555;
+  margin-top:4px;
+  text-align:left;
+}
+
+/* radio row */
+.radioRow{
+  display:flex;
+  gap:16px;
+}
+.radioOpt{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  font-size:16px;
+  color:var(--ink);
+}
+
+/* level/class row */
+.row2col{
+  display:flex;
+  gap:12px;
+}
+.row2col .col{ flex:1; }
+
+/* =========================
+   Buttons
+   ========================= */
+.btnRow{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  justify-content:space-between;
+}
+
+.btn{
+  flex:1;
+  background:var(--purple);
+  color:var(--ink-invert);
+  border:0;
+  border-radius:0; /* square buttons */
+  box-shadow:var(--shadow);
+  min-height:var(--btn-h);
+  font-size:16px;
+  font-weight:600;
+  text-align:center;
+  cursor:pointer;
+}
+
+.btn:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+}
+
+/* =========================
+   Progress / Steps
+   ========================= */
+.progressWrap{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.progressBar{
+  flex:1;
+  background:var(--grey);
+  border-radius:8px;
+  height:10px;
+  overflow:hidden;
+  border:1px solid var(--grey-deep);
+}
+
+.progressFill{
+  background:var(--purple);
+  height:100%;
+  width:0%;
+  transition:width .3s linear; /* smooth grow, not flashing */
+}
+
+.progressPct{
+  min-width:3ch;
+  font-size:14px;
+  text-align:right;
+  color:var(--ink);
+  font-weight:600;
+}
+
+.stepsList{
+  margin:0;
+  padding-left:20px;
+  color:var(--ink);
+  font-size:14px;
+  line-height:1.4;
+}
+
+.stepsList li{
+  margin-bottom:6px;
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:8px;
+}
+
+.tick{
+  color:green;
+  font-weight:700;
+  min-width:1.5ch;
+  text-align:right;
+}
+
+.msg{
+  font-size:14px;
+  min-height:1.4em;
+  color:var(--ink);
+  font-weight:600;
+  text-align:center;
+}
+
+/* =========================
+   Small screen tweak
+   ========================= */
+@media(min-width:600px){
+  .page{ padding-top:24px; }
+}
+
+/* =========================
+   Input with icon button (from trans-out + trans-class)
+   ========================= */
+.inputWithBtn{
+  position:relative;
+}
+
+.inputWithBtn .input{
+  width:100%;
+  padding-right:44px; /* space for the arrow button */
+}
+
+.inputIconBtn{
+  position:absolute;
+  top:50%;
+  right:10px;
+  transform:translateY(-50%);
+  border:none;
+  background:transparent;
+  cursor:pointer;
+  font-size:18px;
+  line-height:1;
+  padding:0;
+}
+
+/* If #progressFill specifically in DOM */
+#progressFill{
+  transition:width 0.5s ease;
+}
+
+/* =========================
+   ✅ ADDITIONS (needed)
+   ========================= */
+
+/* Auto BLOCK LETTERS (visual). JS should still .toUpperCase() before save. */
+.upper{
+  text-transform:uppercase;
+  letter-spacing:.4px;
+}
+
+.logBox{
+  width:100%;
+  min-height:120px;
+  max-height:180px;
+  overflow:auto;
+  background:#000;
+  color:#fff;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.12);
+  padding:10px 12px;
+  font:12px/1.45 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  white-space:pre-wrap;
+}
+
+/* Nice focus ring (helps mobile) */
+.input:focus,
+button:focus,
+a:focus{
+  outline:2px solid rgba(143,97,165,.45);
+  outline-offset:2px;
+}
+
+/* Disabled radios still readable */
+.radioOpt input[disabled] + span{
+  opacity:.9;
+}
+
+/* ===== Custom dropdown ===== */
+.combo{ position:relative; }
+
+.comboList{
+  position:absolute;
+  left:0;
+  right:0;
+  top:calc(100% + 6px);
+
+  background:#fff;
+  border:1px solid var(--grey-deep);
+  border-radius:12px;
+  box-shadow:0 12px 26px rgba(0,0,0,.14);
+
+  max-height:260px;
+  overflow:auto;
+  z-index:50;
+}
+
+.comboItem{
+  padding:12px 12px;
+  font-size:16px;
+  color:var(--ink);
+  cursor:pointer;
+  user-select:none;
+}
+
+.comboItem + .comboItem{
+  border-top:1px solid rgba(0,0,0,.06);
+}
+
+.comboItem:hover{
+  background:rgba(143,97,165,.08);
+}
+
+.comboEmpty{
+  padding:12px 12px;
+  font-size:14px;
+  color:#666;
+}
+
+/* Muted note */
+.mutedNote{
+  font-size:12px;
+  color:var(--ink);
+  text-align:center;
+  margin-top:-6px;  
+  font-weight:500;
+  font-style: italic;
+}

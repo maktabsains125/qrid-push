@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+  <meta name="theme-color" content="#8f61a5"/>
+  <title>Daily Reports</title>
+
+  <link rel="stylesheet" href="./daily-reports.css"/>
+
+  <script src="/auth.js" defer></script>
+  <script src="./daily-reports.js" defer></script>
+</head>
+
+<body>
+  <div class="page">
+
+    <header class="mast">
+      <div class="mastInner">
+        <div class="mastTitle">
+          <h1 class="h20">DAILY REPORTS</h1>
+          <div class="subHead">
+            <strong id="whoBadge">—</strong>
+            <span id="metaBadge">—</span>
+          </div>
+        </div>
+
+        <button id="closeBtn" class="closeX" aria-label="Back">×</button>
+      </div>
+
+      <div id="status" class="statusLine" aria-live="polite"></div>
+    </header>
+
+    <main class="layout">
+      <!-- ===== Left: Select ===== -->
+      <section class="panel">
+        <div class="panelTitle">Select Level</div>
+        <div class="levelRow" id="levelRow">
+          <button class="chip" data-level="7"  type="button">7</button>
+          <button class="chip" data-level="8"  type="button">8</button>
+          <button class="chip" data-level="9"  type="button">9</button>
+          <button class="chip" data-level="10" type="button">10</button>
+          <button class="chip" data-level="12" type="button">12</button>
+          <button class="chip" data-level="13" type="button">13</button>
+        </div>
+
+        <div class="panelTitle">Select Class</div>
+        <div id="classGrid" class="classGrid"></div>
+      </section>
+
+      <!-- ===== Right: Viewer ===== -->
+      <section class="viewer">
+        <nav class="tabs" aria-label="Viewer tabs">
+          <button id="tabGrid" class="tab" aria-selected="true" type="button">Attendance</button>
+          <button id="tabRemarks" class="tab" aria-selected="false" type="button">Remarks</button>
+        </nav>
+
+        <div class="card" id="gridCard">
+          <div class="toolbar">
+            <button id="saveBtn" class="btn" type="button">Save</button>
+            <button id="refreshBtn" class="btn" type="button">Refresh</button>
+          </div>
+          <div class="sheet">
+            <div id="tableWrap"></div>
+          </div>
+        </div>
+
+        <div class="card hidden" id="remarksCard">
+          <div class="toolbar">
+            <span class="muted">Only Remarks column is editable.</span>
+          </div>
+
+          <div class="sheet remarks">
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Day</th>
+                  <th>Remarks</th>
+                </tr>
+              </thead>
+              <tbody id="remarksBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+
+  </div>
+</body>
+</html>

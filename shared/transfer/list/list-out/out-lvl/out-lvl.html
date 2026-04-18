@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+  <title>List of Transferred Out</title>
+
+  <meta name="theme-color" content="#8f61a5" />
+  <link rel="stylesheet" href="./out-lvl.css"/>
+
+  <!-- Auth helper -->
+  <script src="/auth.js"></script>
+
+  <!-- Page logic -->
+  <script defer src="./out-lvl.js"></script>
+</head>
+<body>
+  <div class="page">
+
+    <!-- Header: 3-col grid (5% / 90% / 5%) -->
+    <header class="head">
+      <!-- LEFT: vertical kebab -->
+      <button id="kebabBtn" class="head-kebab" aria-label="Open menu" title="Menu">⋮</button>
+
+      <!-- CENTER: title -->
+      <h1 class="head-title">LIST OF TRANSFERRED OUT</h1>
+
+      <!-- RIGHT: X back button -->
+      <a class="head-x" href="/shared/transfer/index.html" aria-label="Back">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M18.3 5.7a1 1 0 0 0-1.4 0L12 10.6 7.1 5.7A1 1 0 1 0 5.7 7.1L10.6 12l-4.9 4.9a1 1 0 1 0 1.4 1.4L12 13.4l4.9 4.9a1 1 0 0 0 1.4-1.4L13.4 12l4.9-4.9a1 1 0 0 0 0-1.4Z"/>
+        </svg>
+      </a>
+    </header>
+
+    <!-- Subheading -->
+    <div class="subhead" id="subhead">Year 7</div>
+
+    <!-- Loading status (standard QRID style) -->
+    <div id="loadStatus" class="loadStatus" hidden>
+      <span id="loadMsg">Loading Year 7</span>
+      <span class="dotsBox"><span id="dots">...</span></span>
+    </div>
+
+    <!-- Grey container with the rendered table inside -->
+    <section class="card">
+      <div class="tableWrap">
+        <table id="grid" class="grid"></table>
+        <div id="gridError" class="gridError" hidden></div>
+      </div>
+    </section>
+
+    <!-- Download XLS button (outside grey card) -->
+    <button id="downloadBtn" class="downloadBtn" type="button">Download csv</button>
+  </div>
+
+  <!-- ===== Kebab slideout menu ===== -->
+  <div id="kebabPanel" class="overlay" hidden aria-hidden="true">
+    <!-- dim area on the right -->
+    <div id="kebabDim" class="overlay-dim" role="button" tabindex="0" aria-label="Close menu"></div>
+
+    <!-- left panel -->
+    <div class="overlay-panel">
+      <div class="panel-head">
+        <div class="panel-title">Level</div>
+        <button class="panel-close" id="panelCloseBtn" aria-label="Close menu">✕</button>
+      </div>
+      <nav class="panel-list">
+        <button class="panel-item levelBtn" data-level="7">Year 7</button>
+        <button class="panel-item levelBtn" data-level="8">Year 8</button>
+        <button class="panel-item levelBtn" data-level="9">Year 9</button>
+        <button class="panel-item levelBtn" data-level="10">Year 10</button>
+        <button class="panel-item levelBtn" data-level="12">Year 12</button>
+        <button class="panel-item levelBtn" data-level="13">Year 13</button>
+        <button class="panel-item attendBtn" data-level="attend">Attendance</button>
+      </nav>
+    </div>
+  </div>
+
+  <!-- ===== Custom popup modal (hidden by default) ===== -->
+  <div id="popup" class="popup" hidden>
+    <div class="popup-box">
+      <button id="popupClose" class="popup-close" aria-label="Close">✕</button>
+      <h3 class="popup-title">Student Details</h3>
+      <div id="popupBody" class="popup-body"></div>
+    </div>
+  </div>
+</body>
+</html>

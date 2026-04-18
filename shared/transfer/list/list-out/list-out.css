@@ -1,0 +1,346 @@
+:root {
+  --purple: #8f61a5;
+  --peach: #efc0a8;
+  --ink: #111;
+  --ink-invert: #fff;
+  --grey: #eeeeef;
+  --grey-deep: #c9c9c9;
+  --radius: 16px;
+  --shadow: 0 10px 30px rgba(0,0,0,.12);
+
+  --title-size: 18px;
+  --btn-h: clamp(44px,6vh,56px);
+  --gap: 16px;
+  --font: 16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+
+  /* New for attendance table */
+  --dates-row: #c8bfe7;   /* purple tint for date cells */
+  --peach-head: #f3c7a8;  /* peach tint for calc headings */
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  min-height: 100%;
+  margin: 0;
+  background: var(--purple);
+  color: var(--ink-invert);
+  font: var(--font);
+}
+
+.page {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  padding: 18px 14px 24px;
+  gap: 16px;
+}
+
+/* =========================
+   Top bar
+   ========================= */
+.topbar {
+  width: 100%;
+}
+
+.topgrid {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 10% 1fr 10%;
+  align-items: center;
+  color: var(--ink-invert);
+}
+
+.col {
+  display: flex;
+  align-items: center;
+}
+.col--c { justify-content: center; }
+.col--r { justify-content: flex-end; }
+
+.topBtn {
+  background: none;
+  border: 0;
+  color: var(--ink-invert);
+  font-size: 28px;
+  line-height: 1;
+  text-align: center;
+  cursor: pointer;
+  padding: 4px;
+}
+.closeBtn { font-weight: 700; }
+
+.title {
+  margin: 0;
+  text-align: center;
+  font-size: var(--title-size);
+  font-weight: 600;
+  color: #fff;
+  line-height: 1.2;
+}
+
+/* =========================
+   Status line (QRID standard)
+   ========================= */
+.status {
+  margin: 6px auto 10px;
+  max-width: 500px;
+  text-align: center;
+  font-size: 15px;      /* standard size */
+  font-weight: 700;     /* bold */
+  line-height: 1.4;
+  color: #fff;
+}
+.status-text {
+  vertical-align: middle;
+}
+
+/* fixed-width span so dots don't shift layout */
+.status-dots {
+  display: inline-block;
+  width: 3ch;          /* standard fixed width */
+  text-align: left;
+  vertical-align: middle;
+}
+
+/* no CSS animation here — dots are driven by JS only */
+
+/* =========================
+   Cards
+   ========================= */
+.card {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 16px;
+}
+
+.card--form {
+  background: var(--grey);
+  color: var(--ink);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.card--actions {
+  background: var(--grey);
+  color: var(--ink);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border-radius: var(--radius);
+}
+
+/* =========================
+   Fields
+   ========================= */
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  color: var(--ink);
+  font-size: 16px;
+  font-weight: 500;
+  margin: 0 0 6px;
+  padding-right: 5px;
+}
+
+.input {
+  width: 100%;
+  background: #fff;
+  color: var(--ink);
+  border: 1px solid var(--grey-deep);
+  border-radius: var(--radius);
+  font-size: 16px;
+  line-height: 1.4;
+  padding: 10px 12px;
+  min-height: 44px;
+}
+
+.input:disabled {
+  background: #f5f5f5;
+  color: #888;
+}
+
+.hint {
+  font-size: 12px;
+  font-style: italic;
+  color: #555;
+  margin-top: 4px;
+  text-align: left;
+}
+
+/* radio row */
+.radioRow {
+  display: flex;
+  gap: 16px;
+}
+.radioOpt {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 16px;
+  color: var(--ink);
+}
+
+/* =========================
+   Shared layout helpers
+   ========================= */
+.row2col{
+  display:flex;
+  gap:12px;
+}
+.row2col .col{
+  flex:1;
+}
+
+/* gender radio inside same-line input box */
+.genderBox {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  min-height: 44px;
+  background: #fff;
+  border: 1px solid var(--grey-deep);
+  border-radius: var(--radius);
+  padding: 4px 8px;
+}
+.genderBox .radioOpt {
+  gap: 6px;
+  color: var(--ink);
+  font-size: 16px;
+}
+.genderBox input[type="radio"] {
+  accent-color: var(--purple);
+}
+
+/* =========================
+   Buttons
+   ========================= */
+.btnRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: space-between;
+}
+.btn {
+  flex: 1;
+  background: var(--purple);
+  color: var(--ink-invert);
+  border: 0;
+  border-radius: 0;
+  box-shadow: var(--shadow);
+  min-height: var(--btn-h);
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+}
+.btn:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+/* Status text under buttons */
+.attStatus {
+  font-size: 13px;
+  color: #555;
+  margin: 0 0 6px;
+}
+
+/* =========================
+   Attendance table
+   ========================= */
+.tableWrap {
+  border-radius: 12px;
+  background: #f3f3f3;
+  border: 1px solid var(--grey-deep);
+  overflow: auto;
+  max-height: 60vh;
+}
+
+.attTable {
+  border-collapse: separate;
+  border-spacing: 0;
+  min-width: 1400px;
+  font-size: 14px;
+  color: #111;
+}
+
+.attTable th,
+.attTable td {
+  padding: 6px 8px;
+  border-right: 1px solid #e4e4e4;
+  border-bottom: 1px solid #e4e4e4;
+  background: #fff;
+  white-space: nowrap;
+}
+
+/* Sticky header row */
+.attTable thead th {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  background: #fafafa;
+  font-weight: 800;
+}
+
+/* Sticky first column (month label col) */
+.stickyCol {
+  position: sticky;
+  left: 0;
+  z-index: 4;
+  background: #fff;
+  box-shadow: 2px 0 0 rgba(0,0,0,.04);
+}
+
+/* Month label cells */
+.monthLabel {
+  font-weight: 700;
+}
+
+/* Dates row cells (cols 2–24) */
+.attTable td.dateCell {
+  background: var(--dates-row) !important;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* Calc heading cells in the dates row (cols 25–34) */
+.attTable td.calcHead {
+  background: var(--peach-head) !important;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* Regular calc values (marks row) stay white */
+.attTable td.calcCol {
+  background: #fff;
+}
+
+.attTable .center { text-align: center; }
+.attTable .right { text-align: right; }
+
+.calcCol.center {
+  background: #f9c6a0; /* or your existing orange */
+  text-align: center;
+  font-weight: 500;
+}
+
+/* =========================
+   Small screen tweak
+   ========================= */
+@media (min-width: 600px) {
+  .page {
+    padding-top: 24px;
+  }
+}

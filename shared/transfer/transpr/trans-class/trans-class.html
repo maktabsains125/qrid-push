@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+  <title>TRANSFER CLASS</title>
+
+  <meta name="theme-color" content="#8f61a5"/>
+
+  <link rel="stylesheet" href="/shared/transfer/transpr/transfer.css"/>
+  <link rel="stylesheet" href="/shared/stylesheet/left-kebab.css"/>
+
+  <script src="/auth.js" defer></script>
+  <script defer src="./trans-class.js"></script>
+</head>
+<body>
+  <div class="page">
+
+    <!-- ===== Top bar (kebab | heading | X) ===== -->
+    <header class="topbar">
+      <div class="topgrid">
+        <button class="kebab-btn" id="kebabBtn" aria-label="Menu">⋮</button>
+
+        <h1 class="title">TRANSFER CLASS</h1>
+
+        <a class="topBtn closeBtn" id="closeBtn" href="/shared/transfer/index.html" aria-label="Close">
+          ×
+        </a>
+      </div>
+    </header>
+
+    <!-- ===== Kebab slideout menu (overlay style) ===== -->
+    <div id="kebabPanel" class="overlay" hidden aria-hidden="true">
+      <div id="kebabDim" class="overlay-dim" role="button" tabindex="0" aria-label="Close menu"></div>
+
+      <div class="overlay-panel">
+        <div class="panel-head">
+          <div class="panel-title">Action</div>
+          <button class="panel-close" id="panelCloseBtn" aria-label="Close menu">✕</button>
+        </div>
+
+        <div class="panel-list">
+          <button class="panel-item" id="navInto">Transfer into</button>
+          <button class="panel-item" id="navOut">Transfer out</button>
+          <button class="panel-item" id="navClass">Transfer class</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== FORM CARD (grey) ===== -->
+    <section class="card card--form">
+
+      <!-- Transfer from -->
+      <div class="field">
+        <span class="label">Transfer from</span>
+        <div class="row2col">
+          <div class="col">
+            <select class="input" id="fromLevelSelect" required>
+              <option value="">Level</option>
+              <option value="Year 7">Year 7</option>
+              <option value="Year 8">Year 8</option>
+              <option value="Year 9">Year 9</option>
+              <option value="Year 10">Year 10</option>
+              <option value="Year 12">Year 12</option>
+              <option value="Year 13">Year 13</option>
+            </select>
+          </div>
+          <div class="col">
+            <select class="input" id="fromClassSelect" required disabled>
+              <option value="">Class</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Transfer to -->
+      <div class="field">
+        <span class="label">Transfer to</span>
+        <div class="row2col">
+          <div class="col">
+            <select class="input" id="toLevelSelect" required disabled>
+              <option value="">Level</option>
+              <option value="Year 7">Year 7</option>
+              <option value="Year 8">Year 8</option>
+              <option value="Year 9">Year 9</option>
+              <option value="Year 10">Year 10</option>
+              <option value="Year 12">Year 12</option>
+              <option value="Year 13">Year 13</option>
+            </select>
+          </div>
+          <div class="col">
+            <select class="input" id="toClassSelect" required disabled>
+              <option value="">Class</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label" for="dateIn">Transfer date</label>
+        <input class="input" id="dateIn" type="date" required>
+      </div>
+
+      <!-- Name dropdown -->
+      <div class="field">
+        <label class="label" for="stuNameSelect">Name</label>
+        <select class="input" id="stuNameSelect" required disabled>
+          <option value="">Select name</option>
+        </select>
+        <div class="hint" id="nameHint">Choose Level + Class to load names.</div>
+      </div>
+
+      <!-- ID (autofilled, read-only) -->
+      <div class="field">
+        <label class="label" for="stuId">ID</label>
+        <input class="input" id="stuId" type="text" readonly placeholder="Auto-filled">
+      </div>
+
+      <!-- Gender (auto-selected, disabled) -->
+      <div class="field">
+        <span class="label">Gender</span>
+        <div class="radioRow">
+          <label class="radioOpt">
+            <input type="radio" name="gender" value="M" id="genderM" disabled>
+            <span>M</span>
+          </label>
+          <label class="radioOpt">
+            <input type="radio" name="gender" value="F" id="genderF" disabled>
+            <span>F</span>
+          </label>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ===== ACTION / PROGRESS CARD (white) ===== -->
+    <section class="card card--actions">
+      <div class="btnRow">
+        <button class="btn btn--primary" id="goBtn" disabled>Transfer</button>
+        <button class="btn btn--primary" id="cancelBtn">Cancel</button>
+      </div>
+
+      <div class="progressWrap">
+        <div class="progressBar">
+          <div class="progressFill" id="progressFill" style="width:0%"></div>
+        </div>
+        <div class="progressPct" id="progressPct">0%</div>
+      </div>
+
+      <ol class="stepsList">
+        <li id="s1">Step 1: Adding student to transfer list <span class="tick" id="tick1"></span></li>
+        <li id="s2">Step 2: Transfer between monthly reports <span class="tick" id="tick2"></span></li>
+        <li id="s3">Step 3: Transfer between daily reports <span class="tick" id="tick3"></span></li>
+      </ol>
+
+      <div class="msg" id="finalMsg" aria-live="polite"></div>
+    </section>
+
+  </div>
+</body>
+</html>
