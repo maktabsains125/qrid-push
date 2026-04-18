@@ -416,14 +416,14 @@ body{
   background:#fff;
   color:#111;
   border-radius:14px;
-  padding:14px 14px 18px; /* extra bottom space inside card */
+  padding:14px 14px 25px;
   box-shadow:0 10px 18px rgba(0,0,0,.22);
 }
 
 .pushCardTitle{
   font-size:15px;
   font-weight:900;
-  text-align:center;      /* centered title */
+  text-align:center
   margin:0 0 8px;
 }
 
@@ -442,17 +442,16 @@ body{
 }
 
 .pushBtn{
-  appearance:none;
-  border:0;
+  flex:1;                
+  max-width:220px;        
+  height:44px;
   border-radius:12px;
   padding:10px 14px;
-  min-width:190px;        
-  height:44px;
   font-weight:800;
   cursor:pointer;
   background:var(--purple);
   color:#fff;
-  box-shadow:0 10px 18px rgba(0,0,0,.15);
+  box-shadow:0 6px 12px rgba(0,0,0,.15);
   text-align:center;
 }
 
