@@ -1,0 +1,4 @@
+Camera100.png, Review100.png, Monthly100.png, Profile100.png.
+Displays100.png
+
+For any new ones below (e.g, Letters100.png, Attendances100.png, ProfileMax100.png, FTList100.png, Transfer100.png, WelfareList100.png, WelfareSingle100.png, Config100.png, GDrive100.png) add matching icons there.

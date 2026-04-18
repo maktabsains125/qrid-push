@@ -1,0 +1,241 @@
+/* ===== Attendance Displays styles ===== */
+:root{
+  --purple:#8f61a5;
+  --peach:#efc0a8;
+  --ink:#111;
+  --ink-invert:#fff;
+  --grey:#adadad;
+  --radius:16px;
+  --shadow: 10px 10px 30px rgba(0,0,0,.35);
+}
+
+*{box-sizing:border-box}
+html,body{height:100%;background: var(--purple);}
+body{
+  margin:0;
+  background:var(--purple);
+  color:var(--ink-invert);
+  font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  min-height:100svh;
+}
+
+.page{
+  min-height:100svh;
+  display:flex;
+  flex-direction:column;
+  padding:18px 14px 14px;
+}
+
+/* Header */
+.head{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:8px 40px; /* space for exit button */
+}
+.head h1{
+  margin:0;
+  font-size:18px;
+  letter-spacing:.6px;
+  text-align:center;
+}
+
+/* ===== Standard X button (MSPSBS header style) ===== */
+.exit{
+  appearance:none;
+  border:0;
+  background:transparent;
+  color:#fff;
+  font-size:28px;
+  line-height:1;
+  padding:2px 6px;
+  cursor:pointer;
+  -webkit-tap-highlight-color: transparent;
+  outline:none;
+
+  position:absolute;
+  right:6px;
+  top:50%;
+  transform:translateY(-50%);
+}
+
+.exit:focus,
+.exit:active{
+  outline:none;
+  transform:translateY(-50%);
+}
+
+
+/* ===== Tabs (3-up: AM | PM | Overall) ===== */
+.tabs{
+  display:grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap:0;
+  border-top-left-radius: var(--radius);
+  border-top-right-radius: var(--radius);
+  overflow: hidden;                 
+  box-shadow: var(--shadow);
+  background: transparent;         
+}
+
+/* base tab */
+.tab{
+  appearance:none; border:0;
+  background: var(--peach);       
+  color: var(--ink);
+  padding: 12px 10px;
+  font-weight: 700;
+  letter-spacing: .2px;
+  border-left: 2px solid #fff;      
+  cursor:pointer;
+}
+.tab:first-child{ border-left: 0; }
+
+/* rounded corners per edge tab */
+#tabAm{ border-top-left-radius: var(--radius); }
+#tabPm{ border-top-right-radius: 0; } /* explicitly square top-right corner */
+.tab--overall{
+  background: #000;
+  color: #fff;
+  border-left: 2px solid #fff;      /* white line between PM and Overall */
+  border-top-right-radius: var(--radius);  /* 16px top-right corner */
+}
+
+/* Selected/active state */
+.tab.active{
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 -2px 12px rgba(0,0,0,.35);
+  filter: saturate(1.05);
+}
+
+/* Keep Overall truly black even when active */
+.tab--overall.active{
+  background: #000;
+  color: #fff;
+  box-shadow: 0 -2px 12px rgba(0,0,0,.45);
+}
+
+/* De-emphasize idle tabs slightly */
+.tab:not(.active){ opacity: .92; }
+
+/* Grey panel flush to tabs */
+.panel{
+  background:var(--grey);
+  color:var(--ink);
+  border-bottom-left-radius:var(--radius);
+  border-bottom-right-radius:var(--radius);
+  box-shadow: var(--shadow);
+  padding:12px;
+}
+
+/* Card grid */
+.wrap{
+  display:grid;
+  grid-template-columns: 1fr;
+  gap:12px;
+}
+@media (min-width:720px){
+  .wrap{ grid-template-columns: 1fr 1fr; }
+}
+
+/* Sheet card */
+.card{
+  background:#fff;
+  color:var(--ink);
+  border-radius:12px;
+  box-shadow: 2px 2px 10px rgba(0,0,0,.25);
+  overflow:hidden;
+}
+.cardHead{
+  padding:10px 12px;
+  background:#f4f4f4;
+  border-bottom:1px solid #e8e8e8;
+  font-weight:700;
+}
+.tableWrap{ overflow:auto }
+.table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:14px;
+}
+.table th, .table td{
+  border:1px solid #e2e2e2;
+  padding:6px 8px;
+  text-align:center;
+}
+.table th{
+  background:#fafafa;
+  font-weight:700;
+}
+
+.hidden{ display:none }
+
+/* ===== Loading status (animated dots, no shift) ===== */
+.statusRow{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:8px 8px 4px;
+  font-weight:700;
+  font-size:12px;
+  color:#fff;   
+  opacity:1;
+}
+.statusText{}
+
+.dots{
+  display:inline-block;
+  width:3ch;               
+  text-align:left;
+  vertical-align:bottom;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-kerning:none;
+  font-variant-ligatures:none;
+  letter-spacing:0;
+}
+.dots::after{
+  content:"";
+  animation:dots-step 1.2s steps(4,end) infinite;
+}
+@keyframes dots-step{
+  0%   { content:"";   }
+  25%  { content:".";  }
+  50%  { content:".."; }
+  100% { content:"..."; }
+}
+
+/* Refresh note */
+.refreshNote{
+  font-size:14px;
+  font-weight:600;
+  color:#000;
+  text-align:center;
+  margin:4px 8px 8px;
+}
+
+/* Refresh link in blue */
+.refreshLink{
+  color:#0818A8;
+  text-decoration:underline;
+  cursor:pointer;
+}
+
+/* instant skeletons */
+.card.skeleton .tableWrap { padding: 12px; }
+.skeletonRow { height: 14px; margin: 8px 0; border-radius: 6px; background: rgba(255,255,255,.6); }
+@media (prefers-color-scheme: dark){
+  .skeletonRow { background: rgba(0,0,0,.15); }
+}
+
+/* Row highlights for specific rows */
+.hl-row td { background: #B4A7D6 !important; }
+.hl-head th { background: #B4A7D6 !important; }
+
+/* Highlight the 3rd row from the bottom (already padded correctly) */
+.table tbody tr:nth-last-child(3) > * {
+  background: #B4A7D6 !important;  /* same purple */
+  font-weight: 700;
+  color: #000;
+}

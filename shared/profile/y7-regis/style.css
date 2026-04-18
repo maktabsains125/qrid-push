@@ -1,0 +1,401 @@
+/* ======================================================
+   ROOT VARIABLES
+====================================================== */
+:root{
+  --purple:#8f61a5;
+  --peach:#efc0a8;
+  --ink:#111;
+  --ink-invert:#fff;
+  --grey:#eeeeef;
+  --grey-deep:#c9c9c9;
+  --radius:16px;
+  --shadow:10px 10px 30px rgba(0,0,0,.35);
+}
+
+/* ======================================================
+   GLOBAL RESET & BASE
+====================================================== */
+*{ box-sizing:border-box; }
+
+html,body{ height:100%; }
+
+body{
+  margin:0;
+  background:var(--purple);
+  color:var(--ink-invert);
+  font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  min-height:100svh;
+}
+
+.page{
+  min-height:100svh;
+  display:flex;
+  flex-direction:column;
+  padding:16px 14px 24px;
+}
+
+.bottomPad{ height:24px; }
+
+/* ======================================================
+   HEADER (10 / 80 / 10)
+====================================================== */
+.topgrid{
+  display:grid;
+  grid-template-columns:10% 1fr 10%;
+  align-items:center;
+  min-height:56px;
+  column-gap:8px;
+}
+
+.col{ display:flex; align-items:center; }
+.col--l{ justify-content:flex-start; }
+.col--c{ justify-content:center; }
+.col--r{ justify-content:flex-end; }
+
+.title{
+  margin:0;
+  text-align:center;
+  color:#fff;
+  font-size:18px;
+}
+
+/* Standard X button */
+.closeBtn{
+  appearance:none;
+  border:0;
+  background:transparent;
+  color:#fff;
+  font-size:28px;
+  line-height:1;
+  padding:2px 6px;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+
+/* ======================================================
+   PANELS (GENERIC)
+====================================================== */
+.panel{
+  margin:0 auto;
+  width:100%;
+  max-width:1280px;
+  background:var(--grey);
+  color:var(--ink);
+  border-radius:var(--radius);
+  padding:18px;
+  box-shadow:var(--shadow);
+}
+
+.panelTitle{
+  font-weight:700;
+  font-size:15px;
+  margin-bottom:10px;
+}
+
+/* ======================================================
+   BUTTONS & GRIDS
+====================================================== */
+.btnGrid{
+  display:grid;
+  gap:18px;
+}
+
+.btnGrid--links{
+  grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));
+}
+
+@media (max-width:520px){
+  .btnGrid{ grid-template-columns:1fr; }
+}
+
+/* Generic pill (rounded) */
+.pill{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  height:56px;
+  padding:0 18px;
+  text-align:center;
+  background:var(--peach);
+  color:#fff;
+  border:2px solid #fff;
+  border-radius:999px;
+  font-weight:700;
+  font-size:16px;
+  line-height:1.2;
+  text-decoration:none;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+
+.pill:active{ transform:translateY(1px); }
+
+/* Flat purple pill (Y7 links) */
+.pill--purpleFlat{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  height:56px;
+  padding:0 18px;
+  background:var(--purple);
+  color:#fff;
+  border:0;
+  font-weight:700;
+  font-size:16px;
+  text-decoration:none;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+
+.pill--purpleFlat:active{ transform:translateY(1px); }
+
+.pill[aria-disabled="true"],
+.pill--purpleFlat.disabled{
+  opacity:.45;
+  cursor:not-allowed;
+  pointer-events:none;
+  filter:grayscale(.35);
+}
+
+/* ======================================================
+   GENERIC BUTTONS
+====================================================== */
+.btn{
+  height:40px;
+  padding:0 14px;
+  border-radius:10px;
+  border:0;
+  cursor:pointer;
+  font-weight:700;
+  background:var(--peach);
+  color:#111;
+}
+
+.btn--sm{ height:36px; }
+
+.btn--primary{
+  background:var(--purple);
+  color:#fff;
+}
+
+/* ======================================================
+   MAIN LAYOUT (Y7 SETTINGS PAGE)
+====================================================== */
+.mainWrap{
+  margin-top:12px;
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+
+/* ======================================================
+   SETTINGS TOP BAR
+====================================================== */
+.settingsTopBar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  margin-bottom:12px;
+  border-bottom:1px solid var(--grey-deep);
+  padding-bottom:8px;
+}
+
+.settingsTitle{
+  font-weight:700;
+  font-size:16px;
+}
+
+.settingsActions{
+  display:flex;
+  gap:8px;
+}
+
+.saveStatus{
+  font-size:13px;
+  color:#555;
+}
+
+/* ======================================================
+   SETTINGS NOTICE
+====================================================== */
+.settingsNotice{
+  font-size:13px;
+  color:#b00020;
+  background:#ffecec;
+  border-radius:10px;
+  padding:6px 10px;
+  margin-bottom:10px;
+}
+
+/* ======================================================
+   SETTINGS FORM
+====================================================== */
+.settingsForm{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+.settingsGroup{
+  background:#f7f7f8;
+  border-radius:12px;
+  padding:10px 12px;
+}
+
+.settingsLabelRow{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:8px;
+}
+
+.settingsLabel{
+  font-weight:600;
+  color:#333;
+}
+
+.settingsRow{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.settingsRow--2{ flex-wrap:wrap; }
+.settingsRow--password{ flex-wrap:nowrap; }
+
+.settingsText{
+  font-size:14px;
+  color:#555;
+}
+
+.settingsCaption{
+  font-size:13px;
+  color:#555;
+  margin-top:2px;
+  text-transform:uppercase;
+}
+
+/* ======================================================
+   INPUTS
+====================================================== */
+.ctl{
+  flex:1;
+  height:40px;
+  padding:6px 10px;
+  border-radius:8px;
+  border:1px solid var(--grey-deep);
+  background:#fff;
+  color:#111;
+  font-size:15px;
+  max-width:100%;
+}
+
+.ctl[readonly]{
+  background:#f8f8f8;
+  color:#333;
+}
+
+.ctl--caps{ text-transform:uppercase; }
+
+/* ======================================================
+   PASSWORD FIELD WITH EYE
+====================================================== */
+.passwordWrap{
+  position:relative;
+  display:flex;
+  align-items:center;
+  width:100%;
+}
+
+.passwordWrap .ctl{
+  width:100%;
+  padding-right:40px;
+}
+
+.eyeBtn{
+  position:absolute;
+  right:8px;
+  top:50%;
+  transform:translateY(-50%);
+  border:0;
+  background:transparent;
+  cursor:pointer;
+  padding:4px 6px;
+  color:#777;
+}
+
+.eyeBtn--on{ color:#111; }
+
+.ctl--fakePassword{
+  -webkit-text-security:disc;
+  text-security:disc;
+}
+
+.ctl--fakePassword.fakePassword--visible{
+  -webkit-text-security:none;
+  text-security:none;
+}
+
+/* ======================================================
+   TOGGLE SWITCH
+====================================================== */
+.toggleWrap{ display:flex; align-items:center; }
+
+.toggle{
+  position:relative;
+  width:50px;
+  height:26px;
+  border-radius:999px;
+  border:1px solid #b0b0b0;
+  background:#d4d4d4;
+  cursor:pointer;
+  padding:0;
+}
+
+.toggle-knob{
+  position:absolute;
+  top:2px;
+  left:2px;
+  width:22px;
+  height:22px;
+  border-radius:50%;
+  background:#f5f5f5;
+  box-shadow:0 1px 4px rgba(0,0,0,.2);
+  transition:transform .18s ease-out;
+}
+
+.toggle--on{
+  background:#2e7d32;
+}
+
+.toggle--on .toggle-knob{
+  transform:translateX(22px);
+}
+
+.toggle--disabled{
+  opacity:.5;
+  cursor:not-allowed;
+}
+
+/* ======================================================
+   MOBILE
+====================================================== */
+@media (max-width:720px){
+  .mainWrap{ gap:12px; }
+
+  .settingsGroup{ padding:10px; }
+
+  .settingsRow{ flex-wrap:wrap; }
+
+  .settingsRow--2 .ctl{
+    flex:1 1 calc(50% - 8px);
+  }
+
+  .btnGrid--links{
+    grid-template-columns:1fr;
+    gap:12px;
+  }
+}

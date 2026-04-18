@@ -1,0 +1,621 @@
+/* ==== Purple flat button variant (for Y7 forms card) ==== */
+.pill--purpleFlat{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  height:56px;
+  padding:0 18px;
+  background:var(--purple);
+  color:#fff;
+  border:0;
+  border-radius:0;
+  font-weight:700;
+  font-size:16px;
+  text-decoration:none;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+.pill--purpleFlat:active{
+  transform:translateY(1px);
+}
+.pill--purpleFlat[disabled],
+.pill--purpleFlat.disabled{
+  opacity:.45;
+  cursor:not-allowed;
+  filter:grayscale(0.2);
+}
+
+/* ===== LEVEL VIEW / TABS (used elsewhere) ===== */
+.levelView{ position:relative; }
+
+.tabsWrap{
+  margin-top:12px;
+  background:var(--peach);
+  border-radius:16px 16px 0 0;
+  display:flex;
+  overflow:hidden;
+}
+.tab{
+  flex:1;
+  height:44px;
+  border:0;
+  background:transparent;
+  color:#111;
+  font-weight:700;
+  cursor:pointer;
+}
+.tab--left{ border-radius:16px 0 0 0; }
+.tab--right{ border-radius:0 16px 0 0; }
+.tab--active{
+  background:rgba(255,255,255,.35);
+}
+
+/* ===== SHARED LOADING STATUS (generic) ===== */
+.loadStatus{
+  text-align:center;
+  font-weight:700;
+  color:#fff;
+  padding:8px 10px;
+  font-size:15px;
+  line-height:1.4;
+  background:transparent;
+}
+.loadStatus .dotsBox{
+  display:inline-block;
+  width:3ch;
+  text-align:left;
+}
+
+/* ===== Slab (generic) ===== */
+.slab{
+  background:#eee;
+  color:#111;
+  border-radius:0 0 16px 16px;
+  padding:12px;
+  margin-top:0;
+  box-shadow:var(--shadow);
+}
+
+/* ===== Form Layout (generic) ===== */
+.formGrid {
+  display:grid;
+  grid-template-columns:1fr;
+  gap:10px;
+  width:100%;
+}
+.formGrid .row {
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  gap:10px;
+  width:100%;
+}
+.lab {
+  flex:0 0 130px;
+  text-align:left;
+  font-weight:600;
+  color:#333;
+  white-space:nowrap;
+}
+
+/* Color overrides for parent blocks (profiles page) */
+#father ~ .grid2 .lab,
+label:has(#father) .lab,
+label:has(#fatherPhone) .lab,
+label:has(#fatherAdd) .lab,
+label:has(#fatherOcc) .lab {
+  color:#1b3487;
+  font-weight:700;
+}
+label:has(#mother) .lab,
+label:has(#motherPhone) .lab,
+label:has(#motherAdd) .lab,
+label:has(#motherOcc) .lab {
+  color:#ab1f57;
+  font-weight:700;
+}
+label:has(#guardian) .lab,
+label:has(#guardianRel) .lab,
+label:has(#guardianAdd) .lab,
+label:has(#guardianOcc) .lab,
+label:has(#guardianPhone) .lab {
+  color:#297a1f;
+  font-weight:700;
+}
+
+/* Inputs / selects */
+.ctl{
+  flex:1;
+  height:40px;
+  padding:6px 10px;
+  border-radius:8px;
+  border:1px solid var(--grey-deep);
+  background:#fff;
+  color:#111;
+  font-size:15px;
+  box-sizing:border-box;
+  overflow-x:auto;
+  white-space:nowrap;
+  max-width:100%;
+}
+.ctl[readonly]{
+  background:#f8f8f8;
+  color:#333;
+}
+
+/* Combo (profiles search dropdown) */
+.combo{
+  position:relative;
+  flex:1;
+}
+
+.combo .ctl{
+  width:100%;
+}
+
+.dropdown{
+  position:absolute;
+  top:100%;
+  left:0;
+  right:0;
+  background:#fff;
+  border:1px solid var(--grey-deep);
+  border-radius:8px;
+  max-height:220px;
+  overflow-y:auto;
+  z-index:10;
+  box-shadow:0 2px 10px rgba(0,0,0,.1);
+}
+.dropdown button{
+  display:block;
+  width:100%;
+  text-align:left;
+  padding:8px 10px;
+  border:0;
+  background:#fff;
+  cursor:pointer;
+  color:#111;
+}
+.dropdown button:hover{
+  background:#f0f0f0;
+}
+
+/* row groups */
+.grid2,
+.grid3{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+.grid2 .row{ flex:1 1 calc(50% - 10px); }
+.grid3 .row{ flex:1 1 calc(33.333% - 10px); }
+
+/* ===== CLASS PANE (profiles) ===== */
+.classHead{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  margin-bottom:10px;
+}
+.ctl--sm{ height:36px; }
+.btn{
+  height:40px;
+  padding:0 14px;
+  border-radius:10px;
+  border:0;
+  cursor:pointer;
+  font-weight:700;
+  background:var(--peach);
+  color:#111;
+}
+.btn--sm{ height:36px; }
+
+/* ===== Table (profiles) ===== */
+.tableWrap{
+  overflow:auto;
+  -webkit-overflow-scrolling:touch;
+  background:#fff;
+  border-radius:12px;
+}
+.table{
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0;
+  font-size:14px;
+}
+.table thead th{
+  position:sticky;
+  top:0;
+  background:#f6f2f6;
+  z-index:1;
+  padding:8px;
+  border-bottom:1px solid #ddd;
+  text-align:left;
+}
+.table tbody td{
+  padding:8px;
+  border-bottom:1px solid #eee;
+}
+
+.bottomPad{ height:24px; }
+
+/* ===== Mobile (generic) ===== */
+@media (max-width:720px){
+  .panel--profiles{ padding:14px; }
+  .btnGrid{ grid-template-columns:1fr; gap:14px; }
+  .pill{
+    height:64px;
+    border-width:2px;
+  }
+
+  .slab{ overflow:visible; }
+
+  .formGrid .row{
+    flex-wrap:wrap;
+    align-items:stretch;
+  }
+  .lab{
+    flex:0 0 100%;
+    max-width:100%;
+    margin-bottom:4px;
+  }
+  .ctl, .combo{
+    flex:1 1 100%;
+    min-width:0;
+  }
+
+  .ctl{
+    overflow-x:auto;
+    text-overflow:clip;
+    white-space:nowrap;
+  }
+
+  .combo .dropdown{ max-width:100%; }
+
+  .grid2 .row,
+  .grid3 .row{
+    flex:1 1 100%;
+  }
+
+  #homeView[hidden],
+  #levelView[hidden]{ display:none !important; }
+
+  .mode-level #closeTop{ display:none !important; }
+}
+
+/* ===== Selected row highlight in Class table ===== */
+.table tbody tr.row-active {
+  background: #e9d9f4 !important;
+}
+.table tbody tr.row-active td {
+  color: #111;
+}
+
+/* ===== Modal overlay for student details (profiles) ===== */
+.modalDim {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 9999;
+}
+.modalDim[hidden] {
+  display: none;
+}
+.modalCard {
+  background: #fff;
+  color: #111;
+  border-radius: 16px;
+  max-width: 420px;
+  width: 100%;
+  max-height: 90vh;
+  box-shadow: 0 20px 40px rgba(0,0,0,.4);
+  position: relative;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 16px 16px 20px;
+  font-size: 15px;
+  line-height: 1.4;
+}
+.modalClose {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  border: 0;
+  background: transparent;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  color: #111;
+}
+.modalBody {
+  padding-top: 28px;
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  column-gap: 10px;
+  row-gap: 6px;
+  word-break: break-word;
+}
+.modalLabel {
+  font-weight: 600;
+  color: #555;
+  text-align: right;
+}
+.modalValue {
+  color: #111;
+  font-weight: 500;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  white-space: pre-line;
+}
+.modalGroupHead {
+  grid-column: 1 / span 2;
+  margin-top: 10px;
+  font-weight: 700;
+  font-size: 15px;
+  color: #1b3487;
+  border-top: 1px solid #ddd;
+  padding-top: 8px;
+}
+
+/* ===== Y7 SETTINGS PAGE SPECIFIC ===== */
+
+/* Generic panel for this page */
+.mainWrap {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.panel {
+  margin: 0 auto;
+  width: 100%;
+  max-width: 1280px;
+  background: var(--grey);
+  color: var(--ink);
+  border-radius: var(--radius);
+  padding: 18px;
+  box-shadow: var(--shadow);
+}
+
+.panel--links {
+  /* same base as panel */
+}
+
+.panel--settings {
+  /* same base as panel; can tweak if needed */
+}
+
+.panelTitle {
+  font-weight: 700;
+  font-size: 15px;
+  margin-bottom: 10px;
+}
+
+/* Link buttons grid in top card */
+.btnGrid--links {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+/* Settings card layout */
+.settingsTopBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--grey-deep);
+  padding-bottom: 8px;
+}
+
+.settingsTitle {
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.settingsActions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn--primary {
+  background: var(--purple);
+  color: #fff;
+}
+
+.settingsNotice {
+  font-size: 13px;
+  color: #b00020;
+  background: #ffecec;
+  border-radius: 10px;
+  padding: 6px 10px;
+  margin-bottom: 10px;
+}
+
+/* Form layout inside settings card */
+.settingsForm {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.settingsGroup {
+  background: #f7f7f8;
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+
+.settingsLabelRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.settingsLabel {
+  font-weight: 600;
+  color: #333;
+}
+
+.settingsRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.settingsRow--2 {
+  flex-wrap: wrap;
+}
+
+.settingsRow--password {
+  flex-wrap: nowrap;
+}
+
+.settingsText {
+  font-size: 14px;
+  color: #555;
+}
+
+.settingsCaption {
+  font-size: 13px;
+  color: #555;
+  margin-top: 2px;
+  text-transform: uppercase;
+}
+
+.settingsHint {
+  font-size: 11px;
+  color: #777;
+  margin-top: 4px;
+}
+
+.saveStatus {
+  margin-top: 4px;
+  font-size: 13px;
+  color: #555;
+}
+
+/* Force visual caps */
+.ctl--caps {
+  text-transform: uppercase;
+}
+
+/* ===== Toggle control ===== */
+.toggleWrap {
+  display: flex;
+  align-items: center;
+}
+
+.toggle {
+  position: relative;
+  width: 50px;
+  height: 26px;
+  border-radius: 999px;
+  border: 1px solid #b0b0b0;
+  background: #d4d4d4;          /* OFF: grey bar */
+  padding: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+
+.toggle-knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #f5f5f5;          /* knob stays grey */
+  box-shadow: 0 1px 4px rgba(0,0,0,.2);
+  transition: transform 0.18s ease-out;
+}
+
+/* ON: green bar, knob moves right */
+.toggle--on {
+  background: #2e7d32;
+}
+.toggle--on .toggle-knob {
+  transform: translateX(22px);
+}
+
+/* Disabled toggle */
+.toggle--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ===== Password field with eye button ===== */
+.passwordWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+.passwordWrap .ctl {
+  width: 100%;
+  padding-right: 40px; /* space for eye button */
+}
+
+.eyeBtn {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  padding: 4px 6px;
+  font-size: 16px;
+  color: #777;
+  -webkit-tap-highlight-color: transparent;
+}
+.eyeBtn--on {
+  color: #111;
+}
+
+/* Edit key: looks like a password, but is just text */
+.ctl--fakePassword {
+  -webkit-text-security: disc; /* Chrome / Edge / Safari */
+  text-security: disc;         /* some other engines */
+}
+
+/* When eye button is ON → reveal text */
+.ctl--fakePassword.fakePassword--visible {
+  -webkit-text-security: none;
+  text-security: none;
+}
+
+
+/* ===== Mobile tweaks for settings page ===== */
+@media (max-width: 720px) {
+  .mainWrap {
+    gap: 12px;
+  }
+
+  .settingsGroup {
+    padding: 10px 10px;
+  }
+
+  .settingsRow {
+    flex-wrap: wrap;
+  }
+
+  .settingsRow--2 .ctl {
+    flex: 1 1 calc(50% - 8px);
+  }
+
+  .settingsRow--2 .settingsText {
+    flex: 0 0 auto;
+  }
+
+  .btnGrid--links {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}

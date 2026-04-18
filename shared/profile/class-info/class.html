@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+  <meta name="theme-color" content="#8f61a5">
+  <title>CLASS PROFILES</title>
+
+  <link rel="stylesheet" href="./class.css"/>
+  <link rel="stylesheet" href="/shared/stylesheet/left-kebab.css"/>
+
+  <!-- Page logic -->
+  <script defer src="/auth.js"></script>
+  <script defer src="./class.js"></script>
+
+</head>
+<body class="page">
+
+  <!-- ===== Top purple header ===== -->
+  <header class="topbar">
+    <div class="topgrid">
+      <!-- LEFT: kebab -->
+      <button id="kebabBtn"
+              class="kebab-btn"
+              aria-label="Open menu"
+              title="Menu">⋮</button>
+
+      <!-- CENTER: heading + subheading + status -->
+      <div class="top-center">
+        <h1 class="headingMain">CLASS PROFILES</h1>
+        <div id="subheading" class="headingSub">Year 7 Class</div>
+        <div id="statusMsg" class="statusMsg" data-state="loading">
+          <span class="statusText">Loading. Please wait</span><span class="dots" aria-hidden="true"></span>
+        </div>
+      </div>
+
+      <!-- RIGHT: X -->
+      <a id="closeBtn"
+         class="top-btn top-btn--close"
+         href="/shared/profile/index.html"
+         aria-label="Close"
+         title="Close">
+        ✕
+      </a>
+    </div>
+  </header>
+
+  <!-- ===== Kebab slideout menu (overlay style) ===== -->
+<div id="kebabPanel" class="overlay" hidden aria-hidden="true">
+  <!-- dim area on the right -->
+  <div id="kebabDim" class="overlay-dim" role="button" tabindex="0" aria-label="Close menu"></div>
+
+  <!-- left panel -->
+  <div class="overlay-panel">
+    <div class="panel-head">
+      <div class="panel-title">Levels</div>
+	  <button class="panel-close" id="panelCloseBtn" type="button">✕</button>
+    </div>
+
+    <div class="panel-list">
+      <button class="panel-item" data-year="7">Year 7</button>
+      <button class="panel-item" data-year="8">Year 8</button>
+      <button class="panel-item" data-year="9">Year 9</button>
+      <button class="panel-item" data-year="10">Year 10</button>
+      <button class="panel-item" data-year="12">Year 12</button>
+      <button class="panel-item" data-year="13">Year 13</button>
+      <button class="panel-item" data-year="TOTAL">Total</button>
+    </div>
+  </div>
+</div>
+
+
+  <!-- ===== Main card ===== -->
+  <main class="mainArea">
+<section class="card">
+  <!-- Table container -->
+  <div class="tableWrap">
+    <table id="classTable" class="gridTable" aria-label="Class info table">
+      <!-- JS will inject <thead> and <tbody> -->
+    </table>
+  </div>
+
+  <!-- NEW: summary footer for TOTAL view -->
+  <div id="summaryFooter" class="summaryFooter"></div>
+
+  <!-- Action buttons (Edit / Save) -->
+  <div class="actions">
+    <button id="editBtn" class="pillBtn" disabled>Edit</button>
+    <button id="saveBtn" class="pillBtn" disabled>Save</button>
+  </div>
+</section>
+  </main>
+
+  <!-- ===== Row detail modal (double tap) ===== -->
+  <div id="rowModal" class="modal" aria-hidden="true">
+    <div class="modalDim" data-close-modal></div>
+    <div class="modalCard">
+      <div class="modalHead">
+        <div class="modalTitle" id="modalTitle">CLASS ??</div>
+        <button class="modalClose" data-close-modal aria-label="Close detail">✕</button>
+      </div>
+      <div class="modalBody">
+        <div class="modalLine"><strong>FT:</strong> <span id="modalFT"></span></div>
+        <div class="modalLine"><strong>AFT:</strong> <span id="modalAFT"></span></div>
+        <div class="modalLine"><strong>Venue:</strong> <span id="modalVenue"></span></div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

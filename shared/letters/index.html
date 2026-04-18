@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+  <meta name="theme-color" content="#8f61a5">
+  <title>Documents for Absence</title>
+
+  <link rel="stylesheet" href="./style.css"/>
+
+  <!-- auth + shared role nav -->
+  <script src="/auth.js" defer></script>
+  <script src="./app.js" defer></script>
+</head>
+<body>
+  <div class="page">
+    <!-- Header -->
+    <header class="topbar">
+      <h1 class="title">DOCUMENTS FOR ABSENCE</h1>
+      <button id="closeBtn" class="closeBtn" aria-label="Close and return">×</button>
+    </header>
+
+    <!-- Main grey container with table -->
+    <main class="card">
+      <div class="tableWrap">
+        <figure class="wp-block-table">
+          <table class="has-fixed-layout">
+            <thead>
+              <tr>
+                <th class="col-code"><strong>Code</strong></th>
+                <th><strong>Situation</strong></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="center">1&nbsp;</td>
+                <td class="center">Present.</td>
+              </tr>
+              <tr>
+                <td class="center">0&nbsp;</td>
+                <td class="center">Absent without any letter.</td>
+              </tr>
+              <tr>
+                <td class="center">N</td>
+                <td class="center">
+                  Absent with a letter given due to reasons such as no transport and going abroad for a personal reason.
+                </td>
+              </tr>
+              <tr>
+                <td class="center">M</td>
+                <td class="center">Absent with a medical certificate from a clinic or hospital.</td>
+              </tr>
+              <tr>
+                <td class="center">P</td>
+                <td class="center">
+                  Absent with a parent’s letter due to a family emergency, being unwell, or attending an official matter.<br>
+                  Absent with a government letter.<br>
+                  <em>*For a parent's letter, assigning P is limited to 3 consecutive days for being unwell. The rest will be assigned N.</em>
+                </td>
+              </tr>
+              <tr>
+                <td class="center">L</td>
+                <td class="center">
+                  Arrive at the school after 7:30 am for the AM session.<br>
+                  Arrive at the school after 1:00 pm for the PM session.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </figure>
+      </div>
+    </main>
+
+    <!-- 2-by-2 style row: two grey cards with purple buttons -->
+    <section class="actions">
+      <!-- Card 1 -->
+      <article class="docCard">
+        <p class="docText">
+          Absent more than 3 consecutive days without letters.
+        </p>
+        <a
+          class="downloadBtn"
+          href="https://drive.google.com/file/d/1NjpihMODIf7S-76DGfJvgNoLjqKDiFiI/view"
+          target="_blank"
+          rel="noopener"
+        >
+          D1-D4 forms
+        </a>
+      </article>
+
+      <!-- Card 2 -->
+      <article class="docCard">
+        <p class="docText">
+          Cumulative attendance less than 85%.
+        </p>
+        <a
+          class="downloadBtn"
+          href="https://drive.google.com/file/d/15sIKv7tnLtIteD16YDYjGJlfgcXsoHk_/view"
+          target="_blank"
+          rel="noopener"
+        >
+          D5 form
+        </a>
+      </article>
+    </section>
+  </div>
+</body>
+</html>

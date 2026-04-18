@@ -1,0 +1,175 @@
+:root{
+  --purple:#8F61A5;
+  --peach:#efc0a8;
+  --grey:#E9E9EC;
+  --white:#FFFFFF;
+  --lilac:#B4A7D6;
+  --radius:16px;
+  --shadow:0 10px 30px rgba(0,0,0,.15);
+
+  /* For purple buttons */
+  --ink-invert:#ffffff;
+  --btn-h:clamp(44px,6vh,56px);
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+
+body{
+  margin:0;
+  background:var(--purple);
+  color:#000;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,"Noto Sans",sans-serif;
+}
+
+/* Full-height page */
+.page{
+  min-height:100dvh;
+  display:flex;
+  flex-direction:column;
+  padding:14px 14px 18px 14px;
+  gap:12px;
+}
+
+/* ===== Header: 3-column grid (15% | 70% | 15%) ===== */
+.topbar{
+  display:grid;
+  align-items:center;
+  grid-template-columns: 15% 70% 15%;
+  padding:10px 0;
+}
+
+.title{
+  grid-column:2;
+  margin:0;
+  color:#fff;
+  text-align:center;
+  font-size:18px;
+  letter-spacing:0.4px;
+}
+
+.closeBtn{
+  grid-column:3;
+  justify-self:end;
+  margin-right:10px;
+  background:transparent;
+  border:none;
+  color:#fff;
+  font-size:24px;
+  line-height:1;
+  cursor:pointer;
+  width:36px;
+  height:36px;
+}
+.closeBtn:active{
+  transform:scale(0.95);
+}
+
+/* Main grey container card */
+.card{
+  background:var(--grey);
+  border-radius:var(--radius);
+  padding:12px;
+  box-shadow:var(--shadow);
+  width:100%;
+  margin:0 auto;
+  padding-left:16px;
+  padding-right:16px;
+  margin-bottom:30px;
+}
+
+/* Table wrapper ensures table stays inside card and scrolls on small screens */
+.tableWrap{
+  background:var(--white);
+  border-radius:12px;
+  padding:8px;
+  overflow:auto;
+}
+
+/* Table */
+.wp-block-table{margin:0}
+table{
+  border-collapse:collapse;
+  width:100%;
+  font-size:11px;
+  color:#000;
+  background:var(--white);
+  border:1px solid #000;
+}
+thead tr{
+  background:var(--lilac);
+}
+th, td{
+  border:1px solid #000;
+  padding:8px;
+  vertical-align:top;
+}
+th{
+  font-weight:700;
+  text-align:center;
+}
+.col-code{width:80px}
+.center{text-align:center}
+
+/* ===== 2-by-2 style row: mini grey cards with purple buttons ===== */
+.actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px; /* ~10px spacing between cards */
+  width:100%;
+}
+
+/* Each small grey card */
+.docCard{
+  background:var(--grey);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:14px 12px 16px;
+  flex:1 1 0;        /* make them share row space equally */
+  display:flex;
+  flex-direction:column;
+  text-align:center;  /* center text inside card */
+}
+
+/* Text inside the mini cards */
+.docText{
+  margin:0 0 12px 0;
+  color:#000;
+  font-size:14px;
+}
+
+/* ===== Purple button (#8f61a5) style ===== */
+.downloadBtn{
+  flex:none;
+  margin-top:auto; /* pushes button to bottom so cards equalise height */
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  background:var(--purple);
+  color:var(--ink-invert);
+  border:0;
+  border-radius:0; /* square buttons */
+  box-shadow:var(--shadow);
+  min-height:var(--btn-h);
+  font-size:16px;
+  font-weight:600;
+  text-align:center;
+  cursor:pointer;
+  text-decoration:none; /* for <a> */
+}
+.downloadBtn:active{
+  transform:scale(0.98);
+}
+
+/* Wider screens: keep things stretched nicely */
+@media (min-width: 768px){
+  .page{
+    align-items:stretch;
+  }
+  .card,
+  .actions{
+    width:100%;
+    max-width:100%;
+  }
+}

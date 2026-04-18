@@ -1,0 +1,318 @@
+:root{
+  --purple:#8f61a5;
+  --purple-dark:#7a4e91;
+  --peach:#efc0a8;
+  --ink:#111;
+  --ink-invert:#fff;
+  --grey:#eeeeef;
+  --grey-deep:#c9c9c9;
+  --radius-card:16px;
+  --radius-pill:10px;
+  --shadow:10px 10px 30px rgba(0,0,0,.35);
+  --gap:16px;
+  --font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  --header-h:auto;
+  --btn-h:clamp(44px,6vh,56px);
+}
+
+*{
+  box-sizing:border-box;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  margin:0;
+  padding:0;
+}
+
+html,body{
+  min-height:100%;
+}
+
+body.page{
+  min-height:100svh;
+  background:var(--purple);
+  color:var(--ink-invert);
+  font:var(--font);
+  display:flex;
+  flex-direction:column;
+}
+
+/* ===== Top bar ===== */
+.topbar{
+  padding:16px 14px 8px;
+  color:var(--ink-invert);
+}
+
+.topgrid{
+  width:100%;
+  max-width:480px;
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:10% 1fr 10%;
+  align-items:flex-start;
+  min-height:var(--header-h);
+  row-gap:8px;
+  column-gap:0;
+  position:relative;
+}
+
+.top-btn{
+  background:none;
+  border:0;
+  color:var(--ink-invert);
+  font-size:18px;
+  font-weight:600;
+  line-height:1;
+  padding:0;
+  height:18px;
+  width:18px;
+  justify-self:start;
+  align-self:flex-start;
+  text-decoration:none;
+}
+
+.top-btn--close{
+  justify-self:end;
+  text-align:right;
+}
+
+.top-center{
+  text-align:center;
+  justify-self:center;
+  align-self:flex-start;
+}
+
+.headingMain{
+  font-size:18px;
+  font-weight:700;
+  color:var(--ink-invert);
+  line-height:1.2;
+  margin:0;
+}
+
+.headingSub{
+  font-size:14px;
+  font-weight:400;
+  color:var(--ink-invert);
+  line-height:1.3;
+  margin-top:4px;
+}
+
+.statusMsg{
+  font-size:12px;
+  font-weight:400;
+  color:var(--ink-invert);
+  line-height:1.2;
+  margin-top:4px;
+  min-height:16px;
+  text-align:center;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  white-space:nowrap;
+}
+
+/* calm dots - JS will update .dots text content, not flashing colors */
+.dots{
+  display:inline-block;
+  width:3ch;
+  text-align:left;
+  margin-left:2px;
+  font-weight:400;
+  font-size:12px;
+  line-height:1.2;
+  letter-spacing:1px;
+}
+
+/* ===== Main card ===== */
+
+.step-title{
+  font-size:16px;
+  font-weight:700;
+  color:var(--ink-invert);
+  line-height:1.2;
+  margin:0;
+  text-align:left;
+  font-style: italic;
+}
+
+.mainArea{
+  flex:1 1 auto;
+  display:flex;
+  flex-direction:column;
+  padding:0 14px 24px;
+}
+
+.card{
+  width:100%;
+  max-width:480px;
+  margin:0 auto;
+  background:var(--grey);
+  color:var(--ink);
+  border-radius:var(--radius-card);
+  box-shadow:var(--shadow);
+  padding:16px;
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+
+/* ===== Table ===== */
+.tableWrap{
+  width:100%;
+  overflow-x:auto;
+}
+
+.gridTable{
+  width:100%;
+  border-collapse:collapse;
+  font-size:14px;
+  text-align:center;
+  color:var(--ink);
+}
+
+.gridTable thead th{
+  background:var(--purple-dark);
+  color:var(--ink-invert);
+  font-weight:600;
+  font-size:13px;
+  line-height:1.3;
+  padding:8px 4px;
+  white-space:nowrap;
+}
+
+.gridTable tbody td{
+  background:#fff;
+  color:var(--ink);
+  border-bottom:1px solid var(--grey-deep);
+  padding:8px 4px;
+  line-height:1.3;
+  vertical-align:middle;
+  text-align:center;
+  min-width:60px;
+  word-break:break-word;
+}
+
+.gridTable tbody tr.activeRow td{
+  background:#e9ddf0;
+}
+
+/* editable cells */
+.cellInput{
+  width:100%;
+  background:#fff;
+  border:1px solid var(--grey-deep);
+  border-radius:4px;
+  padding:6px 4px;
+  font-size:14px;
+  line-height:1.3;
+  text-align:center;
+  color:var(--ink);
+  font-weight:500;
+  text-transform:uppercase; /* force uppercase visually */
+}
+
+/* ===== Actions Edit / Save ===== */
+.actions{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:12px;
+}
+
+.pillBtn{
+  flex:1;
+  background:var(--purple);
+  color:var(--ink-invert);
+  border:0;
+  border-radius:0; /* square buttons */
+  box-shadow:var(--shadow);
+  min-height:var(--btn-h);
+  font-size:16px;
+  font-weight:600;
+  text-align:center;
+  cursor:pointer;
+}
+
+
+.pillBtn[disabled]{
+  opacity:.5;
+  cursor:not-allowed;
+}
+
+
+/* ===== Modal for row detail ===== */
+.modal{
+  position:fixed;
+  inset:0;
+  z-index:1000;
+  display:none;
+}
+
+.modal.show{
+  display:flex;
+}
+
+.modalDim{
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,.4);
+}
+
+.modalCard{
+  position:relative;
+  margin:auto;
+  background:var(--grey);
+  color:var(--ink);
+  border-radius:var(--radius-card);
+  box-shadow:var(--shadow);
+  width:90%;
+  max-width:360px;
+  padding:16px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  z-index:1;
+}
+
+.modalHead{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+}
+
+.modalTitle{
+  font-size:18px;
+  font-weight:700;
+  color:var(--ink);
+  text-transform:uppercase;
+}
+
+.modalClose{
+  background:none;
+  border:0;
+  color:var(--ink);
+  font-size:20px;
+  line-height:1;
+  padding:0;
+  width:24px;
+  height:24px;
+  text-align:right;
+}
+
+.modalBody{
+  font-size:14px;
+  line-height:1.4;
+  color:var(--ink);
+}
+
+.modalLine{
+  margin-bottom:6px;
+  word-break:break-word;
+}
+
+/****SUMMARY *****/
+.summaryFooter{
+  margin: 8px 0 0;
+  font-size: 0.9rem;
+  text-align: left;
+}

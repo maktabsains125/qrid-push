@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+  />
+  <title>Year 7 Registration Settings</title>
+
+  <meta name="theme-color" content="#8f61a5"/>
+
+  <link rel="stylesheet" href="./style.css">
+
+  <!-- auth + shared role nav -->
+  <script src="/auth.js" defer></script>
+  <script defer src="./app.js"></script>
+</head>
+<body>
+  <div class="page">
+
+    <!-- ===== Top header (10% / 80 / 10) ===== -->
+    <header class="topgrid">
+      <div class="col col--l"></div>
+      <div class="col col--c">
+        <h1 class="title">YEAR 7 REGISTRATION</h1>
+      </div>
+      <div class="col col--r">
+        <button id="closeTop" class="closeBtn" aria-label="Close and return">×</button>
+      </div>
+    </header>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main class="mainWrap">
+
+      <!-- Top grey card: hyperlinks -->
+      <section class="panel panel--links">
+        <div class="panelTitle">Forms</div>
+        <div class="btnGrid btnGrid--links">
+          <a class="pill--purpleFlat" href="https://y7-registration-mspsbs.netlify.app/" id="linkFormWebsite">Website</a>
+          <a class="pill--purpleFlat" href="https://docs.google.com/spreadsheets/d/1ZdTFEzSpIBM_hPvrN5wMIuYJBL9fYDU8rFN3QnmbG64/edit?usp=sharing" id="linkFormResponses">Responses</a>
+          <a class="pill--purpleFlat" href="https://docs.google.com/spreadsheets/d/1AKYgdAVga-dznsFaBUgKws1qLmpmAPsWs6mr3wTZ-O8/edit?usp=sharing" id="linkFormSearch">Search</a>
+          <a class="pill--purpleFlat" href="https://y7-regis-form-editor.netlify.app/" id="linkFormEditor">Editor</a>
+          <a class="pill--purpleFlat" href="https://docs.google.com/spreadsheets/d/1_nY5QvH3JzX-wIh1tMiiLMVQWURdv7LfgyfJ8zUyusM/edit?usp=sharing" id="linkNewDatabase">Database</a>
+          <a class="pill--purpleFlat" href="https://drive.google.com/drive/folders/1wgN5mnUIWpw32-w9Ro8O4hwQ3WON9mGQ?usp=drive_link" id="linkEmailPdf">Email PDF</a>
+        </div>
+      </section>
+
+      <!-- Bottom grey card: Settings -->
+      <section class="panel panel--settings">
+
+        <div class="settingsTopBar">
+          <div class="settingsTitle">Settings</div>
+		  <div id="saveStatus" class="saveStatus" aria-live="polite"></div>
+          <div class="settingsActions">
+            <button id="editBtn" class="btn btn--sm">Edit</button>
+            <button id="saveBtn" class="btn btn--sm btn--primary" disabled>Save</button>
+          </div>
+        </div>
+
+        <div id="settingsNotice" class="settingsNotice" hidden>
+          View only – you are not authorised.
+        </div>
+
+        <form id="settingsForm" class="settingsForm" autocomplete="off">
+
+          <!-- Edit key -->
+<div class="settingsGroup" id="editKeyGroup">
+  <div class="settingsLabelRow">
+    <span class="settingsLabel">Form Editor password</span>
+  </div>
+  <div class="settingsRow settingsRow--password">
+    <div class="passwordWrap">
+      <input
+        id="editKey"
+        class="ctl ctl--caps ctl--fakePassword"
+        type="text"
+        placeholder="EDIT KEY"
+        autocomplete="off"
+        data-lpignore="true"
+        data-form-type="other"
+      />
+      <button
+        type="button"
+        id="toggleEditKey"
+        class="eyeBtn"
+        aria-label="Show edit key"
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24">
+          <path d="M12 5c5 0 9 5 9 7s-4 7-9 7-9-5-9-7 4-7 9-7zm0 3a4 4 0 100 8 4 4 0 000-8z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+
+          <!-- Accept responses -->
+          <div class="settingsGroup">
+            <div class="settingsLabelRow">
+              <span class="settingsLabel">Accept responses</span>
+              <div class="toggleWrap">
+                <button
+                  type="button"
+                  id="responsesToggle"
+                  class="toggle toggle--off"
+                  aria-pressed="false"
+                  aria-label="Toggle accept responses"
+                >
+                  <span class="toggle-knob"></span>
+                </button>
+              </div>
+            </div>
+            <div class="settingsCaption">
+              <span id="responsesCaption">OFF</span>
+            </div>
+          </div>
+
+          <!-- Registration dates -->
+          <div class="settingsGroup">
+            <div class="settingsLabelRow">
+              <span class="settingsLabel">Registration dates</span>
+            </div>
+            <div class="settingsRow settingsRow--2">
+              <!-- DATE PICKERS -->
+              <input id="date1" class="ctl" type="date"/>
+              <input id="date2" class="ctl" type="date"/>
+            </div>
+          </div>
+
+          <!-- Registration sessions -->
+          <div class="settingsGroup">
+            <div class="settingsLabelRow">
+              <span class="settingsLabel">Registration sessions</span>
+            </div>
+            <!-- TIME PICKERS -->
+            <div class="settingsRow settingsRow--2">
+              <input id="time1" class="ctl" type="time"/>
+              <span class="settingsText">&nbsp;TO&nbsp;</span>
+              <input id="time2" class="ctl" type="time"/>
+            </div>
+            <div class="settingsRow settingsRow--2">
+              <input id="time3" class="ctl" type="time"/>
+              <span class="settingsText">&nbsp;TO&nbsp;</span>
+              <input id="time4" class="ctl" type="time"/>
+            </div>
+          </div>
+
+          <!-- Subject options -->
+          <div class="settingsGroup">
+            <div class="settingsLabelRow">
+              <span class="settingsLabel">Subject options</span>
+            </div>
+            <div class="settingsRow settingsRow--2">
+              <input id="opt1" class="ctl ctl--caps" type="text" placeholder="OPTION 1"/>
+              <input id="opt2" class="ctl ctl--caps" type="text" placeholder="OPTION 2"/>
+            </div>
+            <div class="settingsRow settingsRow--2">
+              <input id="opt3" class="ctl ctl--caps" type="text" placeholder="OPTION 3"/>
+              <input id="opt4" class="ctl ctl--caps" type="text" placeholder="OPTION 4"/>
+            </div>
+          </div>
+		  
+        </form>
+      </section>
+
+    </main>
+
+    <footer class="bottomPad" aria-hidden="true"></footer>
+  </div>
+
+  <!-- Role-aware closeTop override -->
+  <script>
+    (function(){
+      const oldBtn = document.getElementById("closeTop");
+      if (!oldBtn) return;
+      const btn = oldBtn.cloneNode(true);
+      oldBtn.replaceWith(btn);
+
+      function gotoRoleDashboard(){
+        const roleFromAuth = (window.Auth && typeof Auth.who === "function" && Auth.who()?.role) || "";
+        const roleFromLS   = (localStorage.getItem("ms_role") || "");
+        const role = String(roleFromAuth || roleFromLS).toUpperCase().trim();
+        const dest =
+          (window.Auth && typeof Auth.routeFor === "function" && role)
+            ? Auth.routeFor(role)
+            : (role ? "/roles/" + role.toLowerCase() : "/");
+        location.replace(dest);
+      }
+
+      btn.addEventListener("click", function(e){
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        gotoRoleDashboard();
+      });
+    })();
+  </script>
+</body>
+</html>

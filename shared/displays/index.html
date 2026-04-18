@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+  <meta name="theme-color" content="#8f61a5"/>
+  <title>Attendance Displays</title>
+
+  <link rel="stylesheet" href="./style.css"/>
+
+  <script src="/auth.js" defer></script>
+  <script src="./app.js" defer></script>
+</head>
+
+<body>
+  <div class="page">
+
+    <header class="head">
+      <h1>ATTENDANCE DISPLAYS</h1>
+      <button class="exit" id="exitBtn" aria-label="Exit">×</button>
+    </header>
+
+    <div id="loadStatus" class="statusRow" role="status" aria-live="polite">
+      <span class="statusText">
+        <strong>Loading. Please wait</strong><span class="dots" aria-hidden="true"></span>
+      </span>
+    </div>
+
+    <div class="refreshNote">
+      <a href="#" id="refreshLink" class="refreshLink">Update</a> to get the latest data.
+    </div>
+
+    <nav class="tabs" role="tablist" aria-label="Session switch">
+      <button id="tabAm" class="tab active" role="tab" aria-selected="true">AM session</button>
+      <button id="tabPm" class="tab" role="tab" aria-selected="false">PM session</button>
+      <button id="tabOverall" class="tab tab--overall" role="tab" aria-selected="false">Overall</button>
+    </nav>
+
+    <main class="panel" id="panel">
+      <section id="amWrap" class="wrap" aria-labelledby="tabAm"></section>
+      <section id="pmWrap" class="wrap hidden" aria-labelledby="tabPm"></section>
+
+      <section id="overallWrap" class="wrap hidden" aria-labelledby="tabOverall">
+        <div id="overallCards"></div>
+
+        <div class="refreshNote">
+          <a
+            href="https://docs.google.com/spreadsheets/d/1nk1j_pPoS3UzvgZkxYnFU6MD0T8vfNFU_LC3I8d_NHI/edit?gid=1260309912#gid=1260309912"
+            id="toJSSLink"
+            class="refreshLink"
+            target="_blank"
+            rel="noopener"
+          >Send</a> data to JSS.
+        </div>
+      </section>
+    </main>
+
+  </div>
+</body>
+</html>

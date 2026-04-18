@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+  />
+  <title>Profiles</title>
+
+  <meta name="theme-color" content="#8f61a5"/>
+
+  <!-- Shared base styles FIRST -->
+  <link rel="stylesheet" href="/shared/stylesheet/mainpage-btn.css"/>
+
+  <!-- Page-specific styles -->
+  <link rel="stylesheet" href="./style.css"/>
+
+  <!-- Auth + page logic -->
+  <script src="/auth.js" defer></script>
+  <script src="./app.js" defer></script>
+</head>
+
+<body>
+  <div class="page">
+
+    <!-- ===== HEADER (always visible) ===== -->
+    <header class="topgrid" role="banner">
+      <div class="col col--l"></div>
+
+      <div class="col col--c">
+        <h1 class="title"><span id="yy"></span> PROFILES</h1>
+      </div>
+
+      <div class="col col--r">
+        <button
+          id="closeBtn"
+          class="closeBtn"
+          type="button"
+          aria-label="Close"
+        >×</button>
+      </div>
+    </header>
+
+    <!-- ===== HOME VIEW ===== -->
+    <main id="homeView" class="home">
+      <section class="panel">
+        <div class="btnGrid">
+
+          <!-- Year buttons -->
+          <button class="pill levelBtn" data-level="7"  type="button">Year 7</button>
+          <button class="pill levelBtn" data-level="8"  type="button">Year 8</button>
+          <button class="pill levelBtn" data-level="9"  type="button">Year 9</button>
+          <button class="pill levelBtn" data-level="10" type="button">Year 10</button>
+          <button class="pill levelBtn" data-level="12" type="button">Year 12</button>
+          <button class="pill levelBtn" data-level="13" type="button">Year 13</button>
+
+          <!-- Other buttons -->
+          <a id="clsBtn" class="pill linkBtn"
+             href="/shared/profile/class-info/class.html">
+            Class Profile
+          </a>
+
+          <a id="y7RegBtn" class="pill linkBtn"
+             href="/shared/profile/y7-regis/y7-regis.html">
+            Y7 Registration
+          </a>
+
+          <a id="allBtn" class="pill linkBtn"
+             href="https://docs.google.com/spreadsheets/d/1nRnoCHJnbjeku7WT9wVwnQpErW1mphOr7gjRPCJYaKs/edit?usp=sharing">
+            Database
+          </a>
+
+          <a id="welfareBtn" class="pill linkBtn"
+             href="/shared/welfare/index.html">
+            Welfare
+          </a>
+
+        </div>
+      </section>
+    </main>
+
+    <!-- ===== LEVEL VIEW ===== -->
+    <section id="levelView" class="levelView" hidden>
+
+      <!-- Loading status -->
+      <div id="loadStatus" class="loadStatus" hidden>
+        <span id="loadMsg">Loading… Please wait</span>
+        <span class="dotsBox"><span id="dots">...</span></span>
+      </div>
+
+      <!-- Tabs -->
+      <nav class="tabsWrap" aria-label="Profiles tabs">
+        <button id="tabSearch"
+                class="tab tab--left tab--active"
+                type="button">
+          Search
+        </button>
+        <button id="tabClass"
+                class="tab tab--right"
+                type="button">
+          Class
+        </button>
+      </nav>
+
+      <!-- Grey slab -->
+      <div class="slab">
+
+        <!-- ===== SEARCH PANE ===== -->
+        <div id="searchPane" class="pane">
+          <form class="formGrid" autocomplete="off" onsubmit="return false;">
+
+            <label class="row">
+              <span class="lab">CLASS</span>
+              <select id="classInput" class="ctl"></select>
+            </label>
+
+            <label class="row">
+              <span class="lab">NAME</span>
+              <div class="combo">
+                <input id="nameInput"
+                       class="ctl"
+                       type="text"
+                       placeholder="Choose class then name"/>
+                <div id="nameList" class="dropdown" hidden></div>
+              </div>
+            </label>
+
+            <div class="grid2">
+              <label class="row"><span class="lab">STUDENT ID</span><input id="adm" class="ctl" readonly></label>
+              <label class="row"><span class="lab">GENDER</span><input id="gender" class="ctl" readonly></label>
+              <label class="row"><span class="lab">IC</span><input id="ic" class="ctl" readonly></label>
+              <label class="row"><span class="lab">BRU-HIMS</span><input id="bru-hims" class="ctl" readonly></label>
+            </div>
+
+            <div class="grid3">
+              <label class="row"><span class="lab">BIRTH DAY</span><input id="bday" class="ctl" readonly></label>
+              <label class="row"><span class="lab">BIRTH MONTH</span><input id="bmonth" class="ctl" readonly></label>
+              <label class="row"><span class="lab">BIRTH YEAR</span><input id="byear" class="ctl" readonly></label>
+            </div>
+
+            <label class="row"><span class="lab">MEDICAL MATTER</span><input id="med" class="ctl" readonly></label>
+
+            <div class="grid2">
+              <label class="row"><span class="lab">AID</span><input id="aid" class="ctl" readonly></label>
+              <label class="row"><span class="lab">WELFARE</span><input id="welfare" class="ctl" readonly></label>
+            </div>
+
+            <label class="row"><span class="lab">SPORTSHOUSE</span><input id="house" class="ctl" readonly></label>
+
+            <label class="row"><span class="lab">FATHER</span><input id="father" class="ctl" readonly></label>
+            <div class="grid2">
+              <label class="row"><span class="lab">PHONE</span><input id="fatherPhone" class="ctl" readonly></label>
+              <label class="row"><span class="lab">OCCUPATION</span><input id="fatherOcc" class="ctl" readonly></label>
+            </div>
+			<label class="row"><span class="lab">ADDRESS</span><input id="fatherAdd" class="ctl" readonly></label>
+
+            <label class="row"><span class="lab">MOTHER</span><input id="mother" class="ctl" readonly></label>
+            <div class="grid2">
+              <label class="row"><span class="lab">PHONE</span><input id="motherPhone" class="ctl" readonly></label>
+              <label class="row"><span class="lab">OCCUPATION</span><input id="motherOcc" class="ctl" readonly></label>
+            </div>
+			<label class="row"><span class="lab">ADDRESS</span><input id="motherAdd" class="ctl" readonly></label>
+
+            <label class="row"><span class="lab">GUARDIAN</span><input id="guardian" class="ctl" readonly></label>
+            <div class="grid3">
+              <label class="row"><span class="lab">RELATION</span><input id="guardianRel" class="ctl" readonly></label>
+              <label class="row"><span class="lab">PHONE</span><input id="guardianPhone" class="ctl" readonly></label>
+              <div></div>
+            </div>
+			<label class="row"><span class="lab">OCCUPATION</span><input id="guardianOcc" class="ctl" readonly></label>
+			<label class="row"><span class="lab">ADDRESS</span><input id="guardianAdd" class="ctl" readonly></label>
+
+          </form>
+        </div>
+
+        <!-- ===== CLASS PANE ===== -->
+        <div id="classPane" class="pane" hidden>
+          <div class="classHead">
+            <label>Class
+              <select id="classInput2" class="ctl ctl--sm"></select>
+            </label>
+            <button id="reloadClass" class="btn btn--sm" type="button">Reload</button>
+          </div>
+
+          <div class="tableWrap">
+            <table class="table">
+              <thead>
+                <tr>
+  				  <th>ID</th>
+  				  <th>NAME</th>
+  				  <th>GENDER</th>
+  				  <th>DOB</th>
+  				  <th>IC</th>
+  				  <th>BRU-HIMS</th>
+  				  <th>MEDICAL</th>
+  				  <th>AID</th>
+  				  <th>WELFARE</th>
+  				  <th>HOUSE</th>
+  				  <th>FATHER</th>
+  				  <th>FATHER PHONE</th>
+  				  <th>FATHER JOB</th>
+  				  <th>FATHER ADDRESS</th>
+  				  <th>MOTHER</th>
+  				  <th>MOTHER PHONE</th>
+  				  <th>MOTHER JOB</th>
+  				  <th>MOTHER ADDRESS</th>
+  				  <th>GUARDIAN</th>
+  				  <th>RELATION</th>
+  				  <th>GUARDIAN PHONE</th>
+                  <th>GUARDIAN JOB</th>
+                  <th>GUARDIAN ADDRESS</th>
+                </tr>
+              </thead>
+              <tbody id="classTbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <footer class="bottomPad" aria-hidden="true"></footer>
+  </div>
+
+  <!-- ===== Student detail modal ===== -->
+  <div id="modalDim" class="modalDim" hidden>
+    <div class="modalCard" role="dialog" aria-modal="true">
+      <button id="modalClose" class="modalClose" type="button" aria-label="Close">×</button>
+      <div id="modalBody" class="modalBody"></div>
+    </div>
+  </div>
+
+</body>
+</html>
