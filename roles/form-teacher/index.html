@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+  <meta name="theme-color" content="#8f61a5">
+  <title>Form Teacher Dashboard</title>
+
+  <!-- Shared styles -->
+  <link rel="stylesheet" href="/shared/style.css"/>
+  <link rel="stylesheet" href="/shared/kebab/kebab.css"/>
+
+  <!-- Shared scripts -->
+  <script defer src="/shared/kebab/kebab.js"></script>
+
+  <!-- Role requirement -->
+  <meta name="required-role" content="FT">
+
+  <style>
+    .welcome {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+    }
+    .welcome h1 {
+      margin: 0;
+      font-size: 22px;
+      letter-spacing: 0.5px;
+    }
+    .welcome .user {
+      font-weight: 600;
+      margin-top: 2px;
+    }
+    #classBadgeTop {
+      font-size: 15px;
+      font-weight: 500;
+      margin-top: 3px;
+      color: #111;
+      text-align: left;
+      width: 100%;
+      padding-left: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+
+    <!-- ===== Top purple container ===== -->
+    <header class="top">
+      <div class="welcome">
+        <h1>WELCOME</h1>
+        <div class="user" id="whoami">[USER]</div>
+        <div id="classBadgeTop" aria-live="polite"></div>
+      </div>
+
+      <!-- Right side: logo + kebab -->
+      <div class="right">
+        <div class="logoWrap" aria-hidden="true">
+          <div class="logoCircle">
+            <img src="/shared/logo512-raya.png" alt="School Logo" onerror="this.style.display='none'"/>
+          </div>
+        </div>
+
+        <button class="kebab" id="menuBtn" aria-label="Menu" title="Menu" type="button">
+          <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true">
+            <circle cx="12" cy="5" r="2"></circle>
+            <circle cx="12" cy="12" r="2"></circle>
+            <circle cx="12" cy="19" r="2"></circle>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Kebab open + task listener -->
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    // Open the kebab menu
+    document.getElementById("menuBtn")
+      ?.addEventListener("click", () => window.Kebab?.open());
+
+    // When the "Task" button in kebab menu is clicked
+    document.addEventListener("kebab:task", () => {
+      location.assign("https://mspsbs-tasks.netlify.app/");
+    });
+
+    // When the "BioUnicorn" button in kebab menu is clicked (only for whitelisted codes)
+    document.addEventListener("kebab:bio", () => {
+      window.open("https://biounicorns.wordpress.com/", "_blank", "noopener");
+    });
+  });
+</script>
+
+    </header>
+
+    <!-- ===== Peach container ===== -->
+    <section class="peach">
+      <div class="peachText">FT QR-ID Dashboard</div>
+    </section>
+
+    <!-- ===== Grey container ===== -->
+    <main class="panel">
+      <div class="grid">
+        <button class="tile" aria-label="camera" type="button">
+          <img src="/shared/icons/Camera100.png" alt="" loading="lazy">
+        </button>
+        <button class="tile" aria-label="displays" type="button">
+          <img src="/shared/icons/Displays100.png" alt="" loading="lazy">
+        </button>
+        <button class="tile" aria-label="review" type="button">
+          <img src="/shared/icons/Review100.png" alt="" loading="lazy">
+        </button>
+        <button class="tile" aria-label="monthly" type="button">
+          <img src="/shared/icons/Monthly100.png" alt="" loading="lazy">
+        </button>
+        <button class="tile" aria-label="profile" type="button">
+          <img src="/shared/icons/Profile100.png" alt="" loading="lazy">
+        </button>
+        <button class="tile" aria-label="letters" type="button">
+          <img src="/shared/icons/Letters100.png" alt="" loading="lazy">
+        </button>
+      </div>
+    </main>
+
+    <!-- ===== Bottom purple container ===== -->
+    <footer class="bottom"></footer>
+  </div>
+
+  <!-- ===== Core functions ===== -->
+  <script src="/auth.js"></script>
+  <script defer src="/gate-ft.js"></script>
+
+  <!-- ===== Wirings + Displays warm-up ===== -->
+  <script>
+  (function(){
+    Auth.requireRole('FT');
+
+    // === Display name + role ===
+    (function setWhoami(){
+      const who = Auth.who();
+      const el  = document.getElementById('whoami');
+      if (who && el) {
+        const r = String(who.role || '').trim();
+        el.textContent = r ? `${who.code} (${r})` : `${who.code}`;
+      }
+    })();
+
+    // === Class badge ===
+    (function setClassBadgeTop(){
+      const badge = document.getElementById("classBadgeTop");
+      if (!badge) return;
+      const ft = Auth.ft ? Auth.ft() : {};
+      if (ft && (ft.level || ft.class)) {
+        badge.textContent = `Year ${ft.level || ""}${ft.class || ""}`;
+      } else {
+        badge.textContent = "";
+      }
+    })();
+
+    // Multi-tab logout sync
+    window.addEventListener('storage', e=>{
+      if (e.key === 'ms_logout_broadcast') location.replace('/?logout=1');
+    });
+
+    // ==== Camera ====
+    const CAM_PATH = "/shared/camera/index.html";
+    document.querySelector('.tile[aria-label="camera"]')
+      ?.addEventListener('click', ()=> location.assign(CAM_PATH));
+
+    // ==== Displays ====
+    const DISPLAY_PATH = "/shared/displays/index.html";
+    document.querySelector('.tile[aria-label="displays"]')
+      ?.addEventListener('click', ()=> location.assign(DISPLAY_PATH));
+
+    // ==== Letters ====
+    const LETTERS_PATH = "/shared/letters/index.html";
+    document.querySelector('.tile[aria-label="letters"]')
+      ?.addEventListener('click', ()=> location.assign(LETTERS_PATH));
+
+    // ==== Monthly ====
+    document.querySelector('.tile[aria-label="monthly"]')
+      ?.addEventListener('click', ()=>{
+        const ft = Auth.ft ? Auth.ft() : {};
+        const sheetId = ft.returnid || localStorage.getItem("ms_returnid") || "";
+        if (sheetId) {
+          const url = `https://docs.google.com/spreadsheets/d/${sheetId}`;
+          window.open(url, "_blank");
+        } else {
+          alert("No Return Sheet ID found for this Form Teacher.");
+        }
+      });
+
+    // ==== Review ====
+(function wireReview(){
+  const REVIEW_PATH = "/shared/review/index.html";
+  const btn = document.querySelector('.tile[aria-label="review"]');
+  if (!btn) return;
+
+  btn.addEventListener('click', ()=>{
+    const ft  = Auth.ft ? Auth.ft() : {};
+    const who = Auth.who ? Auth.who() : null;
+
+    if (!who?.code) {
+      alert("Session expired. Please login again.");
+      location.href = "/";
+      return;
+    }
+
+    const anchor = String(ft.anchor || localStorage.getItem("ms_anchor") || "").trim();
+    const level  = String(ft.level  || localStorage.getItem("ms_level")  || "").trim();
+    const klass  = String(ft.class  || localStorage.getItem("ms_class")  || "").trim();
+    const clazz  = `${level}${klass}`.trim();
+
+    if (!anchor || !clazz) {
+      alert("Missing Anchor or Class (level+class). Please login again or set FT info.");
+      return;
+    }
+
+    // Keep it simple: rely on localStorage hard-lock on the review page.
+    // Optional: pass query params if the review page wants them as fallback.
+    const url = `${REVIEW_PATH}?anchor=${encodeURIComponent(anchor)}&clazz=${encodeURIComponent(clazz)}`;
+    location.assign(url);
+  });
+})();
+
+
+    // ==== PROFILE (role-aware) ====
+    (function(){
+      const btn = document.querySelector('.tile[aria-label="profile"]');
+      if (!btn) return;
+
+      const who  = window.Auth?.who?.() || {};
+      const role = String(who.role || '').toUpperCase();
+
+      const PATH_BY_ROLE = {
+        FT:      '/shared/profile/index.html',
+        REGIS:   '/shared/profile/index.html',
+        ADMIN:   '/shared/profile/index.html',
+        HEP:     '/shared/profile/index.html',
+        WELFARE: '/shared/profile/index.html',
+        // GENERAL: '/shared/profile/readonly.html',
+      };
+
+      const ALLOW = new Set(Object.keys(PATH_BY_ROLE));
+
+      if (!ALLOW.has(role)) {
+        btn.disabled = true;
+        btn.style.opacity = '0.45';
+        btn.style.pointerEvents = 'none';
+        return;
+      }
+
+      const dest = PATH_BY_ROLE[role];
+      btn.addEventListener('click', () => location.assign(dest));
+    })();
+
+    // ===== Displays Warm-up (cache prefetch + server wake) =====
+    (function warmDisplays() {
+      const who = Auth.who && Auth.who();
+      if (!who) return; // only warm when logged in
+
+      const PROXY = "/.netlify/functions/displays"; // same endpoint as Displays page
+      const CACHE_KEY = "ms_displays_cache_v1";
+      const url = `${PROXY}?full=1&warm=1`;
+
+      function go(){
+        fetch(url, { cache: "no-store", keepalive: true })
+          .then(r => r.ok ? r.json() : null)
+          .then(data => {
+            if (!data) return;
+            // Store exactly what Displays/app.js expects
+            localStorage.setItem(CACHE_KEY, JSON.stringify({ t: Date.now(), data }));
+          })
+          .catch(()=>{ /* silent */ });
+      }
+
+      // Run quietly when the browser is idle (fallback to small delay)
+      if ("requestIdleCallback" in window) {
+        requestIdleCallback(go, { timeout: 2000 });
+      } else {
+        setTimeout(go, 500);
+      }
+    })();
+
+  })();
+  </script>
+</body>
+</html>

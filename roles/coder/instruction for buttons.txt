@@ -1,0 +1,294 @@
+below is located in root/shared/style.css
+/* ===== Theme ===== */
+:root{
+  --purple:#8f61a5;
+  --purple-dark:#7a4e91;
+  --panel:#b3b3b3;
+  --peach:#efc0a8;
+  --ink:#111;
+  --ink-invert:#fff;
+  --radius-xl: 36px;
+  --shadow: 10px 10px 30px rgba(0,0,0,.40);
+}
+
+/* ===== Reset / Base ===== */
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  background:#8f61a5;
+  color:var(--ink);
+  font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+}
+
+.grid{
+  background:#adadad;
+  padding:28px 0;
+  width:100%;
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  justify-items:center;
+  align-items:center;
+  gap:28px;
+  height:400px;
+  border-radius:0 0 28px 28px;
+}
+
+.app{
+  min-height:100dvh;
+  max-width:430px;
+  margin:0 auto;
+  display:flex;
+  flex-direction:column;
+  background:var(--purple);
+}
+
+/* ===== Header ===== */
+.top{
+  height:170px;
+  background:var(--purple);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:28px 22px;
+}
+
+.welcome h1{
+  margin:0 0 6px 0;
+  font-size:28px;
+  letter-spacing:.5px;
+  color:var(--ink-invert);
+  padding-left:10px;
+}
+.user{
+  font-weight:700;
+  font-size:22px;
+  color:var(--ink-invert);
+  padding-left:10px;
+}
+
+/* right side: logo + kebab */
+.right{
+  display:flex;
+  align-items:center;
+  gap:5px;
+}
+
+.logoWrap{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.logoCircle{
+  width:92px; height:92px;
+  border-radius:50%;
+  background:#fff;
+  display:grid; place-items:center;
+  box-shadow:var(--shadow);
+}
+.logoCircle img{
+  width:72px; height:72px; object-fit:contain;
+}
+
+.kebab{
+  display:inline-flex;
+  align-items:top;
+  justify-content:center;
+  width:40px; height:40px;
+  border-radius:10px;
+  background:transparent;
+  border:0px solid rgba(255,255,255,.25);
+  cursor:pointer;
+  padding:0;
+}
+.kebab svg{ fill:#fff; }
+.kebab:active{ transform:scale(.98); }
+
+/* ===== Main Panel ===== */
+.panel{
+  background:transparent;
+  margin:0;
+  display:flex;
+}
+
+/* Fixed-size square tiles */
+.tile{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#fff;
+  border:none;
+  border-radius:12px;
+  width:100px; height:100px;
+  box-shadow:var(--shadow);
+  cursor:pointer;
+}
+.tile img{ width:80px; height:80px; object-fit:contain; }
+
+/* ===== Peach band ===== */
+.peach{
+  background:var(--peach);
+  border-radius:28px 28px 0 0; 
+  height:68px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:0 16px;
+}
+.peachText{ font-size:18px; font-weight:700; }
+
+/* ===== Bottom bar ===== */
+.bottom{
+  background:var(--purple-dark);
+  margin-top:30px;
+  display:flex;
+}
+
+below is in root/roles/form-teacher/index.html:
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+  <title>Class Dashboard</title>
+
+  <!-- Shared styles -->
+  <link rel="stylesheet" href="/shared/style.css"/>
+  <link rel="stylesheet" href="/shared/kebab/kebab.css"/>
+
+  <!-- Shared scripts -->
+  <script defer src="/shared/kebab/kebab.js"></script>
+
+  <!-- Role requirement -->
+  <meta name="required-role" content="FT">
+</head>
+<body>
+  <div class="app">
+
+    <!-- ===== Top purple container ===== -->
+    <header class="top">
+      <div class="welcome">
+        <h1>WELCOME</h1>
+        <div class="user" id="whoami">[USER]</div>
+      </div>
+
+      <!-- Right side: logo + kebab menu -->
+      <div class="right">
+        <div class="logoWrap" aria-hidden="true">
+          <div class="logoCircle">
+            <img src="/shared/logo512.png" alt="School Logo" onerror="this.style.display='none'"/>
+          </div>
+        </div>
+
+        <!-- Kebab (three-dots) button -->
+        <button class="kebab" id="menuBtn" aria-label="Menu" title="Menu">
+          <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true">
+            <circle cx="12" cy="5" r="2"></circle>
+            <circle cx="12" cy="12" r="2"></circle>
+            <circle cx="12" cy="19" r="2"></circle>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Kebab open + task listener -->
+      <script>
+        // Open shared kebab panel when kebab button clicked
+        document.addEventListener("DOMContentLoaded", () => {
+          const btn = document.getElementById("menuBtn");
+          btn?.addEventListener("click", () => window.Kebab?.open());
+
+          // Listen for task button click (will be bound later)
+          document.addEventListener("kebab:task", () => {
+            console.log("Task clicked from kebab panel");
+          });
+        });
+      </script>
+    </header>
+
+    <!-- ===== Peach container ===== -->
+    <section class="peach">
+      <div class="peachText">Form Teacher Dashboard</div>
+    </section>
+     
+        <!-- ===== Grey container (2×2 grid) ===== -->
+    <main class="panel">
+      <div class="grid">
+        <button class="tile" aria-label="camera">
+          <img src="/shared/icons/Camera100.png" alt="">
+        </button>
+        <button class="tile" aria-label="review">
+          <img src="/shared/icons/Review100.png" alt="">
+        </button>
+        <button class="tile" aria-label="monthly">
+          <img src="/shared/icons/Monthly100.png" alt="">
+        </button>
+        <button class="tile" aria-label="profile_min">
+          <img src="/shared/icons/Profile100.png" alt="">
+        </button>
+      </div>
+    </main>
+
+
+    <!-- ===== Bottom purple container ===== -->
+    <footer class="bottom"></footer>
+
+  </div> <!-- /app -->
+
+  <!-- ===== Core functions ===== -->
+  <script src="/auth.js"></script>
+  <script src="/gate-ft.js"></script>
+</body>
+</html>
+
+the structure of the root folder is:
+root/
+├── roles/
+│   ├── admin/
+│   ├── coder/
+│   ├── form-teacher/
+│   │   └── index.html
+│   ├── general/
+│   ├── hep/
+│   ├── regis/
+│   └── welfare/
+├── shared/
+│   ├── camera/
+│   ├── displays/
+│   ├── icons/
+│   │   ├── Camera100.png
+│   │   ├── close.svg
+│   │   ├── logout.svg
+│   │   ├── Monthly100.png
+│   │   ├── Profile100.png
+│   │   └── Review100.png
+│   ├── img/
+│   ├── kebab/
+│   │   ├── kebab.css
+│   │   ├── kebab.html
+│   │   ├── kebab.js
+│   │   └── shared_kebab.txt
+│   ├── logo512.png
+│   └── style.css
+├── _redirects
+├── auth.js
+├── Code.gs
+├── gate-ft.js
+├── index.html
+├── login-dom-lite.js
+├── root-domain.txt
+└── style.css
+
+I intend to:
+[1] Copy the index.html in form-teacher folder, and pasted it each roles folder.
+[2] However I need to change the number of tiles/buttons.
+[3] in general, there will be 2 tile buttons: camera, displays
+[4] form-teacher, right now it has 4 buttons, but i will change to have 6 buttons. The additional 2 buttons: displays, letters
+[5] hep will have 4 buttons: camera, displays, profile_min, attendances
+[6] welfare will have 6 buttons: camera, welfare_list, welfare_single, transfer, ft_list, attendances
+[7]regis will have 6 buttons: camera, displays, attendances, profile_max,ft_list, transfer
+[8]admin will have 6 buttons: camera, displays, attendances, profile_max,ft_list, transfer
+[9] coder 8 buttons: camera, displays, attendances, profile_max,ft_list, transfer,config, gdrive
+
+The buttons are still in 2 columns. The rows depend on how many buttons there are. If 6 then 2 columns, 3 rows, etc. 
+
+The grey container should adjust its height to accommodate for the buttons without disturbing the elements below it.

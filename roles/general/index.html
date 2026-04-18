@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+  <meta name="theme-color" content="#8f61a5">
+  <title>QR-ID Dashboard</title>
+
+  <!-- Shared styles -->
+  <link rel="stylesheet" href="/shared/style.css"/>
+  <link rel="stylesheet" href="/shared/kebab/kebab.css"/>
+
+  <!-- Shared scripts -->
+  <script defer src="/shared/kebab/kebab.js"></script>
+</head>
+<body>
+  <div class="app">
+
+    <!-- ===== Top purple container ===== -->
+    <header class="top">
+      <div class="welcome">
+        <h1>WELCOME</h1>
+        <div class="user" id="whoami">[USER]</div>
+      </div>
+
+      <!-- Right side: logo + kebab menu -->
+      <div class="right">
+        <div class="logoWrap" aria-hidden="true">
+          <div class="logoCircle">
+            <img src="/shared/logo512-raya.png" alt="School Logo" onerror="this.style.display='none'"/>
+          </div>
+        </div>
+
+        <!-- Kebab (three-dots) button -->
+        <button class="kebab" id="menuBtn" aria-label="Menu" title="Menu" type="button">
+          <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true">
+            <circle cx="12" cy="5" r="2"></circle>
+            <circle cx="12" cy="12" r="2"></circle>
+            <circle cx="12" cy="19" r="2"></circle>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Kebab open + task + bio listeners -->
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    // Open the kebab menu
+    document.getElementById("menuBtn")
+      ?.addEventListener("click", () => window.Kebab?.open());
+
+    // When the "Task" button in kebab menu is clicked
+    document.addEventListener("kebab:task", () => {
+      location.assign("https://mspsbs-tasks.netlify.app/");
+    });
+
+    // When the "BioUnicorn" button in kebab menu is clicked (only for whitelisted codes)
+    document.addEventListener("kebab:bio", () => {
+      window.open("https://biounicorns.wordpress.com/", "_blank", "noopener");
+    });
+  });
+</script>
+
+    </header>
+
+    <!-- ===== Peach container ===== -->
+    <section class="peach">
+      <div class="peachText">QR-ID Dashboard</div>
+    </section>
+
+    <!-- ===== Grey container (2×2 grid) ===== -->
+    <main class="panel">
+      <div class="grid">
+        <button class="tile" aria-label="camera" type="button">
+          <img src="/shared/icons/Camera100.png" alt="" loading="lazy">
+        </button>
+
+        <button class="tile" aria-label="displays" type="button">
+          <img src="/shared/icons/Displays100.png" alt="" loading="lazy">
+        </button>
+
+        <button class="tile" aria-label="class-info" type="button"
+                onclick="window.location.href='/shared/profile/class-info/class.html'">
+          <img src="/shared/icons/Class100.png" alt="" loading="lazy">
+        </button>
+
+        <button class="tile" aria-label="letters" type="button">
+          <img src="/shared/icons/Letters100.png" alt="" loading="lazy">
+        </button>
+      </div>
+    </main>
+
+    <!-- ===== Bottom purple container ===== -->
+    <footer class="bottom"></footer>
+
+  </div> <!-- /app -->
+
+  <!-- Auth + page guard for role '' (empty). No arg = just ensure logged in. -->
+  <script src="/auth.js"></script>
+  <script>
+    // Ensure a session exists (no specific role required for this dashboard)
+    Auth.requireRole();
+
+    const who = Auth.who();
+    const el  = document.getElementById('whoami');
+    if (who && el) el.textContent = String(who.code || '').trim(); // code only
+
+    // multi-tab logout sync
+    window.addEventListener("storage", (e)=>{
+      if (e.key === "ms_logout_broadcast") location.replace("/?logout=1");
+    });
+  </script>
+
+  <!-- ==== Wirings ==== -->
+  <script>
+  (function () {
+    // ==== Camera button wiring ====
+    const CAM_PATH = "/shared/camera/index.html";
+    const camBtn = document.querySelector('.grid .tile[aria-label="camera"], .tile[aria-label="Camera"]');
+    camBtn?.addEventListener('click', () => { location.assign(CAM_PATH); });
+
+    // ==== Letters ====
+    const LETTERS_PATH = "/shared/letters/index.html";
+    document.querySelector('.tile[aria-label="letters"]')
+      ?.addEventListener('click', ()=> location.assign(LETTERS_PATH));
+
+    // ==== Displays button wiring ====
+    const DISPLAY_PATH = "/shared/displays/index.html";
+    const dispBtn = document.querySelector('.grid .tile[aria-label="displays"], .tile[aria-label="Displays"]');
+    dispBtn?.addEventListener('click', () => { location.assign(DISPLAY_PATH); });
+  })();
+  </script>
+
+  <!-- ===== Displays Warm-up (silent prefetch + server wake) ===== -->
+  <script>
+  (function warmDisplays(){
+    const who = Auth.who && Auth.who();
+    if (!who) return; // only warm if logged in
+
+    const PROXY = "/.netlify/functions/displays";   // same as Displays page
+    const CACHE_KEY = "ms_displays_cache_v1";
+    const url = `${PROXY}?full=1&warm=1`;
+
+    function go(){
+      fetch(url, { cache: "no-store", keepalive: true })
+        .then(r => r.ok ? r.json() : null)
+        .then(data => {
+          if (!data) return;
+          localStorage.setItem(CACHE_KEY, JSON.stringify({ t: Date.now(), data }));
+        })
+        .catch(()=>{ /* silent fail; never block the dashboard */ });
+    }
+
+    if ("requestIdleCallback" in window) {
+      requestIdleCallback(go, { timeout: 2000 });
+    } else {
+      setTimeout(go, 500);
+    }
+  })();
+  </script>
+
+</body>
+</html>

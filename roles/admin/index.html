@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+  <meta name="theme-color" content="#8f61a5">
+  <title>Admin Dashboard</title>
+
+  <!-- Shared styles -->
+  <link rel="stylesheet" href="/shared/style.css"/>
+  <link rel="stylesheet" href="/shared/kebab/kebab.css"/>
+
+  <!-- Shared scripts -->
+  <script defer src="/shared/kebab/kebab.js"></script>
+
+  <!-- Role requirement -->
+  <meta name="required-role" content="ADMIN">
+</head>
+<body>
+  <div class="app">
+
+    <!-- ===== Top purple container ===== -->
+    <header class="top">
+      <div class="welcome">
+        <h1>WELCOME</h1>
+        <div class="user" id="whoami">[USER]</div>
+      </div>
+
+      <!-- Right side: logo + kebab menu -->
+      <div class="right">
+        <div class="logoWrap" aria-hidden="true">
+          <div class="logoCircle">
+            <img src="/shared/logo512-raya.png" alt="School Logo" onerror="this.style.display='none'"/>
+          </div>
+        </div>
+
+        <!-- Kebab (three-dots) button -->
+        <button class="kebab" id="menuBtn" aria-label="Menu" title="Menu" type="button">
+          <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true">
+            <circle cx="12" cy="5" r="2"></circle>
+            <circle cx="12" cy="12" r="2"></circle>
+            <circle cx="12" cy="19" r="2"></circle>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Kebab open + task listener -->
+      <script>
+        document.addEventListener("DOMContentLoaded", () => {
+          // Open the kebab menu
+          document.getElementById("menuBtn")?.addEventListener("click", () => window.Kebab?.open());
+
+          // When the "Task" button in kebab menu is clicked
+          document.addEventListener("kebab:task", () => {
+            location.assign("https://mspsbs-tasks.netlify.app/");
+          });
+        });
+      </script>
+    </header>
+
+    <!-- ===== Peach container ===== -->
+    <section class="peach">
+      <div class="peachText">Admin QR-ID Dashboard</div>
+    </section>
+
+    <!-- ===== Grey container (2×2 grid) ===== -->
+    <main class="panel">
+      <div class="grid">
+        <button class="tile" aria-label="camera" type="button">
+          <img src="/shared/icons/Camera100.png" alt="" loading="lazy">
+        </button>
+        <button class="tile" aria-label="displays" type="button">
+          <img src="/shared/icons/Displays100.png" alt="" loading="lazy">
+        </button>
+        <button class="tile" aria-label="attendances" type="button">
+          <img src="/shared/icons/Attendances100.png" alt="" loading="lazy">
+        </button>
+        <button class="tile" aria-label="profile" type="button">
+          <img src="/shared/icons/Profile100.png" alt="" loading="lazy">
+        </button>
+        <a href="/shared/contacts/index.html" class="tile" aria-label="ft_list">
+        <img src="/shared/icons/FTList100.png" alt="" loading="lazy">
+        </a>
+        <a href="/shared/transfer/index.html" class="tile" aria-label="transfer">
+          <img src="/shared/icons/Transfer100.png" alt="" loading="lazy">
+        </a>
+
+      </div>
+    </main>
+
+    <!-- ===== Bottom purple container ===== -->
+    <footer class="bottom"></footer>
+
+  </div> <!-- /app -->
+
+
+
+  <!-- ===== Auth + whoami + warm-up ===== -->
+<script src="/auth.js"></script>
+<script>
+  function setWhoami(selector = '#whoami') {
+    const who = Auth.who();
+    const el  = document.querySelector(selector);
+    if (!who || !el) return;
+    const r = String(who.role || '').trim();
+    el.textContent = r ? `${who.code} (${r})` : `${who.code}`;
+  }
+
+  Auth.requireRole('ADMIN');
+  setWhoami('#whoami');
+
+  // Logout sync across tabs
+  window.addEventListener('storage', e => {
+    if (e.key === 'ms_logout_broadcast') location.replace('/?logout=1');
+  });
+
+  // ===== Displays Warm-up =====
+  (function warmDisplays() {
+    const who = Auth.who();
+    if (!who) return; // only warm if logged in
+
+    const PROXY = "/.netlify/functions/displays"; // same as Displays page
+    const CACHE_KEY = "ms_displays_cache_v1";
+    const url = `${PROXY}?full=1&warm=1`;
+
+    async function go() {
+      try {
+        const res = await fetch(url, { cache: "no-store", keepalive: true });
+        if (!res.ok) return;
+        const data = await res.json();
+        localStorage.setItem(CACHE_KEY, JSON.stringify({ t: Date.now(), data }));
+      } catch (err) {
+        // Silent fail — never block dashboard
+      }
+    }
+
+    // Run quietly when browser is idle
+    if ("requestIdleCallback" in window) {
+      requestIdleCallback(go, { timeout: 2000 });
+    } else {
+      setTimeout(go, 800);
+    }
+  })();
+</script>
+
+
+
+
+  <!-- ==== Wirings (NO nested <script> here) ==== -->
+  <script>
+  (function(){
+    // ==== Camera ====
+    const CAM_PATH = "/shared/camera/index.html";
+    document.querySelector('.tile[aria-label="camera"]')
+      ?.addEventListener('click', ()=> location.assign(CAM_PATH));
+
+    // ==== Displays ====
+    const DISPLAY_PATH = "/shared/displays/index.html";
+    document.querySelector('.tile[aria-label="displays"]')
+      ?.addEventListener('click', ()=> location.assign(DISPLAY_PATH));
+
+    // ==== Attendances ====
+    const ATTENDANCE_PATH = "/shared/attendance/index.html";
+    const attendanceBtn = document.querySelector('.grid .tile[aria-label="attendances"], .tile[aria-label="Attendances"]');
+    attendanceBtn?.addEventListener('click', ()=> location.assign(ATTENDANCE_PATH));
+
+    // ==== FT List ====
+    const FT_LIST_PATH = "/shared/admin/ft-list/index.html";
+    document.querySelector('.tile[aria-label="ft_list"]')
+      ?.addEventListener('click', ()=> location.assign(FT_LIST_PATH));
+
+    // ==== Transfer ====
+    const TRANSFER_PATH = "/shared/admin/transfer/index.html";
+    document.querySelector('.tile[aria-label="transfer"]')
+      ?.addEventListener('click', ()=> location.assign(TRANSFER_PATH));
+
+    // ==== Profile (role-aware) ====
+    (function(){
+      const btn = document.querySelector('.tile[aria-label="profile"]');
+      if (!btn) return;
+
+      const who  = window.Auth?.who?.() || {};
+      const role = String(who.role || '').toUpperCase();
+
+      const PATH_BY_ROLE = {
+        FT:      '/shared/profile/index.html',
+        REGIS:   '/shared/profile/index.html',
+        ADMIN:   '/shared/profile/index.html',
+        HEP:     '/shared/profile/index.html',
+        WELFARE: '/shared/profile/index.html',
+      };
+
+      const ALLOW = new Set(Object.keys(PATH_BY_ROLE));
+      if (!ALLOW.has(role)) {
+        btn.disabled = true;
+        btn.style.opacity = '0.45';
+        btn.style.pointerEvents = 'none';
+        return;
+      }
+
+      const dest = PATH_BY_ROLE[role] || '/shared/profile/index.html';
+      btn.addEventListener('click', () => location.assign(dest));
+    })();
+
+  })();
+  </script>
+
+</body>
+</html>

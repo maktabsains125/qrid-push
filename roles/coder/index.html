@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+  <meta name="theme-color" content="#8f61a5">
+  <title>Dev Dashboard</title>
+
+  <!-- Shared styles -->
+  <link rel="stylesheet" href="/shared/style.css"/>
+  <link rel="stylesheet" href="/shared/kebab/kebab.css"/>
+
+  <!-- Shared scripts -->
+  <script defer src="/shared/kebab/kebab.js"></script>
+
+  <!-- Required role -->
+  <meta name="required-role" content="CODER">
+
+  <style>
+    body.locked { visibility: hidden; }
+  </style>
+</head>
+
+<body class="locked">
+  <div class="app">
+
+    <!-- ===== Top purple container ===== -->
+    <header class="top">
+      <div class="welcome">
+        <h1>WELCOME</h1>
+        <div class="user" id="whoami">[USER]</div>
+      </div>
+
+      <!-- Right side: logo + kebab menu -->
+      <div class="right">
+        <div class="logoWrap" aria-hidden="true">
+          <div class="logoCircle">
+            <img src="/shared/logo512-raya.png"
+                 alt="School Logo"
+                 onerror="this.style.display='none'"/>
+          </div>
+        </div>
+
+        <!-- Kebab (three-dots) button -->
+        <button class="kebab" id="menuBtn" aria-label="Menu" title="Menu" type="button">
+          <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true">
+            <circle cx="12" cy="5" r="2"></circle>
+            <circle cx="12" cy="12" r="2"></circle>
+            <circle cx="12" cy="19" r="2"></circle>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- ===== Peach container ===== -->
+    <section class="peach">
+      <div class="peachText">Dev QR-ID Dashboard</div>
+    </section>
+
+    <!-- ===== Grey container ===== -->
+    <main class="panel">
+      <div class="grid">
+
+        <button class="tile" aria-label="camera" type="button">
+          <img src="/shared/icons/Camera100.png" alt="" loading="lazy">
+        </button>
+
+        <button class="tile" aria-label="displays" type="button">
+          <img src="/shared/icons/Displays100.png" alt="" loading="lazy">
+        </button>
+
+        <button class="tile" aria-label="attendances" type="button">
+          <img src="/shared/icons/Attendances100.png" alt="" loading="lazy">
+        </button>
+
+        <button class="tile" aria-label="profile" type="button">
+          <img src="/shared/icons/Profile100.png" alt="" loading="lazy">
+        </button>
+
+        <a href="/shared/contacts/index.html" class="tile" aria-label="ft_list">
+          <img src="/shared/icons/FTList100.png" alt="" loading="lazy">
+        </a>
+
+        <a href="/shared/transfer/index.html" class="tile" aria-label="transfer">
+          <img src="/shared/icons/Transfer100.png" alt="" loading="lazy">
+        </a>
+
+      </div>
+    </main>
+
+    <!-- ===== Bottom purple container ===== -->
+    <footer class="bottom"></footer>
+
+  </div><!-- /app -->
+
+  <!-- ===== Auth + whoami + warm-up ===== -->
+  <script src="/auth.js"></script>
+  <script>
+    document.body.classList.add('locked');
+
+    (function secureAccess(){
+      const who = (window.Auth && Auth.who && Auth.who()) || null;
+
+      if (!who) {
+        location.replace('/?logout=1');
+        return;
+      }
+
+      const role = String(who.role || '').toUpperCase();
+
+      if (role !== 'CODER') {
+        alert('Access denied — CODER role required.');
+        location.replace('/');
+        return;
+      }
+
+      document.body.classList.remove('locked');
+    })();
+
+    function setWhoami(selector = '#whoami') {
+      const who = Auth.who && Auth.who();
+      const el  = document.querySelector(selector);
+      if (!who || !el) return;
+      const roleTxt = String(who.role || '').trim();
+      el.textContent = roleTxt ? `${who.code} (${roleTxt})` : `${who.code}`;
+    }
+
+    Auth.requireRole('CODER');
+    setWhoami('#whoami');
+
+    window.addEventListener('storage', e => {
+      if (e.key === 'ms_logout_broadcast') {
+        location.replace('/?logout=1');
+      }
+    });
+
+    (function warmDisplays() {
+      const who = Auth.who && Auth.who();
+      if (!who) return;
+
+      const PROXY = "/.netlify/functions/displays";
+      const CACHE_KEY = "ms_displays_cache_v1";
+      const url = `${PROXY}?full=1&warm=1`;
+
+      async function go() {
+        try {
+          const res = await fetch(url, { cache: "no-store", keepalive: true });
+          if (!res.ok) return;
+          const data = await res.json();
+          localStorage.setItem(CACHE_KEY, JSON.stringify({ t: Date.now(), data }));
+        } catch {}
+      }
+
+      if ("requestIdleCallback" in window) {
+        requestIdleCallback(go, { timeout: 2000 });
+      } else {
+        setTimeout(go, 800);
+      }
+    })();
+
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("menuBtn")
+        ?.addEventListener("click", () => window.Kebab?.open());
+
+      document.addEventListener("kebab:task", () => {
+        location.assign("https://mspsbs-tasks.netlify.app/");
+      });
+    });
+  </script>
+
+  <!-- ==== Tile wiring (navigation) ==== -->
+  <script>
+    (function(){
+      function gotoOnClick(sel, path){
+        const el = document.querySelector(sel);
+        if (el) el.addEventListener('click', () => location.assign(path));
+      }
+
+      gotoOnClick('.tile[aria-label="camera"]', '/shared/camera/index.html');
+      gotoOnClick('.tile[aria-label="displays"]', '/shared/displays/index.html');
+
+      const attendanceBtn = document.querySelector('.tile[aria-label="attendances"], .tile[aria-label="Attendances"]');
+      if (attendanceBtn) attendanceBtn.addEventListener('click', () => {
+        location.assign('/shared/attendance/index.html');
+      });
+
+      const btn = document.querySelector('.tile[aria-label="profile"]');
+      if (btn) btn.addEventListener('click', () => location.assign('/shared/profile/index.html'));
+
+      // Note: transfer + ft_list are anchors with href already, so no JS needed.
+    })();
+  </script>
+
+</body>
+</html>
