@@ -282,7 +282,7 @@
   async function savePushSubscription(subscription) {
     const res = await fetch("/.netlify/functions/push-subscribe", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type":"application/json" },
       body: JSON.stringify({
         code: userCode,
         subscription
@@ -290,9 +290,7 @@
     });
 
     const data = await res.json();
-    if (!res.ok || !data.ok) {
-      throw new Error(data.error || "Failed to save subscription");
-    }
+    if (!res.ok || !data.ok) throw new Error(data.error || "Failed to save subscription");
     return data;
   }
 
@@ -300,6 +298,11 @@
     if (!("Notification" in window)) {
       throw new Error("Notifications are not supported on this device/browser.");
     }
+
+    if (isIosLike() && !isStandalonePwa()) {
+      throw new Error("On iPhone/iPad, add this app to Home Screen first, then open it from Home Screen.");
+    }
+
     if (!("PushManager" in window)) {
       throw new Error("Push notifications are not available in this browser view. Open the app in the main browser or from Home Screen.");
     }
@@ -338,6 +341,7 @@
 
     if (hasNotification && Notification.permission === "granted") return;
 
+    // iPhone/iPad not opened from Home Screen
     if (isIosLike() && !isStandalonePwa()) {
       pushCardText.textContent =
         "To receive notifications on iPhone/iPad, add this app to Home Screen first, then open it from Home Screen.";
@@ -345,6 +349,7 @@
       return;
     }
 
+    // Browser does not support notifications at all
     if (!hasNotification) {
       pushCardText.textContent =
         "This phone/browser does not support notifications here. Try opening the app in Chrome or Safari, or install it to Home Screen.";
@@ -352,6 +357,7 @@
       return;
     }
 
+    // Browser supports notifications but not push/service worker
     if (!hasSW || !hasPushManager) {
       pushCardText.textContent =
         "Notifications are not available in this browser view. Open this app in the main browser or from Home Screen.";
@@ -359,6 +365,7 @@
       return;
     }
 
+    // Normal supported case
     pushCardText.textContent =
       "Get a reminder on the day when there is a greeting duty.";
     pushCard.hidden = false;
@@ -452,7 +459,9 @@
     shownRows.forEach((r, idx) => {
       const day = String(r.day || "").trim().toUpperCase();
 
-      if (idx !== 0 && day === "MON" && wk.length) {
+      if (idx === 0) {
+        // first row starts week 1
+      } else if (day === "MON" && wk.length) {
         pushWeek();
       }
 
@@ -556,12 +565,7 @@
           const shiftRow = document.createElement("div");
           shiftRow.className = "shiftRow";
 
-          const n = (
-            shift === 1 ? slotCounts.s1 :
-            shift === 2 ? slotCounts.s2 :
-            shift === 3 ? slotCounts.s3 : 1
-          );
-
+          const n = (shift === 1 ? slotCounts.s1 : shift === 2 ? slotCounts.s2 : slotCounts.s3);
           shiftRow.style.gridTemplateColumns = "repeat(3, minmax(0,1fr))";
 
           const allCols = SLOT_MAP[gate][shift];
@@ -613,7 +617,6 @@
 
     const rowNum = Number(slotEl.dataset.row);
     const rowObj = monthRows.find(r => r.rIndex === rowNum);
-
     if (rowObj && isPastRow(rowObj)) {
       showPopup("Past dates cannot be booked.");
       return;
@@ -759,7 +762,7 @@
       return;
     }
 
-    // Do not block page load on service worker
+    // Show card early. Do not block page load on service worker.
     showPushCardIfNeeded();
     ensureServiceWorker().catch(() => {});
 
