@@ -107,7 +107,6 @@
   // ===== Push notifications =====
   const PUSH_PUBLIC_KEY = "BIjJvyTjSAwpqPNrMiczDwHUQ8T0v_-ITLvPPMTTPv-mq9Eg0Q79kaJkCFqK1vxmoMOjovQ3GNasnPwYKbWqIvo";
   const PUSH_SW_URL = "/sw.js";
-  const PUSH_STATE_KEY = "greetings_push_card_hidden";
 
   // ===== State =====
   let who = null;
@@ -294,6 +293,87 @@
     return data;
   }
 
+  function setPushCardState({ text, buttonLabel, buttonDisabled }) {
+    if (!pushCard) return;
+
+    pushCard.hidden = false;
+
+    if (pushCardText) {
+      pushCardText.textContent = text || "";
+    }
+
+    if (pushEnableBtn) {
+      pushEnableBtn.textContent = buttonLabel || "Enable notifications";
+      pushEnableBtn.disabled = !!buttonDisabled;
+    }
+  }
+
+  async function refreshPushCard() {
+    if (!pushCard) return;
+
+    const hasNotification = ("Notification" in window);
+    const hasSW = ("serviceWorker" in navigator);
+    const hasPushManager = ("PushManager" in window);
+
+    if (hasNotification && Notification.permission === "granted") {
+      setPushCardState({
+        text: "Notifications are enabled for greeting duty reminders.",
+        buttonLabel: "On",
+        buttonDisabled: true
+      });
+      return;
+    }
+
+    if (isIosLike() && !isStandalonePwa()) {
+      setPushCardState({
+        text: "To receive notifications on iPhone/iPad, add this app to Home Screen first, then open it from Home Screen.",
+        buttonLabel: "Open from Home Screen",
+        buttonDisabled: true
+      });
+      return;
+    }
+
+    if (!hasNotification) {
+      setPushCardState({
+        text: "This phone/browser does not support notifications here. Try opening the app in Chrome or Safari, or install it to Home Screen.",
+        buttonLabel: "Unavailable",
+        buttonDisabled: true
+      });
+      return;
+    }
+
+    if (!hasSW || !hasPushManager) {
+      setPushCardState({
+        text: "Notifications are not available in this browser view. Open this app in the main browser or from Home Screen.",
+        buttonLabel: "Unavailable",
+        buttonDisabled: true
+      });
+      return;
+    }
+
+    try {
+      const reg = await navigator.serviceWorker.getRegistration();
+      const existingSub = reg ? await reg.pushManager.getSubscription() : null;
+
+      if (existingSub) {
+        setPushCardState({
+          text: "Notifications are enabled for greeting duty reminders.",
+          buttonLabel: "On",
+          buttonDisabled: true
+        });
+        return;
+      }
+    } catch (_) {
+      // ignore and fall through
+    }
+
+    setPushCardState({
+      text: "Get a reminder on the day when there is a greeting duty.",
+      buttonLabel: "Enable notifications",
+      buttonDisabled: false
+    });
+  }
+
   async function enablePushNotifications() {
     if (!("Notification" in window)) {
       throw new Error("Notifications are not supported on this device/browser.");
@@ -326,49 +406,8 @@
     }
 
     await savePushSubscription(sub.toJSON());
-    localStorage.removeItem(PUSH_STATE_KEY);
-    pushCard.hidden = true;
+    await refreshPushCard();
     showPopup("Notifications enabled.");
-  }
-
-  function showPushCardIfNeeded() {
-    if (!pushCard) return;
-    if (localStorage.getItem(PUSH_STATE_KEY) === "1") return;
-
-    const hasNotification = ("Notification" in window);
-    const hasSW = ("serviceWorker" in navigator);
-    const hasPushManager = ("PushManager" in window);
-
-    if (hasNotification && Notification.permission === "granted") return;
-
-    // iPhone/iPad not opened from Home Screen
-    if (isIosLike() && !isStandalonePwa()) {
-      pushCardText.textContent =
-        "To receive notifications on iPhone/iPad, add this app to Home Screen first, then open it from Home Screen.";
-      pushCard.hidden = false;
-      return;
-    }
-
-    // Browser does not support notifications at all
-    if (!hasNotification) {
-      pushCardText.textContent =
-        "This phone/browser does not support notifications here. Try opening the app in Chrome or Safari, or install it to Home Screen.";
-      pushCard.hidden = false;
-      return;
-    }
-
-    // Browser supports notifications but not push/service worker
-    if (!hasSW || !hasPushManager) {
-      pushCardText.textContent =
-        "Notifications are not available in this browser view. Open this app in the main browser or from Home Screen.";
-      pushCard.hidden = false;
-      return;
-    }
-
-    // Normal supported case
-    pushCardText.textContent =
-      "Get a reminder on the day when there is a greeting duty.";
-    pushCard.hidden = false;
   }
 
   // ===== Month menu =====
@@ -762,8 +801,8 @@
       return;
     }
 
-    // Show card early. Do not block page load on service worker.
-    showPushCardIfNeeded();
+    // Always show/update card early. Do not block page load on service worker.
+    refreshPushCard();
     ensureServiceWorker().catch(() => {});
 
     pageTitle.textContent = "BOOK GREETINGS";
@@ -871,12 +910,12 @@
       await enablePushNotifications();
     } catch (err) {
       showPopup(String(err.message || err));
+      await refreshPushCard();
     }
   });
 
   pushLaterBtn?.addEventListener("click", () => {
-    localStorage.setItem(PUSH_STATE_KEY, "1");
-    pushCard.hidden = true;
+    showPopup("Notifications can be enabled later from this card.");
   });
 
   // ===== Start =====
