@@ -288,15 +288,18 @@ async function enablePushNotifications() {
 function showPushCardIfNeeded() {
   if (!pushCard) return;
   if (localStorage.getItem(PUSH_STATE_KEY) === "1") return;
-  if (!("Notification" in window) || !("serviceWorker" in navigator) || !("PushManager" in window)) return;
+  if (!("Notification" in window)) return;
   if (Notification.permission === "granted") return;
 
+  // iPhone/iPad: show card first, even if PushManager is not available yet
   if (isIosLike() && !isStandalonePwa()) {
     pushCardText.textContent =
       "To receive notifications on iPhone/iPad, add this app to Home Screen first, open it from Home Screen, then enable notifications.";
     pushCard.hidden = false;
     return;
   }
+
+  if (!("serviceWorker" in navigator) || !("PushManager" in window)) return;
 
   pushCardText.textContent =
     "Get a reminder on the day when there is a greeting duty.";
