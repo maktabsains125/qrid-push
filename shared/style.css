@@ -1,0 +1,159 @@
+/* ===== Theme ===== */
+:root{
+  --purple:#8f61a5;
+  --purple-dark:#7a4e91;
+  --panel:#b3b3b3;
+  --peach:#efc0a8;
+  --ink:#111;
+  --ink-invert:#fff;
+  --radius-xl: 36px;
+  --shadow: 10px 10px 30px rgba(0,0,0,.40);
+}
+
+/* ===== Reset / Base ===== */
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  background:#8f61a5;
+  color:var(--ink);
+  font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+}
+
+.grid{
+  background:#adadad;
+  padding:28px 0;
+  width:100%;
+
+  /* 2 fixed columns, rows grow automatically */
+  display:grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: auto;
+
+  justify-items:center;
+  align-items:center;
+  gap:28px;
+  border-radius:0 0 28px 28px;
+}
+
+.app{
+  min-height:100dvh;
+  max-width:430px;
+  margin:0 auto;
+  display:flex;
+  flex-direction:column;
+  background:var(--purple);
+}
+
+/* ===== Header ===== */
+.top{
+  height:170px;
+  background:var(--purple);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:28px 22px;
+}
+
+.welcome h1{
+  margin:0 0 6px 0;
+  font-size:28px;
+  letter-spacing:.5px;
+  color:var(--ink-invert);
+  padding-left:10px;
+}
+.user{
+  font-weight:700;
+  font-size:22px;
+  color:var(--ink-invert);
+  padding-left:10px;
+}
+
+/* right side: logo + kebab */
+.right{
+  display:flex;
+  align-items:center;
+  gap:5px;
+}
+
+.logoWrap{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.logoCircle{
+  width:92px;
+  height:92px;
+  border-radius:50%;
+  background:#f2c276;
+  overflow:hidden;           /* clips image into a circle */
+  box-shadow:var(--shadow);
+  display:flex;              /* simpler than grid */
+  align-items:center;
+  justify-content:center;
+}
+
+.logoCircle img{
+  width:100%;
+  height:100%;
+  object-fit:cover;          /* fills circle, crops edges */
+  display:block;
+}
+
+
+.kebab{
+  display:inline-flex;
+  align-items:top;
+  justify-content:center;
+  width:40px; height:40px;
+  border-radius:10px;
+  background:transparent;
+  border:0px solid rgba(255,255,255,.25);
+  cursor:pointer;
+  padding:0;
+}
+.kebab svg{ fill:#fff; }
+.kebab:active{ transform:scale(.98); }
+
+/* ===== Main Panel ===== */
+
+.panel{
+  background:transparent;
+  margin:0;
+  display:flex;
+  width:100%; justify-content:center;
+}
+
+/* Fixed-size square tiles */
+.tile{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#fff;
+  border:none;
+  border-radius:12px;
+  width:100px; height:100px;
+  box-shadow:var(--shadow);
+  cursor:pointer;
+}
+.tile img{ width:80px; height:80px; object-fit:contain; }
+
+/* ===== Peach band ===== */
+.peach{
+  background:var(--peach);
+  border-radius:28px 28px 0 0; 
+  height:68px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:0 16px;
+}
+.peachText{ font-size:18px; font-weight:700; }
+
+/* ===== Bottom bar ===== */
+.bottom{
+  background:var(--purple-dark);
+  margin-top:30px;
+  display:flex;
+}
