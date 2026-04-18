@@ -439,7 +439,7 @@
 
     if (Notification.permission === "granted" && existingSub && !serverSaved) {
       setPushCardState({
-        text: "This browser is already allowed to send notifications, but this user is not currently linked in the reminder list. Press Enable notifications.",
+        text: "This browser is already allowed to send notifications. Simply press Enable notifications.",
         buttonLabel: "Enable notifications",
         buttonDisabled: false
       });
@@ -448,7 +448,7 @@
 
     if (Notification.permission === "granted" && !existingSub) {
       setPushCardState({
-        text: "Notifications are allowed on this device. Press Enable notifications to turn on greeting duty reminders for this app.",
+        text: "Notifications are allowed on this device. Press Enable notifications to turn on greeting duty reminders for QR-ID.",
         buttonLabel: "Enable notifications",
         buttonDisabled: false
       });
