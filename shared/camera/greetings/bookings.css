@@ -12,7 +12,7 @@
   --slot2:#ffffff;   /* shift 2 */
   --slot3:#efc0a8;   /* shift 3 */
 
-  --gateGap:5px;     /* ✅ requested */
+  --gateGap:5px;    
 }
 
 /* ===== Global reset ===== */
@@ -423,9 +423,9 @@ body{
 .pushCardTitle{
   font-size:15px;
   font-weight:900;
-  text-align:center
+  text-align:center;
   margin:0 0 8px;
-  padding-bottom: 20px;
+  padding-bottom: 18px;
 }
 
 .pushCardText{
@@ -497,8 +497,8 @@ body{
     font-size: 11px;
     padding: 0 4px;
 
-    border-width: 1px;        /* thinner border = more inner width */
-    letter-spacing: 0;        /* keep tight */
+    border-width: 1px;        
+    letter-spacing: 0;       
     line-height: 1;
   }
 
