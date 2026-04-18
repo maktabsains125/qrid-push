@@ -327,8 +327,8 @@
     if (isIosLike() && !isStandalonePwa()) {
       setPushCardState({
         text: "To receive notifications on iPhone/iPad, add this app to Home Screen first, then open it from Home Screen.",
-        buttonLabel: "Open from Home Screen",
-        buttonDisabled: true
+        buttonLabel: "Enable notifications",
+        buttonDisabled: false
       });
       return;
     }
@@ -336,17 +336,17 @@
     if (!hasNotification) {
       setPushCardState({
         text: "This phone/browser does not support notifications here. Try opening the app in Chrome or Safari, or install it to Home Screen.",
-        buttonLabel: "Unavailable",
-        buttonDisabled: true
+        buttonLabel: "Enable notifications",
+        buttonDisabled: false
       });
       return;
     }
 
     if (!hasSW || !hasPushManager) {
       setPushCardState({
-        text: "Notifications are not available in this browser view. Open this app in the main browser or from Home Screen.",
-        buttonLabel: "Unavailable",
-        buttonDisabled: true
+        text: "Notifications are not available in this browser view. Try pressing Enable notifications. If nothing appears, open this app in the main browser or from Home Screen.",
+        buttonLabel: "Enable notifications",
+        buttonDisabled: false
       });
       return;
     }
@@ -363,9 +363,7 @@
         });
         return;
       }
-    } catch (_) {
-      // ignore and fall through
-    }
+    } catch (_) {}
 
     setPushCardState({
       text: "Get a reminder on the day when there is a greeting duty.",
@@ -379,23 +377,30 @@
       throw new Error("Notifications are not supported on this device/browser.");
     }
 
+    // Ask first, like camera permission
+    let permission = Notification.permission;
+    if (permission === "default") {
+      permission = await Notification.requestPermission();
+    }
+
+    if (permission !== "granted") {
+      throw new Error("Notification permission was not granted.");
+    }
+
+    // Continue after permission is granted
     if (isIosLike() && !isStandalonePwa()) {
       throw new Error("On iPhone/iPad, add this app to Home Screen first, then open it from Home Screen.");
     }
 
+    if (!("serviceWorker" in navigator)) {
+      throw new Error("Service worker is not supported on this device/browser.");
+    }
+
     if (!("PushManager" in window)) {
-      throw new Error("Push notifications are not available in this browser view. Open the app in the main browser or from Home Screen.");
+      throw new Error("Push notifications are not available in this browser view.");
     }
 
     const reg = await ensureServiceWorker();
-
-    let permission = Notification.permission;
-    if (permission !== "granted") {
-      permission = await Notification.requestPermission();
-    }
-    if (permission !== "granted") {
-      throw new Error("Notification permission was not granted.");
-    }
 
     let sub = await reg.pushManager.getSubscription();
     if (!sub) {
