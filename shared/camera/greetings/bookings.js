@@ -308,51 +308,18 @@
     }
   }
 
+  async function getExistingPushSubscription() {
+    const reg = await navigator.serviceWorker.getRegistration();
+    if (!reg) return null;
+    return reg.pushManager.getSubscription();
+  }
+
   async function refreshPushCard() {
     if (!pushCard) return;
 
     const hasNotification = ("Notification" in window);
     const hasSW = ("serviceWorker" in navigator);
     const hasPushManager = ("PushManager" in window);
-
-    async function refreshPushCard() {
-  if (!pushCard) return;
-
-  const hasNotification = ("Notification" in window);
-  const hasSW = ("serviceWorker" in navigator);
-  const hasPushManager = ("PushManager" in window);
-
-  if (!hasNotification || !hasSW || !hasPushManager) {
-    setPushCardState({
-      text: "Notifications may not be supported on this device.",
-      buttonLabel: "Enable notifications",
-      buttonDisabled: false
-    });
-    return;
-  }
-
-  try {
-    const reg = await navigator.serviceWorker.getRegistration();
-    const sub = reg ? await reg.pushManager.getSubscription() : null;
-
-    if (Notification.permission === "granted" && sub) {
-      setPushCardState({
-        text: "Notifications are enabled for greeting duty reminders.",
-        buttonLabel: "On",
-        buttonDisabled: true
-      });
-      return;
-    }
-
-  } catch (_) {}
-
-  // default state
-  setPushCardState({
-    text: "Get a reminder on the day when there is a greeting duty.",
-    buttonLabel: "Enable notifications",
-    buttonDisabled: false
-  });
-}
 
     if (isIosLike() && !isStandalonePwa()) {
       setPushCardState({
@@ -374,22 +341,40 @@
 
     if (!hasSW || !hasPushManager) {
       setPushCardState({
-        text: "Notifications are not available in this browser view. Try pressing Enable notifications. If nothing appears, open this app in the main browser or from Home Screen.",
+        text: "Notifications are not available in this browser view. Open this app in the main browser or from Home Screen.",
         buttonLabel: "Enable notifications",
         buttonDisabled: false
       });
       return;
     }
 
-    try {
-      const reg = await navigator.serviceWorker.getRegistration();
-      const existingSub = reg ? await reg.pushManager.getSubscription() : null;
+    if (Notification.permission === "denied") {
+      setPushCardState({
+        text: "Notifications are blocked for this app. Please allow notifications in browser/app settings, then return here.",
+        buttonLabel: "Blocked",
+        buttonDisabled: false
+      });
+      return;
+    }
 
-      if (existingSub) {
+    try {
+      const reg = await ensureServiceWorker();
+      const existingSub = await reg.pushManager.getSubscription();
+
+      if (Notification.permission === "granted" && existingSub) {
         setPushCardState({
           text: "Notifications are enabled for greeting duty reminders.",
           buttonLabel: "On",
           buttonDisabled: true
+        });
+        return;
+      }
+
+      if (Notification.permission === "granted" && !existingSub) {
+        setPushCardState({
+          text: "Notifications are allowed on this browser. Press Enable notifications to turn on greeting duty reminders for this app.",
+          buttonLabel: "Enable notifications",
+          buttonDisabled: false
         });
         return;
       }
@@ -407,17 +392,6 @@
       throw new Error("Notifications are not supported on this device/browser.");
     }
 
-    // Ask first, like camera permission
-    let permission = Notification.permission;
-    if (permission === "default") {
-      permission = await Notification.requestPermission();
-    }
-
-    if (permission !== "granted") {
-      throw new Error("Notification permission was not granted.");
-    }
-
-    // Continue after permission is granted
     if (isIosLike() && !isStandalonePwa()) {
       throw new Error("On iPhone/iPad, add this app to Home Screen first, then open it from Home Screen.");
     }
@@ -428,6 +402,20 @@
 
     if (!("PushManager" in window)) {
       throw new Error("Push notifications are not available in this browser view.");
+    }
+
+    let permission = Notification.permission;
+
+    if (permission === "denied") {
+      throw new Error("Notifications were blocked before. Please enable them in browser/app settings.");
+    }
+
+    if (permission === "default") {
+      permission = await Notification.requestPermission();
+    }
+
+    if (permission !== "granted") {
+      throw new Error("Notification permission was not granted.");
     }
 
     const reg = await ensureServiceWorker();
@@ -836,8 +824,7 @@
       return;
     }
 
-    // Always show/update card early. Do not block page load on service worker.
-    refreshPushCard();
+    refreshPushCard().catch(() => {});
     ensureServiceWorker().catch(() => {});
 
     pageTitle.textContent = "BOOK GREETINGS";
