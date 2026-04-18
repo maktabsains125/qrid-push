@@ -10,8 +10,9 @@ exports.handler = async (event) => {
 
     const body = JSON.parse(event.body || "{}");
     const mode = String(body.mode || "").trim();
-    const code = String(body.code || "").trim();
+    const code = String(body.code || "").trim().toUpperCase();
     const subscription = body.subscription || {};
+    const endpoint = String(body.endpoint || subscription.endpoint || "").trim();
 
     const GAS_URL = "https://script.google.com/macros/s/AKfycbzYFG0Z2pCifQSRLWQwPK8PGQugBUKSqoXPZdltLxJMKJ5y83b40PcmifTu8aHsQcVp/exec";
 
@@ -92,12 +93,24 @@ exports.handler = async (event) => {
     }
 
     if (mode === "deactivatePushSubscription") {
+      if (!endpoint) {
+        return {
+          statusCode: 400,
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            ok: false,
+            error: "Missing endpoint for device-specific deactivation"
+          })
+        };
+      }
+
       const res = await fetch(GAS_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           mode: "deactivatePushSubscription",
-          code
+          code,
+          endpoint
         })
       });
 
