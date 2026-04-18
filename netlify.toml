@@ -11,5 +11,5 @@
   status = 200
 
 [functions."push-send-daily"]
-  schedule = "*/2 * * * *"
+  schedule = "0 22 * * *"
 
