@@ -10,6 +10,5 @@
   to = "/.netlify/functions/camera"
   status = 200
 
-[[scheduled]]
-  path = "/.netlify/functions/push-send-daily"
-  cron = "*/2 * * * *"
+  [functions."push-send-daily"]
+  schedule = "*/2 * * * *"
