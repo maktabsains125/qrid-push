@@ -79,6 +79,11 @@
   const saveOverlay = document.getElementById("saveOverlay");
   const saveCardText = document.getElementById("saveCardText");
 
+  // ===== Booking gate toggle =====
+  const bookingGateBar = document.getElementById("bookingGateBar");
+  const bookingGateToggle = document.getElementById("bookingGateToggle");
+  const bookingGateText = document.getElementById("bookingGateText");
+
   const pushCard = document.getElementById("pushCard");
   const pushCardText = document.getElementById("pushCardText");
   const pushEnableBtn = document.getElementById("pushEnableBtn");
@@ -117,6 +122,7 @@
   let isAdmin = false;
 
   let init = null;
+  let bookingGate = 0; // 0=open, 1=closed
   let currentMonth = "JAN";
   let slotCounts = { s1: 1, s2: 1, s3: 1 };
   let monthRows = [];
@@ -269,6 +275,30 @@
         last = now;
       }
     }, { passive: true });
+  }
+
+  function applyBookingGateUI() {
+    if (bookingGateBar) {
+      bookingGateBar.hidden = !isAdmin;
+    }
+
+    if (bookingGateToggle && bookingGateText) {
+      if (bookingGate === 0) {
+        bookingGateToggle.classList.add("is-on");
+        bookingGateToggle.setAttribute("aria-pressed", "true");
+        bookingGateText.textContent = "YES";
+      } else {
+        bookingGateToggle.classList.remove("is-on");
+        bookingGateToggle.setAttribute("aria-pressed", "false");
+        bookingGateText.textContent = "NO";
+      }
+    }
+
+    if (bookingGate === 1 && !isAdmin) {
+      setStatus("Bookings are closed");
+    } else {
+      setStatus("Tap twice to book or unbook.");
+    }
   }
 
   // ===== Push notification helpers =====
@@ -747,6 +777,11 @@
 
   // ===== Slot interactions =====
   async function onSlotDoubleTap(slotEl) {
+    if (bookingGate === 1 && !isAdmin) {
+      showPopup("Bookings are closed.");
+      return;
+    }
+
     if (!slotEl || editMode) return;
 
     const a1 = slotEl.dataset.a1;
@@ -774,7 +809,8 @@
         mode: "toggle",
         monthKey: currentMonth,
         a1,
-        code: userCode
+        code: userCode,
+        role
       });
 
       const value = String(data.value || "").trim().toUpperCase();
@@ -784,11 +820,11 @@
       if (rowObj2) setValueForA1_(rowObj2, a1, value);
 
       hideCenter();
-      setStatus("Tap twice to book or unbook.");
+      applyBookingGateUI();
     } catch (err) {
       hideCenter();
       showPopup(String(err.message || err));
-      setStatus("Tap twice to book or unbook.");
+      applyBookingGateUI();
     }
   }
 
@@ -846,11 +882,11 @@
       applyUpdatesToUI(updates);
 
       if (showOverlayCard) hideCenter();
-      setStatus("Tap twice to book or unbook.");
+      applyBookingGateUI();
     } catch (err) {
       if (showOverlayCard) hideCenter();
       showPopup(String(err.message || err));
-      setStatus("Tap twice to book or unbook.");
+      applyBookingGateUI();
     }
   }
 
@@ -890,6 +926,8 @@
     if (editBtn) editBtn.hidden = !isAdmin;
     if (saveBtn) saveBtn.hidden = !isAdmin;
 
+    if (bookingGateBar) bookingGateBar.hidden = !isAdmin;
+
     goAdmin.hidden = !isAdmin;
     monthBox.disabled = !isAdmin;
 
@@ -906,6 +944,9 @@
     setStatus("Loading. Please wait...");
 
     init = await apiGet({ mode: "init", code: userCode });
+
+    bookingGate = Number(init.bookingGate || 0);
+    applyBookingGateUI();
 
     currentMonth = String(init.monthKey || "JAN").toUpperCase();
     slotCounts = init.slotCounts || {
@@ -927,7 +968,7 @@
 
     await loadMonth(currentMonth, true);
 
-    setStatus("Tap twice to book or unbook.");
+    applyBookingGateUI();
   }
 
   async function loadMonth(monthKey, autoWeek) {
@@ -949,7 +990,7 @@
     const wk = autoWeek ? findCurrentWeek() : selectedWeek;
     setWeek(wk);
 
-    setStatus("Tap twice to book or unbook.");
+    applyBookingGateUI();
   }
 
   // ===== Events =====
@@ -1000,6 +1041,30 @@
   saveBtn?.addEventListener("click", async () => {
     if (!isAdmin) return;
     await saveDirty(true);
+  });
+
+  bookingGateToggle?.addEventListener("click", async () => {
+    if (!isAdmin) return;
+
+    const newValue = bookingGate === 1 ? 0 : 1;
+
+    try {
+      showCenter("Saving...");
+
+      const res = await apiPost({
+        mode: "setBookingGate",
+        value: newValue,
+        role
+      });
+
+      bookingGate = Number(res.bookingGate || 0);
+      hideCenter();
+      applyBookingGateUI();
+    } catch (err) {
+      hideCenter();
+      showPopup(String(err.message || err));
+      applyBookingGateUI();
+    }
   });
 
   pushEnableBtn?.addEventListener("click", async () => {
