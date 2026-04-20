@@ -2,7 +2,7 @@
 // Proxy → Google Apps Script Web App
 
 const GAS_URL =
-  "https://script.google.com/macros/s/AKfycbxcCW3GPrw3dyH0GEsoVvT0G7c3sfotdJUWU-RaNxE6_tlTSUiK_cDGfB8cHWVr1jFEeQ/exec";
+  "https://script.google.com/macros/s/AKfycbzGuHng9hTccAKDfxKogJbANW-oYohDAy4xzSatNIac4nesJlme60w1y5NH1Z0PklC6LA/exec";
 
 function corsHeaders(origin) {
   return {
