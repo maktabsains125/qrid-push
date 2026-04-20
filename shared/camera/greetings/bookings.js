@@ -277,10 +277,14 @@
     }, { passive: true });
   }
 
+  function setBookingGateVisibility() {
+    if (!bookingGateBar) return;
+    bookingGateBar.hidden = !isAdmin;
+    bookingGateBar.style.display = isAdmin ? "" : "none";
+  }
+
   function applyBookingGateUI() {
-    if (bookingGateBar) {
-      bookingGateBar.hidden = !isAdmin;
-    }
+    setBookingGateVisibility();
 
     if (bookingGateToggle && bookingGateText) {
       if (bookingGate === 0) {
@@ -292,6 +296,11 @@
         bookingGateToggle.setAttribute("aria-pressed", "false");
         bookingGateText.textContent = "NO";
       }
+    }
+
+    if (editMode) {
+      setStatus("Edit mode");
+      return;
     }
 
     if (bookingGate === 1 && !isAdmin) {
@@ -922,14 +931,14 @@
     role = String(who.role || "").toUpperCase();
     isAdmin = isAdminRole(role);
 
-    adminBar.hidden = !isAdmin;
+    if (adminBar) adminBar.hidden = !isAdmin;
     if (editBtn) editBtn.hidden = !isAdmin;
     if (saveBtn) saveBtn.hidden = !isAdmin;
 
-    if (bookingGateBar) bookingGateBar.hidden = !isAdmin;
+    setBookingGateVisibility();
 
-    goAdmin.hidden = !isAdmin;
-    monthBox.disabled = !isAdmin;
+    if (goAdmin) goAdmin.hidden = !isAdmin;
+    if (monthBox) monthBox.disabled = !isAdmin;
 
     userCode = getUserDisplayCode(who);
     if (!userCode) {
@@ -1035,7 +1044,7 @@
     dirty.clear();
     editBtn.textContent = editMode ? "Edit mode: ON" : "Edit mode: OFF";
     renderWeek();
-    setStatus(editMode ? "Edit mode" : "Tap twice to book or unbook.");
+    applyBookingGateUI();
   });
 
   saveBtn?.addEventListener("click", async () => {
