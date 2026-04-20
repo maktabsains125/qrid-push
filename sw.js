@@ -1,3 +1,24 @@
+// ===== INSTALL =====
+self.addEventListener('install', event => {
+  console.log('SW installed');
+  self.skipWaiting(); // activate immediately
+});
+
+// ===== ACTIVATE =====
+self.addEventListener('activate', event => {
+  console.log('SW activated');
+
+  event.waitUntil(
+    self.clients.claim() // take control immediately
+  );
+});
+
+// ===== FETCH (required for PWA install criteria) =====
+self.addEventListener('fetch', event => {
+  // simple pass-through (no caching yet)
+});
+
+// ===== PUSH =====
 self.addEventListener("push", event => {
   let data = {};
 
@@ -24,6 +45,7 @@ self.addEventListener("push", event => {
   );
 });
 
+// ===== NOTIFICATION CLICK =====
 self.addEventListener("notificationclick", event => {
   event.notification.close();
 
@@ -36,10 +58,7 @@ self.addEventListener("notificationclick", event => {
   event.waitUntil(
     clients.matchAll({ type: "window", includeUncontrolled: true }).then(clientList => {
       for (const client of clientList) {
-        if (
-          client.url &&
-          client.url.includes("/shared/camera/greetings")
-        ) {
+        if (client.url && client.url.includes("/shared/camera/greetings")) {
           return client.focus();
         }
       }
