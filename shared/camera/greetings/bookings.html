@@ -31,7 +31,7 @@
 
     <div class="subhead" id="statusMsg">Loading. Please wait...</div>
 	
-    <!-- Month selector -->
+	<!-- Month selector -->
     <div class="monthRow">
       <button class="monthBox" id="monthBox" type="button" aria-haspopup="listbox" aria-expanded="false">
         <span id="monthText">JANUARY</span>
@@ -46,6 +46,22 @@
       <button class="weekArrow" id="weekPrev" type="button" aria-label="Previous week">‹</button>
       <button class="weekPill" id="weekPill" type="button" aria-label="Change week">WEEK 1</button>
       <button class="weekArrow" id="weekNext" type="button" aria-label="Next week">›</button>
+    </div>
+	
+	<!-- Booking gate toggle (ADMIN/CODER only) -->
+    <div class="bookingGateBar" id="bookingGateBar" hidden>
+      <div class="bookingGateLabel">Bookings allowed</div>
+
+      <button
+        class="bookingGateToggle"
+        id="bookingGateToggle"
+        type="button"
+        aria-label="Toggle bookings allowed"
+        aria-pressed="false"
+      >
+        <span class="bookingGateKnob"></span>
+        <span class="bookingGateText" id="bookingGateText">NO</span>
+      </button>
     </div>
 
     <!-- Admin bar -->
@@ -99,6 +115,13 @@
     </div>
   </div>
 
+  <!-- Center status overlay (Booking... / Cancelling... / Saving...) -->
+  <div class="saveOverlay" id="saveOverlay" hidden>
+    <div class="saveCard">
+      <div class="saveCardText" id="saveCardText">Saving...</div>
+    </div>
+  </div>
+  
   <!-- Push permission card -->
 	<div class="pushCard" id="pushCard" hidden>
   	  <div class="pushCardTitle">Greeting duty reminders</div>
@@ -110,15 +133,8 @@
         <button class="pushBtn" id="pushEnableBtn" type="button">Enable notifications</button>
   	  </div>
 	</div>
-
-  <!-- Center status overlay (Booking... / Cancelling... / Saving...) -->
-  <div class="saveOverlay" id="saveOverlay" hidden>
-    <div class="saveCard">
-      <div class="saveCardText" id="saveCardText">Saving...</div>
-    </div>
-  </div>
-
-  <div class="pageSpacer"></div>
 	
- </body>
+	<div class="pageSpacer"></div>
+
+</body>
 </html>
