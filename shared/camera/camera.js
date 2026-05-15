@@ -319,7 +319,7 @@
     showStatus("Please wait...");
 
     try {
-      const scanRes = await api("scan", { token, id, name }, { timeoutMs: 15000 });
+      const scanRes = await api("scan", { token, id, name }, { timeoutMs: 22000 });
 
       if (!scanRes || scanRes.ok !== true) {
         throw new Error(scanRes?.error || "Scan failed");
