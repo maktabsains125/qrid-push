@@ -94,7 +94,7 @@ export async function handler(event) {
     `${CAMERA_WEBAPP_URL}?mode=${encodeURIComponent(mode)}&origin=${encodeURIComponent(ORIGIN)}`;
 
   const ctrl = new AbortController();
-  const timeoutMs = 12000;
+  const timeoutMs = 20000;
   const timer = setTimeout(() => ctrl.abort(), timeoutMs);
 
   try {
