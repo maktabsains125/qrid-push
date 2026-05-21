@@ -15,7 +15,7 @@
 html,body{height:100%}
 body{
   margin:0;
-  background:#927cb1;
+  background:#AA9AC0;
   color:var(--ink);
   font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
 }
