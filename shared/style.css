@@ -1,6 +1,6 @@
 /* ===== Theme ===== */
 :root{
-  --purple:#7a4e91;
+  --purple:#8f61a5;
   --purple-dark:#7a4e91;
   --panel:#FFFFFF;
   --peach:#efc0a8;
@@ -15,7 +15,7 @@
 html,body{height:100%}
 body{
   margin:0;
-  background:#9E8BBA;
+  background:#8f61a5;
   color:var(--ink);
   font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
 }
