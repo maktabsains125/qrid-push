@@ -119,7 +119,7 @@ body{
 /* ===== Main Panel ===== */
 
 .panel{
-  background:transparent;
+  background:var(--panel);
   margin:0;
   display:flex;
   width:100%; justify-content:center;
