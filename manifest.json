@@ -5,8 +5,8 @@
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#8f61a5",
-  "theme_color": "#8f61a5",
+  "background_color": "#AC9BC4",
+  "theme_color": "#AC9BC4",
   "icons": [
     {
       "src": "/homescreen192.png",
