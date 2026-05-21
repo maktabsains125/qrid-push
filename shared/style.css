@@ -1,11 +1,11 @@
 /* ===== Theme ===== */
 :root{
-  --purple:#9E8BBA;
-  --purple-dark:#917BB1;
+  --purple:#7a4e91;
+  --purple-dark:#7a4e91;
   --panel:#FFFFFF;
   --peach:#efc0a8;
   --ink:#111;
-  --ink-invert:#FFFFFF;
+  --ink-invert:#ffff;
   --radius-xl: 36px;
   --shadow: 10px 10px 30px rgba(0,0,0,.40);
 }
