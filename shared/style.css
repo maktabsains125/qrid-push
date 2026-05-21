@@ -21,8 +21,8 @@ body{
 }
 
 .grid{
-  background:#D9D9E3;
-  padding:50px 30px;
+  background:#999DA0;
+  padding:35px 0;
   width:100%;
 
   /* 2 fixed columns, rows grow automatically */
