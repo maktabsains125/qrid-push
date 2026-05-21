@@ -22,7 +22,7 @@ body{
 
 .grid{
   background:#D9D9E3;
-  padding:35px 0;
+  padding:50px 30px;
   width:100%;
 
   /* 2 fixed columns, rows grow automatically */
