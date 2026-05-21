@@ -1,11 +1,11 @@
 /* ===== Theme ===== */
 :root{
-  --purple:#bdb0d0;
-  --purple-dark:#bdb0d0;
+  --purple:#FFFFFF;
+  --purple-dark:#FFFFFF;
   --panel:#FFFFFF;
   --peach:#efc0a8;
   --ink:#111;
-  --ink-invert:#fff;
+  --ink-invert:#000000;
   --radius-xl: 36px;
   --shadow: 10px 10px 30px rgba(0,0,0,.40);
 }
@@ -21,7 +21,7 @@ body{
 }
 
 .grid{
-  background:#cecece;
+  background:#bdb0d0;
   padding:28px 0;
   width:100%;
 
