@@ -1,7 +1,7 @@
 /* /shared/attendance/app.js — Attendance main page (role-aware)
  * UPDATE: btnTranspr time-lock (Brunei time)
  * - Disabled daily from 05:00 to 15:00 (inclusive of 05:00, exclusive of 15:01)
- * - Enabled from 15:01 to 04:59 next day
+ * - Enabled from 14:10 to 04:59 next day
  * - EXCEPT Fridays + Sundays: enabled all day
  * - Still only visible/usable for REGIS + CODER (ADMIN removed)
  */
@@ -107,7 +107,7 @@
     // disabled window: 05:00 (300) through 15:00 (900)
     // enabled starts at 15:01 (901)
     const DISABLE_START = 5 * 60;      // 300
-    const DISABLE_END   = 15 * 60;     // 900 (15:00)
+    const DISABLE_END   = 14 * 60 + 10; // 850 (2:10 PM)
 
     if (mins >= DISABLE_START && mins <= DISABLE_END) return false;
     return true;
