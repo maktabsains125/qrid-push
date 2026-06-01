@@ -3,7 +3,7 @@
    - ✅ NO progress bar (all related code removed)
    - ✅ Never show "Error: ..." if backend steps 1–5 are completed (or skipped)
    - ✅ UI tick issues never count as an error
-   - ✅ goBtn disabled daily 5:00am–3:00pm Brunei time EXCEPT Friday & Sunday
+   - ✅ goBtn disabled daily 5:00am–2:10pm Brunei time EXCEPT Friday & Sunday
 */
 
 (function () {
@@ -169,7 +169,7 @@
 
     const mins = (p.hour * 60) + p.minute;
     const start = 5 * 60;   // 05:00
-    const end = 15 * 60;    // 15:00
+    const end = 14 * 60 + 10; // 14:10
 
     // Block from 05:00 inclusive until 15:00 exclusive
     return (mins >= start && mins < end);
@@ -188,10 +188,10 @@
 
     if (finalMsg) {
       if (blocked) {
-        finalMsg.textContent = "Transfers are disabled from 5:00am to 3:00pm (Brunei time), except Fri & Sun.";
+        finalMsg.textContent = "Transfers are disabled from 5:00am to 2:10pm (Brunei time), except Fri & Sun.";
       } else {
         // Only clear this specific gate message (avoid wiping other messages)
-        const gateMsg = "Transfers are disabled from 5:00am to 3:00pm (Brunei time), except Fri & Sun.";
+        const gateMsg = "Transfers are disabled from 5:00am to 2:10pm (Brunei time), except Fri & Sun.";
         if (finalMsg.textContent === gateMsg) finalMsg.textContent = "";
       }
     }
