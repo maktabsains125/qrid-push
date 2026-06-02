@@ -184,7 +184,31 @@
     return `${y}-${m}-${day}`;
   }
 
-  // ==========================================================
+  //
+
+function isGoBtnBlockedBrunei_() {
+  const parts = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Asia/Brunei",
+    weekday: "short",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false
+  }).formatToParts(new Date());
+
+  const get = type => parts.find(p => p.type === type)?.value;
+
+  const day = get("weekday"); // Fri, Sun, etc.
+  const hour = Number(get("hour"));
+  const minute = Number(get("minute"));
+  const total = hour * 60 + minute;
+
+  const start = 5 * 60 + 30;  // 5:30am
+  const end = 14 * 60 + 9;    // 2:09pm
+
+  if (day === "Fri" || day === "Sun") return false;
+
+  return total >= start && total <= end;
+} ==========================================================
   // Backend calls
   // ==========================================================
   async function apiGet(endpoint, params){
