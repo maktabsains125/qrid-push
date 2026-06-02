@@ -92,7 +92,7 @@
   function setBusy(on){
     busy = !!on;
 
-    if (goBtn) goBtn.disabled = busy;
+    if (goBtn) goBtn.disabled = busy || isGoBtnBlockedBrunei_();
 	if (cancelBtn) cancelBtn.disabled = busy;
 
     if (levelSelect) levelSelect.disabled = busy;
@@ -824,7 +824,17 @@ function isGoBtnBlockedBrunei_() {
   }
 
   // ===== Init =====
-  resetForm(false);
-  setBusy(false);
+resetForm(false);
+setBusy(false);
+
+if (goBtn) {
+  goBtn.disabled = busy || isGoBtnBlockedBrunei_();
+}
+
+setInterval(() => {
+  if (goBtn) {
+    goBtn.disabled = busy || isGoBtnBlockedBrunei_();
+  }
+}, 30000);
 
 })();
