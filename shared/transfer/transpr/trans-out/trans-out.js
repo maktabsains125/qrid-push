@@ -208,7 +208,8 @@ function isGoBtnBlockedBrunei_() {
   if (day === "Fri" || day === "Sun") return false;
 
   return total >= start && total <= end;
-} ==========================================================
+} 
+  // ==========================================================
   // Backend calls
   // ==========================================================
   async function apiGet(endpoint, params){
