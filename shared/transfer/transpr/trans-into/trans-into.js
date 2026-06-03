@@ -207,7 +207,7 @@ autofillLastId();
 
     if (finalMsg) {
       if (blocked) {
-        finalMsg.textContent = "Transfers are disabled from 5:00am to 2:10pm (Brunei time), except Fri & Sun.";
+        finalMsg.textContent = "Transfers are disabled from 5:00am to 2:10pm, except Fri & Sun.";
       } else {
         // Only clear this specific gate message (avoid wiping other messages)
         const gateMsg = "Transfers are disabled from 5:00am to 2:10pm (Brunei time), except Fri & Sun.";
