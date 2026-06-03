@@ -90,45 +90,6 @@
         <div class="hint">Select level then classes.</div>
       </div>
 
-      <!-- Transfer out to (COMBOBOX via datalist) -->
-<div class="field">
-  <label class="label" for="transferTo">Transfer out to</label>
-
-  <input class="input upper"
-         id="transferTo"
-         type="text"
-         list="transferToList"
-         inputmode="text"
-         autocomplete="off"
-         autocapitalize="characters"
-         spellcheck="false"
-         required>
-
-  <datalist id="transferToList">
-    <option value="MAKTAB DULI PMAMB"></option>
-    <option value="HIGHER INSTITUTION"></option>
-    <option value="POLITEKNIK BRUNEI"></option>
-    <option value="JIS"></option>
-    <option value="PTES"></option>
-    <option value="PTEM"></option>
-    <option value="PTET"></option>
-    <option value="IBTE"></option>
-    <option value="SM RIMBA 1"></option>
-    <option value="SM RIMBA 2"></option>
-    <option value="SM SULTAN SHARIF ALI"></option>
-    <option value="SM SAYYIDINA HASAN"></option>
-    <option value="LCB"></option>
-    <option value="IGS COLLEGE"></option>
-    <option value="SEKOLAH ARAB SHHB"></option>
-  </datalist>
-</div>
-
-      <!-- Transfer date -->
-      <div class="field">
-        <label class="label" for="dateIn">Transfer date</label>
-        <input class="input" id="dateIn" type="date" required>
-      </div>
-
       <!-- Name (single field + custom dropdown) -->
       <div class="field">
         <label class="label" for="nameInput">Name</label>
@@ -174,7 +135,48 @@
         </div>
       </div>
 
-    </section>
+
+      
+      <!-- Transfer out to (COMBOBOX via datalist) -->
+<div class="field">
+  <label class="label" for="transferTo">Transfer out to</label>
+
+  <input class="input upper"
+         id="transferTo"
+         type="text"
+         list="transferToList"
+         inputmode="text"
+         autocomplete="off"
+         autocapitalize="characters"
+         spellcheck="false"
+         required>
+
+  <datalist id="transferToList">
+    <option value="MAKTAB DULI PMAMB"></option>
+    <option value="HIGHER INSTITUTION"></option>
+    <option value="POLITEKNIK BRUNEI"></option>
+    <option value="JIS"></option>
+    <option value="PTES"></option>
+    <option value="PTEM"></option>
+    <option value="PTET"></option>
+    <option value="IBTE"></option>
+    <option value="SM RIMBA 1"></option>
+    <option value="SM RIMBA 2"></option>
+    <option value="SM SULTAN SHARIF ALI"></option>
+    <option value="SM SAYYIDINA HASAN"></option>
+    <option value="LCB"></option>
+    <option value="IGS COLLEGE"></option>
+    <option value="SEKOLAH ARAB SHHB"></option>
+  </datalist>
+</div>
+
+      <!-- Transfer date -->
+      <div class="field">
+        <label class="label" for="dateIn">Transfer date</label>
+        <input class="input" id="dateIn" type="date" required>
+      </div>
+
+          </section>
 
     <!-- ===== ACTION / PROGRESS CARD (white) ===== -->
     <section class="card card--actions" aria-label="Actions and progress">
@@ -184,7 +186,7 @@
         <button class="btn btn--primary" id="cancelBtn" type="button">Modify</button>
       </div>
 
-      <div class="mutedNote" id="closeNote">Opening: 3pm onwards. All day on Fri and Sun.</div>
+      <div class="mutedNote" id="closeNote">Transfers are disabled from 5:00am to 2:10pm, except Fri & Sun.</div>
       
       
       <!-- Progress bar -->
