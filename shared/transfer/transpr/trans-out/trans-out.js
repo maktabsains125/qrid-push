@@ -253,24 +253,17 @@ function isGoBtnBlockedBrunei_() {
   // Kebab overlay
   // ==========================================================
   function openMenu(){
-  console.log("OPEN MENU");
+  alert("kebab clicked");
 
   if (!kebabPanel) {
-    console.log("kebabPanel not found");
+    alert("kebabPanel not found");
     return;
   }
 
   kebabPanel.hidden = false;
   kebabPanel.removeAttribute("hidden");
   kebabPanel.setAttribute("aria-hidden", "false");
-
-  // force visible in case CSS is hiding it
-  kebabPanel.style.display = "block";
-  kebabPanel.style.visibility = "visible";
-  kebabPanel.style.opacity = "1";
-  kebabPanel.style.zIndex = "9999";
-}
-  function closeMenu(){
+}  function closeMenu(){
   if (!kebabPanel) return;
 
   kebabPanel.hidden = true;
