@@ -62,7 +62,26 @@
   const navOut   = document.getElementById("navOut");
   const navClass = document.getElementById("navClass");
 
-  // ===== Helpers =====
+  // ==== autofill last id =====
+ 
+   async function autofillLastId() {
+  if (!stuId) return;
+
+  try {
+    const r = await fetch(API_URL + "?mode=getLastId");
+    const data = await r.json();
+
+    if (data.ok && data.lastId) {
+      stuId.value = String(data.lastId).trim();
+    }
+  } catch (err) {
+    // Do nothing. User can still type manually.
+  }
+}
+
+autofillLastId();  
+   
+   // ===== Helpers =====
 
   function openMenu() {
     if (!kebabPanel) return;
@@ -279,6 +298,7 @@
   if (cancelBtn) {
     cancelBtn.addEventListener("click", () => {
       clearForm();
+      autofillLastId();
       applyGoTimeGate_();
     });
   }
@@ -364,6 +384,8 @@
       // Never show "Error: ..." if steps 1–5 are done/skipped.
       if (allFiveDoneOrSkipped_(stepsObj)) {
         if (finalMsg) finalMsg.textContent = "Transfer complete.";
+       // Refresh latest ID from backend
+       await autofillLastId();
       } else {
         // Not fully completed: show a simple message.
         // (Allowed to show error here because backend steps not confirmed complete.)
