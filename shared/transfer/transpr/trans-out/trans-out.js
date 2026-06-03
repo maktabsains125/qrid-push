@@ -207,7 +207,7 @@ function isGoBtnBlockedBrunei_() {
 
   if (day === "Fri" || day === "Sun") return false;
 
-  return total >= start && total <= end;
+  return total >= start && total < end;
 } 
   // ==========================================================
   // Backend calls
@@ -262,6 +262,14 @@ function isGoBtnBlockedBrunei_() {
     kebabPanel.hidden = true;
     kebabPanel.setAttribute("aria-hidden", "true");
   }
+
+  if (kebabBtn) kebabBtn.addEventListener("click", openMenu);
+  if (panelCloseBtn) panelCloseBtn.addEventListener("click", closeMenu);
+  if (kebabDim) kebabDim.addEventListener("click", closeMenu);
+
+  if (navInto)  navInto.addEventListener("click", ()=> goTo("/shared/transfer/transpr/trans-into/trans-into.html"));
+  if (navOut)   navOut.addEventListener("click", ()=> goTo("/shared/transfer/transpr/trans-out/trans-out.html"));
+  if (navClass) navClass.addEventListener("click", ()=> goTo("/shared/transfer/transpr/trans-class/trans-class.html"));
 
   // ==========================================================
   // Reset helpers  (✅ DO NOT CLEAR transferTo/dateIn)
@@ -801,14 +809,7 @@ function isGoBtnBlockedBrunei_() {
   }
 
   // ===== Kebab menu wiring =====
-  if (kebabBtn) kebabBtn.addEventListener("click", openMenu);
-  if (panelCloseBtn) panelCloseBtn.addEventListener("click", closeMenu);
-  if (kebabDim) kebabDim.addEventListener("click", closeMenu);
-
-  if (navInto)  navInto.addEventListener("click", ()=> goTo("/shared/transfer/transpr/trans-into/trans-into.html"));
-  if (navOut)   navOut.addEventListener("click", ()=> goTo("/shared/transfer/transpr/trans-out/trans-out.html"));
-  if (navClass) navClass.addEventListener("click", ()=> goTo("/shared/transfer/transpr/trans-class/trans-class.html"));
-
+  
   if (kebabPanel){
     kebabPanel.addEventListener("click", (e) => {
       const btn = e.target.closest(".panel-item");
