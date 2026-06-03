@@ -252,25 +252,16 @@ function isGoBtnBlockedBrunei_() {
   // ==========================================================
   // Kebab overlay
   // ==========================================================
-  function openMenu(){
-  alert("kebab clicked");
-
-  if (!kebabPanel) {
-    alert("kebabPanel not found");
-    return;
+  function openMenu() {
+    if (!kebabPanel) return;
+    kebabPanel.hidden = false;
+    kebabPanel.setAttribute("aria-hidden", "false");
   }
-
-  kebabPanel.hidden = false;
-  kebabPanel.removeAttribute("hidden");
-  kebabPanel.setAttribute("aria-hidden", "false");
-}  function closeMenu(){
-  if (!kebabPanel) return;
-
-  kebabPanel.hidden = true;
-  kebabPanel.setAttribute("aria-hidden", "true");
-  kebabPanel.style.display = "none";
-}
-
+  function closeMenu() {
+    if (!kebabPanel) return;
+    kebabPanel.hidden = true;
+    kebabPanel.setAttribute("aria-hidden", "true");
+  }
   if (kebabBtn) kebabBtn.addEventListener("click", openMenu);
   if (panelCloseBtn) panelCloseBtn.addEventListener("click", closeMenu);
   if (kebabDim) kebabDim.addEventListener("click", closeMenu);
