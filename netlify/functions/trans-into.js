@@ -5,7 +5,7 @@
 //   POST ?mode=transferStudent  (JSON body)
 
 export default async (req, context) => {
-  const GAS_URL = "https://script.google.com/macros/s/AKfycby2cEcAsNWfrrcW6sXdA5eCHFeEr_z_RMwb__gNU0XWz6iw0gDNLZozp1UwZbb31nIz/exec";
+  const GAS_URL = "https://script.google.com/macros/s/AKfycbyP5PskgxVmlQDRWqS2JGfQ4clvpoCS6DX-HXRlZ2SlRl5CWqxMPYmZz8Bm9gMbH2dG/exec";
 
   try {
     const { method, url } = req;
