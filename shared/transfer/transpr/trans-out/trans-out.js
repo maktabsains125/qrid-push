@@ -202,8 +202,8 @@ function isGoBtnBlockedBrunei_() {
   const minute = Number(get("minute"));
   const total = hour * 60 + minute;
 
-  const start = 5 * 60 + 30;  // 5:30am
-  const end = 14 * 60 + 9;    // 2:09pm
+  const start = 5 * 60 + 00;  // 5:00am
+  const end = 14 * 60 + 10;    // 2:10pm
 
   if (day === "Fri" || day === "Sun") return false;
 
