@@ -42,7 +42,8 @@
     <div class="panel-head">
       <div class="panel-title">Action</div>
       <button class="panel-close" id="panelCloseBtn" aria-label="Close menu">✕</button>
-    </div>
+    </div>
+
     <div class="panel-list">
 
       <button class="panel-item" id="navOut">Transfer out</button>
@@ -98,7 +99,7 @@
         <label class="label" for="stuId">ID</label>
         <input class="input" id="stuId" type="text" inputmode="numeric"
                maxlength="5" placeholder="5-digit ID" required>
-        <div class="hint" id="idHint">Must be exactly 5 digits, e.g. 12345</div>
+        <div class="hint" id="idHint">Autofilled. Can be edited.</div>
       </div>
 	  
 	
@@ -130,8 +131,6 @@
         <button class="btn btn--primary" id="cancelBtn">Cancel</button>
       </div>
 	  
-	  <div class="mutedNote" id="closeNote">Opening: 2:10pm onwards. All day on Fri and Sun.</div>
-
       <!-- Steps list -->
       <ol class="stepsList">
         <li id="s1">Step 1: Adding student to transfer list <span class="tick"></span></li>
