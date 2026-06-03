@@ -1,7 +1,7 @@
 /* trans-class.js
  *
  * Updates requested:
- * ✅ goBtn disabled 5:00am–3:00pm Brunei time, EXCEPT Fri & Sun (always enabled those days)
+ * ✅ goBtn disabled 5:00am–2:10pm Brunei time, EXCEPT Fri & Sun (always enabled those days)
  * ✅ Do NOT show error messages for UI ticking/progress issues
  * ✅ If backend returns ok:true => always show success message
  * ✅ If backend returns ok:false OR network fail => show a simple error (real backend failure)
@@ -98,7 +98,7 @@
 
     const m = now.minutes;
     // blocked: 05:00 (300) to 15:00 (900) inclusive start, exclusive end
-    return (m >= 300 && m < 900);
+    return (m >= 300 && m < 850);
   }
 
   // =========================================================
@@ -220,9 +220,9 @@
     // Optional: show a small hint when time-blocked (no error tone)
     if (finalMsg && timeBlocked && !isTransferring) {
       // Only show if nothing else is being shown
-      if (!finalMsg.textContent) finalMsg.textContent = "Transfer is closed 5:00am–3:00pm (except Fri & Sun).";
+      if (!finalMsg.textContent) finalMsg.textContent = "Transfers are disabled from 5:00am to 2:10pm, except Fri & Sun.";
     }
-    if (finalMsg && !timeBlocked && finalMsg.textContent === "Transfer is closed 5:00am–3:00pm (except Fri & Sun).") {
+    if (finalMsg && !timeBlocked && finalMsg.textContent === "TTransfers are disabled from 5:00am to 2:10pm, except Fri & Sun.") {
       finalMsg.textContent = "";
     }
   }
