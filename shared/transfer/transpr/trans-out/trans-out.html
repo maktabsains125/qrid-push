@@ -35,26 +35,42 @@
       </div>
     </header>
 
-    <!-- ===== Kebab slideout menu (overlay style) ===== -->
-    <div id="kebabPanel" class="overlay" hidden aria-hidden="true">
-      <div id="kebabDim" class="overlay-dim" role="button" tabindex="0" aria-label="Close menu"></div>
+     <!-- ===== Top bar (kebab | heading | X) ===== -->
+    <header class="topbar">
+      <div class="topgrid">
+      <button class="kebab-btn" id="kebabBtn" aria-label="Menu">⋮</button>
 
-      <div class="overlay-panel" role="dialog" aria-modal="true" aria-label="Menu">
-        <div class="panel-head">
-          <div class="panel-title">Action</div>
-          <button class="panel-close" id="panelCloseBtn" aria-label="Close menu" type="button">✕</button>
-        </div>
+        <h1 class="title">TRANSFER INTO</h1>
 
-        <div class="panel-list" aria-label="Transfer navigation">
-          <!-- IDs to match JS wiring -->
-         <button class="panel-item" id="navOut"   data-page="transfer-out"   type="button">Transfer out</button>
-
-          <button class="panel-item" id="navInto"  data-page="transfer-into"  type="button">Transfer into</button>
-          
-          <button class="panel-item" id="navClass" data-page="transfer-class" type="button">Transfer class</button>
-        </div>
+        <a class="topBtn closeBtn" id="closeBtn" href="/shared/transfer/index.html" aria-label="Close">
+          ×
+        </a>
       </div>
+    </header>
+	
+	 <!-- ===== Kebab slideout menu (overlay style) ===== -->
+<div id="kebabPanel" class="overlay" hidden aria-hidden="true">
+  <!-- dim area on the right -->
+  <div id="kebabDim" class="overlay-dim" role="button" tabindex="0" aria-label="Close menu"></div>
+
+  <!-- left panel -->
+  <div class="overlay-panel">
+    <div class="panel-head">
+      <div class="panel-title">Action</div>
+      <button class="panel-close" id="panelCloseBtn" aria-label="Close menu">✕</button>
     </div>
+
+    <div class="panel-list">
+
+      <button class="panel-item" id="navOut">Transfer out</button>
+
+      <button class="panel-item" id="navInto">Transfer into</button>
+      
+      <button class="panel-item" id="navClass">Transfer class</button>
+
+    </div>
+  </div>
+</div>
 
     <!-- ===== FORM CARD (grey) ===== -->
     <section class="card card--form" aria-label="Transfer out form">
