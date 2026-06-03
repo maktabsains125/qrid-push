@@ -61,6 +61,21 @@ export default async (req, context) => {
       });
     }
 
+    // ===== GET /?mode=getLastId =====
+if (method === "GET" && mode === "getLastId") {
+  const forwardUrl = `${GAS_URL}?${hasQuery}`;
+  const r = await fetch(forwardUrl, { method: "GET" });
+  const text = await r.text();
+
+  return new Response(text, {
+    status: 200,
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*"
+    }
+  });
+}
+
     // ===== anything else =====
     return new Response(
       JSON.stringify({ ok: false, error: "Unsupported method/mode" }),
