@@ -8,7 +8,20 @@
 (function () {
   "use strict";
 
-  const PAGE_MODE = String(window.TRANS_OUT_PAGE_MODE || "transfer").toLowerCase(); // "transfer" or "reverse"
+  document.addEventListener("DOMContentLoaded", () => {
+    const btn = document.getElementById("kebabBtn");
+    const panel = document.getElementById("kebabPanel");
+
+    if (btn && panel) {
+      btn.addEventListener("click", () => {
+        alert("OPEN");
+        panel.hidden = false;
+        panel.setAttribute("aria-hidden", "false");
+      });
+    }
+  });
+
+  const PAGE_MODE = String(window.TRANS_OUT_PAGE_MODE || "transfer").toLowerCase();
   const IS_REVERSE_PAGE = PAGE_MODE === "reverse";
 
   // ==========================================================
