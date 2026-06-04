@@ -48,13 +48,27 @@ html,body{
 }
 
 .closeBtn{
-  font-weight:500;
-  text-decoration:none;
+  appearance:none;
+  border:0;
+  background:transparent;
+  color:#fff;
+  font-size:28px;
+  line-height:1;
+  padding:2px 6px;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
 }
 
-.col--c{ display:flex; align-items:center; width:100%; }
-.col--r{ justify-content:flex-end; }
+.closeBtn:focus,
+.closeBtn:active{
+  outline:none;
+  transform:none;
+}
+
+.col{ display:flex; align-items:center; width:100%; }
 .col--l{ justify-content:flex-start; }
+.col--c{ justify-content:center; }
+.col--r{ justify-content:flex-end; }
 
 .title{
   margin:0;
