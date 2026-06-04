@@ -654,12 +654,24 @@ async function deleteUser() {
       }
 
       if (e.key === "Enter") {
-        e.preventDefault();
-        closeDomainCombo();
-        snapDomainToCanonical_();
-        return;
-      }
+  e.preventDefault();
 
+  const typed = String(codeInput.value || "").trim();
+  const hit = CODE_MAP[typed.toUpperCase()];
+
+  closeCombo();
+
+  if (hit) {
+    selectCode(hit);
+  } else {
+    CURRENT_CODE = "";
+    clearFields();
+    applyMode("edit");
+    setNote("New user code. Fill in details, then click Add user.");
+  }
+
+  return;
+}
       if (e.key === "ArrowDown") {
         e.preventDefault();
         renderDomainList(filterDomains(emailDomain.value));
@@ -719,12 +731,10 @@ async function deleteUser() {
 
   // On blur: snap back unless it matches CURRENT_CODE (delay so list click works)
   codeInput.addEventListener("blur", () => {
-    setTimeout(() => {
-      const v = String(codeInput.value || "").trim();
-      if (v !== CURRENT_CODE) codeInput.value = CURRENT_CODE;
-      closeCombo();
-    }, 120);
-  });
+  setTimeout(() => {
+    closeCombo();
+  }, 120);
+});
 
   // Close when clicking outside (codes)
   document.addEventListener("click", (e) => {
