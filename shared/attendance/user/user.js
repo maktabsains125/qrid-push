@@ -439,6 +439,9 @@
   codeInput.value = "";
   codeInput.disabled = false;
 
+  received.checked = false;
+  received.disabled = true;
+
   MODE = "add";
   applyMode("add");
 
