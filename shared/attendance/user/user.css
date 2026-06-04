@@ -162,7 +162,6 @@ html,body{
   color:var(--ink);
 }
 
-/* 2-col rows */
 .row2col{
   display:flex;
   gap:12px;
@@ -171,7 +170,6 @@ html,body{
 
 .row2col .col{
   flex:1;
-  display:flex;
 }
 
 /* =========================
