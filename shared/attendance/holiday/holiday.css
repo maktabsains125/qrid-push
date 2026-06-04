@@ -125,7 +125,7 @@ body{
 .card{
   margin:12px auto 0;
   width:100%;
-  max-width:900px;
+  max-width:1280px;
   background:var(--grey);
   color:var(--ink);
   border-radius:var(--radius);
