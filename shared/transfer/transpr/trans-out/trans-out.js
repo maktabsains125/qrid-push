@@ -266,7 +266,6 @@ function isGoBtnBlockedBrunei_() {
   // Kebab overlay
   // ==========================================================
   function openMenu() {
-  alert("OPEN");
   if (!kebabPanel) return;
   kebabPanel.hidden = false;
   kebabPanel.setAttribute("aria-hidden", "false");
