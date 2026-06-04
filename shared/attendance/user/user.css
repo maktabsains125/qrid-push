@@ -38,15 +38,12 @@ html,body{
    TOP BAR
    ========================= */
 .topgrid{
-  width:100%;
-  max-width:500px;
-  margin:0 auto;
   display:grid;
   grid-template-columns:10% 1fr 10%;
   align-items:center;
-  color:var(--ink-invert);
+  justify-items:center;
+  min-height:56px;
 }
-
 .closeBtn{
   appearance:none;
   border:0;
