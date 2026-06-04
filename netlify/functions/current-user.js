@@ -1,7 +1,7 @@
 // netlify/functions/current-user.js
 export async function handler(event) {
   try {
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbzkVh7AB3B6mZJ2wui_CHhuaZDhhR3MhD-8507vBiz6N1NYbimyH4oCNq059zh_hd5E/exec";
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbyEqbVtvFGEgPDA4nTIQEnKwQ9WHY7IuiQipP413KpJgJYzklc4pfMUYdaf9jldWPo/exec";
     const method = event.httpMethod || "GET";
 
     if (method === "GET") {
@@ -23,21 +23,40 @@ export async function handler(event) {
       };
     }
 
-    if (method === "POST") {
-      const body = JSON.parse(event.body || "{}");
-      const r = await fetch(GAS_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body)
-      });
-      const text = await r.text();
+   if (method === "POST") {
+  const body = JSON.parse(event.body || "{}");
 
-      return {
-        statusCode: r.ok ? 200 : r.status,
-        headers: { "Content-Type": "application/json" },
-        body: text
-      };
-    }
+  const action = String(body.action || "").trim().toLowerCase();
+
+  const ALLOWED_ACTIONS = new Set([
+    "save",
+    "cleartally",
+    "adduser",
+    "deleteuser"
+  ]);
+
+  if (!ALLOWED_ACTIONS.has(action)) {
+    return {
+      statusCode: 400,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ok: false, error: "Invalid action" })
+    };
+  }
+
+  const r = await fetch(GAS_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body)
+  });
+
+  const text = await r.text();
+
+  return {
+    statusCode: r.ok ? 200 : r.status,
+    headers: { "Content-Type": "application/json" },
+    body: text
+  };
+}
 
     return {
       statusCode: 405,
