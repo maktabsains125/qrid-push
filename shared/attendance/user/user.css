@@ -163,13 +163,13 @@ html,body{
   color:var(--ink);
 }
 
-.row2col{
+.rowCol{
   display:flex;
   gap:12px;
   align-items:stretch;
 }
 
-.row2col .col{
+.rowCol .col{
   flex:1;
   align-items:stretch;
 }
