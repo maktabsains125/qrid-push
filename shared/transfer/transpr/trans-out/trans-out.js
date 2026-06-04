@@ -14,7 +14,6 @@
 
     if (btn && panel) {
       btn.addEventListener("click", () => {
-        alert("OPEN");
         panel.hidden = false;
         panel.setAttribute("aria-hidden", "false");
       });
