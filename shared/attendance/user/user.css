@@ -77,15 +77,17 @@ html,body{
 }
 
 /* =========================
-   CARDS
+   GREY CARDS
    ========================= */
 .card{
+  margin:12px auto 0;
   width:100%;
-  max-width:500px;
-  margin:0 auto;
+  max-width:1280px;
+  background:var(--grey);
+  color:var(--ink);
   border-radius:var(--radius);
+  padding:18px;
   box-shadow:var(--shadow);
-  padding:16px;
 }
 
 .card--form{
