@@ -60,7 +60,7 @@
   let ALL_CODES = [];
   let CODE_MAP = {};       // uppercase -> canonical code
   let CURRENT_CODE = "";   // committed selection
-  let MODE = "view";       // "view" | "edit"
+  let MODE = "view"; // "view" | "edit" | "add"
   let LOADING = false;
 
   // ===== Email Domain Options (combobox) =====
@@ -103,7 +103,7 @@
   function applyMode(newMode) {
     MODE = newMode;
 
-    const isEdit = MODE === "edit";
+   const isEdit = MODE === "edit" || MODE === "add";
     fullName.disabled = !isEdit;
     if (phone) phone.disabled = !isEdit;
     received.disabled = !isEdit;
@@ -113,7 +113,7 @@
     if (emailDomain) emailDomain.disabled = !isEdit;
     tally.disabled = !isEdit;
 
-    btnSave.disabled = !isEdit || !CURRENT_CODE || LOADING;
+    btnSave.disabled = !isEdit || LOADING;
     btnClearTally.disabled = !isEdit || !CURRENT_CODE || LOADING;
     btnEdit.disabled = !CURRENT_CODE || LOADING;
     btnAdd.disabled = LOADING;
@@ -432,8 +432,27 @@
     applyMode("edit");
   }
 
+  function enterAddMode() {
+  CURRENT_CODE = "";
+  clearFields();
+
+  codeInput.value = "";
+  codeInput.disabled = false;
+
+  MODE = "add";
+  applyMode("add");
+
+  setNote("Enter new user code, fill in details, then click Save.");
+}
+  
   async function saveUser() {
-    if (!CURRENT_CODE) return;
+    const isAdd = MODE === "add";
+const codeToSave = isAdd ? String(codeInput.value || "").trim() : CURRENT_CODE;
+
+if (!codeToSave) {
+  setNote("Missing user code.");
+  return;
+}
 
     setLoading(true, "Saving");
     setNote("");
@@ -460,8 +479,8 @@
       }
 
       const payload = {
-        action: "save",
-        code: CURRENT_CODE,
+        action: isAdd ? "addUser" : "save",
+        code: codeToSave,
         received: !!received.checked,
         fullName: String(fullName.value || "").trim().toUpperCase(),
         phone: phoneNorm,
@@ -472,9 +491,11 @@
 
       const j = await apiPost(payload);
 
-      fillFields(j.user || {});
-      applyMode("view");
-      setNote("Saved.");
+      await loadCodes();
+await selectCode(codeToSave);
+
+applyMode("view");
+setNote(isAdd ? "User added." : "Saved.");
     } catch (err) {
       setStatus("Error", "error");
       if (statusDots) statusDots.style.visibility = "hidden";
@@ -600,7 +621,7 @@ async function deleteUser() {
 
   btnEdit.addEventListener("click", enterEdit);
   btnSave.addEventListener("click", saveUser);
-  btnAdd.addEventListener("click", addUser);
+ btnAdd.addEventListener("click", enterAddMode);
   btnDel.addEventListener("click", deleteUser);
   btnClearTally.addEventListener("click", clearTallyNow);
 
@@ -708,19 +729,20 @@ async function deleteUser() {
       return;
     }
 
-    if (e.key === "Enter") {
-      e.preventDefault();
-      const typed = String(codeInput.value || "").trim();
-      const hit = CODE_MAP[typed.toUpperCase()];
-      if (hit) {
-        closeCombo();
-        selectCode(hit);
-      } else {
-        closeCombo();
-        codeInput.value = CURRENT_CODE;
-      }
-      return;
-    }
+if (e.key === "Enter") {
+  e.preventDefault();
+
+  const typed = String(codeInput.value || "").trim();
+  const hit = CODE_MAP[typed.toUpperCase()];
+
+  closeCombo();
+
+  if (hit && MODE !== "add") {
+    selectCode(hit);
+  }
+
+  return;
+}
 
     if (e.key === "ArrowDown") {
       e.preventDefault();
@@ -742,7 +764,7 @@ async function deleteUser() {
     if (!inside) {
       closeCombo();
       const v = String(codeInput.value || "").trim();
-      if (v !== CURRENT_CODE) codeInput.value = CURRENT_CODE;
+      if (MODE !== "add" && v !== CURRENT_CODE) codeInput.value = CURRENT_CODE;
     }
   });
 
