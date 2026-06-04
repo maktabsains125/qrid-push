@@ -44,10 +44,12 @@
   const btnClearTally = document.getElementById("btnClearTally");
 
   const btnEdit = document.getElementById("btnEdit");
+  const btnAdd = document.getElementById("btnAdd");
+  const btnDel = document.getElementById("btnDel");
   const btnSave = document.getElementById("btnSave");
 
   // Minimal required DOM guard (prevents hard crash)
-  const REQUIRED = [btnClose, codeInput, codeList, fullName, received, sessAM, sessPM, email, tally, btnClearTally, btnEdit, btnSave, note, statusText, statusDots];
+  const REQUIRED = [btnClose, codeInput, codeList, fullName, received, sessAM, sessPM, email, tally, btnClearTally, btnEdit, btnSave, btnAdd, btnDel, note, statusText, statusDots];
   if (REQUIRED.some(x => !x)) {
     console.error("USER CONTROLS: missing required DOM elements");
     // keep hidden (no reveal) to avoid broken UI flash
@@ -114,6 +116,8 @@
     btnSave.disabled = !isEdit || !CURRENT_CODE || LOADING;
     btnClearTally.disabled = !isEdit || !CURRENT_CODE || LOADING;
     btnEdit.disabled = !CURRENT_CODE || LOADING;
+    btnAdd.disabled = LOADING;
+    btnDel.disabled = !CURRENT_CODE || LOADING;
 
     setStatus(isEdit ? "Edit mode" : "View mode", isEdit ? "edit" : "view");
 
@@ -484,6 +488,89 @@
     }
   }
 
+  async function addUser() {
+  setLoading(true, "Saving");
+  setNote("");
+  clearLog();
+
+  try {
+    const code = String(codeInput.value || "").trim();
+    if (!code) throw new Error("Missing user code.");
+
+    const phoneNorm = phone ? normalizePhone(phone.value) : "";
+    if (phone && phoneNorm === null) {
+      throw new Error("Invalid phone. Must be exactly 7 digits (or blank).");
+    }
+
+    snapDomainToCanonical_();
+
+    if (email.value.includes("@")) {
+      setEmailFieldsFromFull_(email.value);
+    }
+
+    const j = await apiPost({
+      action: "addUser",
+      code: code,
+      received: !!received.checked,
+      fullName: String(fullName.value || "").trim().toUpperCase(),
+      phone: phoneNorm,
+      session: currentSessionValue(),
+      email: buildEmail_()
+    });
+
+    await loadCodes();
+    await selectCode(code);
+
+    setNote("User added.");
+  } catch (err) {
+    setStatus("Error", "error");
+    if (statusDots) statusDots.style.visibility = "hidden";
+    const msg = String(err && err.message ? err.message : err);
+    setNote(msg);
+    logLine(msg);
+  } finally {
+    setLoading(false);
+    applyMode(MODE);
+  }
+}
+
+
+async function deleteUser() {
+  if (!CURRENT_CODE) return;
+
+  if (!confirm("Are you sure you want to delete this user?")) return;
+
+  setLoading(true, "Saving");
+  setNote("");
+  clearLog();
+
+  try {
+    await apiPost({
+      action: "deleteUser",
+      code: CURRENT_CODE
+    });
+
+    const deletedCode = CURRENT_CODE;
+
+    setSelectedCode("");
+    clearFields();
+    await loadCodes();
+
+    setNote("Deleted user: " + deletedCode);
+    applyMode("view");
+  } catch (err) {
+    setStatus("Error", "error");
+    if (statusDots) statusDots.style.visibility = "hidden";
+    const msg = String(err && err.message ? err.message : err);
+    setNote(msg);
+    logLine(msg);
+  } finally {
+    setLoading(false);
+    applyMode(MODE);
+  }
+}
+
+  
   async function clearTallyNow() {
     if (!CURRENT_CODE) return;
 
@@ -513,6 +600,8 @@
 
   btnEdit.addEventListener("click", enterEdit);
   btnSave.addEventListener("click", saveUser);
+  btnAdd.addEventListener("click", addUser);
+  btnDel.addEventListener("click", deleteUser);
   btnClearTally.addEventListener("click", clearTallyNow);
 
   // ✅ Phone: digits only + max 7 (edit mode only)
