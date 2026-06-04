@@ -113,8 +113,8 @@
     if (emailDomain) emailDomain.disabled = !isEdit;
     tally.disabled = !isEdit;
 
-    btnSave.disabled = !isEdit || LOADING;
-    btnClearTally.disabled = !isEdit || !CURRENT_CODE || LOADING;
+    btnSave.disabled = LOADING || !(MODE === "edit" || MODE === "add");
+    btnClearTally.disabled = LOADING || MODE !== "edit" || !CURRENT_CODE;
     btnEdit.disabled = !CURRENT_CODE || LOADING;
     btnAdd.disabled = LOADING;
     btnDel.disabled = !CURRENT_CODE || LOADING;
@@ -130,7 +130,7 @@
     if (LOADING) setStatus(label || "Please wait", "wait");
 
     btnEdit.disabled = LOADING || !CURRENT_CODE;
-    btnSave.disabled = LOADING || MODE !== "edit" || !CURRENT_CODE;
+    btnSave.disabled = LOADING || !(MODE === "edit" || MODE === "add");
     btnClearTally.disabled = LOADING || MODE !== "edit" || !CURRENT_CODE;
   }
 
@@ -628,7 +628,7 @@ async function deleteUser() {
   // ✅ Phone: digits only + max 7 (edit mode only)
   if (phone) {
     phone.addEventListener("input", () => {
-      if (MODE !== "edit") return;
+      if (!(MODE === "edit" || MODE === "add")) return;
       phone.value = String(phone.value || "").replace(/\D/g, "").slice(0, 7);
     });
   }
@@ -636,13 +636,13 @@ async function deleteUser() {
   // ✅ Email must be username only; move @domain to domain box immediately
   if (email) {
     email.addEventListener("input", () => {
-      if (MODE !== "edit") return;
+      if (!(MODE === "edit" || MODE === "add")) return;
       const v = String(email.value || "");
       if (v.includes("@")) setEmailFieldsFromFull_(v);
     });
 
     email.addEventListener("blur", () => {
-      if (MODE !== "edit") return;
+      if (!(MODE === "edit" || MODE === "add")) return;
       const v = String(email.value || "").trim();
       if (v.includes("@")) setEmailFieldsFromFull_(v);
     });
@@ -651,49 +651,35 @@ async function deleteUser() {
   // ✅ Domain combobox behavior (only active in edit mode)
   if (emailDomain && emailDomainList) {
     emailDomain.addEventListener("focus", () => {
-      if (MODE !== "edit") return;
+      if (!(MODE === "edit" || MODE === "add")) return;
       renderDomainList(filterDomains(emailDomain.value));
     });
 
     emailDomain.addEventListener("click", (e) => {
-      if (MODE !== "edit") return;
+      if (!(MODE === "edit" || MODE === "add")) return;
       e.stopPropagation();
       renderDomainList(filterDomains(emailDomain.value));
     });
 
     emailDomain.addEventListener("input", () => {
-      if (MODE !== "edit") return;
+      if (!(MODE === "edit" || MODE === "add")) return;
       renderDomainList(filterDomains(emailDomain.value));
     });
 
     emailDomain.addEventListener("keydown", (e) => {
-      if (MODE !== "edit") return;
+      if (!(MODE === "edit" || MODE === "add")) return;
 
       if (e.key === "Escape") {
         closeDomainCombo();
         return;
       }
 
-      if (e.key === "Enter") {
+     if (e.key === "Enter") {
   e.preventDefault();
-
-  const typed = String(codeInput.value || "").trim();
-  const hit = CODE_MAP[typed.toUpperCase()];
-
-  closeCombo();
-
-  if (hit) {
-    selectCode(hit);
-  } else {
-    CURRENT_CODE = "";
-    clearFields();
-    applyMode("edit");
-    setNote("New user code. Fill in details, then click Add user.");
-  }
-
+  closeDomainCombo();
+  snapDomainToCanonical_();
   return;
-}
-      if (e.key === "ArrowDown") {
+}      if (e.key === "ArrowDown") {
         e.preventDefault();
         renderDomainList(filterDomains(emailDomain.value));
         return;
