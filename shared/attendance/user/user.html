@@ -64,7 +64,7 @@
     <div class="logWrap" aria-live="polite">
 
   <div id="statusInfo" class="statusInfo">
-     a user did not receive password reset token in their email after 2 attempts:
+     If a user did not receive password reset token in their email after 2 attempts:<br>
      [1] Check that their email is correct.<br>
      [2] If incorrect, click edit user>edit their email.<br>
      [3] Click clear tally so password token tally changes from 2 to 0.<br>
@@ -72,7 +72,7 @@
 
      <p>Special dashboards include ADMIN, REGIS and CODER.<br>
      Setting a user to these dashboards requires a key as these dashboards have backend controls and access to sensitive data.<br>
-	 Click edit&gt;clear tally to reset request to 0.<br></p>
+     </p>
   </div>
 
   <div class="statusRow">
@@ -82,7 +82,6 @@
 
   <pre id="logBox" class="log"></pre>
 </div>
-
 
 
     <!-- User code combobox -->
@@ -108,6 +107,31 @@
       <div class="label">Full name</div>
       <input id="fullName" class="input upper" type="text" placeholder="FULL NAME" disabled>
     </div>
+
+ /*DASHBOARD and KEY*/
+<div class="row2col">
+  
+  <div class="col">
+    <div class="field">
+      <div class="label">Role</div>
+       <select class="input" id="role" required>
+		      <option value="Dashboard type">Dashboard type</option>
+              <option value="GENERAL">GENERAL</option>
+              <option value="FT">FORM TEACHER</option>
+		      <option value="WElFARE">WELFARE</option>
+              <option value="REGIS">REGISTRATION</option>
+	   </select> 	  
+    </div>
+  </div>
+
+  <div class="col">
+   <div class="field">
+    <div class="label">Key</div>
+    <input id="key" class="input" type="text" placeholder="key" disabled>
+   </div>
+  </div>
+	
+</div>
 	
 	<div class="field">
   	  <div class="label">Mobile phone</div>
