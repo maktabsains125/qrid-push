@@ -12,6 +12,7 @@
 
   <!-- Session + role helpers -->
   <script src="/auth.js" defer></script>
+  <script src="/shared/camera/greetings-kebab.js" defer></script>	
 
   <!-- Manual page logic (combobox version with no-Enter flow) -->
   <script src="./manual.js" defer></script>
@@ -272,9 +273,10 @@
         </div>
 
         <div class="panel-list">
-          <button class="panel-item" id="goBookGreetings" type="button">Book greetings</button>
-          <button class="panel-item" id="goMySchedule" type="button">Personal schedule</button>
-          <button class="panel-item" id="goAdmin" type="button">Admin</button>
+          <button class="panel-item" id="goBook" type="button">Book greetings</button>
+          <button class="panel-item" id="goMine" type="button">Personal schedule</button>
+          <button class="panel-item" id="goAdmin" type="button" hidden>Admin</button>
+          <button class="panel-item" id="goSS" type="button" hidden>Spreadsheet</button>
         </div>
       </div>
 
