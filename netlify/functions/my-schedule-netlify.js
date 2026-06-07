@@ -8,7 +8,7 @@
 // - Safe JSON parsing + response sanity
 
 const GAS_URL =
-  "https://script.google.com/macros/s/AKfycbymugHvqPkSsPoqtXIoxWGYX65P8dEkVOJjPGJ-9aupRUsXAH29Kck8x0mvptQX_36Xgw/exec";
+  "https://script.google.com/macros/s/AKfycbxtRTEFerXxWb6U1Qy6jWkCwnyRX30Lsf405kE0svr1tc1YlIR_ioB4hGkD85X_HFtzuw/exec";
 
 const ALLOWED_MODE = "getMySchedule";
 
