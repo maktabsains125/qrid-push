@@ -43,45 +43,8 @@
     buildTag: $("buildTag"),
 
     exitBtn: $("exitBtn"),
-
-    // kebab / overlay
-    kebabBtn: $("kebabBtn"),
-    overlay: $("overlay"),
-    overlayDim: $("overlayDim"),
-    panelCloseBtn: $("panelCloseBtn"),
-    goBookGreetings: $("goBookGreetings"),
-    goMySchedule: $("goMySchedule"),
-    goAdmin: $("goAdmin")
   };
-
-  // ===== Role helpers =====
-  const role = String(who.role || "").toUpperCase().trim();
-  const isAdmin = (role === "ADMIN" || role === "CODER");
-
-  // ===== Kebab behavior =====
-  function openOverlay(){ if (els.overlay) els.overlay.hidden = false; }
-  function closeOverlay(){ if (els.overlay) els.overlay.hidden = true; }
-
-  if (!isAdmin && els.goAdmin) els.goAdmin.style.display = "none";
-
-  els.kebabBtn?.addEventListener("click", openOverlay);
-  els.overlayDim?.addEventListener("click", closeOverlay);
-  els.panelCloseBtn?.addEventListener("click", closeOverlay);
-
-  els.goBookGreetings?.addEventListener("click", () => {
-    closeOverlay();
-    location.assign("/shared/camera/greetings/bookings.html");
-  });
-  els.goMySchedule?.addEventListener("click", () => {
-    closeOverlay();
-    location.assign("/shared/camera/schedule/my-schedule.html");
-  });
-  els.goAdmin?.addEventListener("click", () => {
-    if (!isAdmin) return;
-    closeOverlay();
-    location.assign("/shared/camera/admin/admin-book.html");
-  });
-
+  
   // ==== UI helpers ====
   function showStatus(msg){
     if (!els.status) return;
