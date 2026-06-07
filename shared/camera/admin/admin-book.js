@@ -19,6 +19,10 @@
       return;
     }
     const role = String(who.role || "").toUpperCase().trim();
+    // Show Spreadsheet button only for ADMIN and CODER
+    if (goSS) {
+    goSS.hidden = !(role === "ADMIN" || role === "CODER");
+    }
     const ALLOWED = new Set(["ADMIN", "CODER"]);
     if (!ALLOWED.has(role)) {
       location.replace(Auth.routeFor ? Auth.routeFor(role) : "/");
@@ -49,6 +53,7 @@
     const goBook = $("goBook");
     const goMine = $("goMine");
     const goAdmin = $("goAdmin");
+	const goSS = $("goSS");
 
     // Modal
     const modal = $("modal");
@@ -150,7 +155,12 @@
     goBook?.addEventListener("click", () => location.assign("/shared/camera/greetings/bookings.html"));
     goMine?.addEventListener("click", () => location.assign("/shared/camera/schedule/my-schedule.html"));
     goAdmin?.addEventListener("click", () => location.assign("/shared/camera/admin/admin-book.html"));
-
+    goSS?.addEventListener("click", () => {
+    window.open(
+    "https://docs.google.com/spreadsheets/d/1VTIbgepfUYEW3cfPGTDirv_pMyKjv2EJCnPl6S5Km0Q/edit?usp=sharing",
+    "_blank"
+      );
+    });
     // ===== MODAL =====
     function openModal(title, html) {
       if (!modal || !modalTitle || !modalBody) return;
