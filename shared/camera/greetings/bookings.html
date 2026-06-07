@@ -11,6 +11,7 @@
 
   <script src="/auth.js" defer></script>
   <script src="./bookings.js" defer></script>
+  <script src="/shared/camera/greetings-kebab.js" defer></script>
 </head>
 
 <body>
@@ -99,9 +100,10 @@
         <button class="panel-close" id="panelCloseBtn" type="button">✕</button>
       </div>
       <div class="panel-list">
-        <button class="panel-item" id="goBookGreetings" type="button">Book greetings</button>
-        <button class="panel-item" id="goMySchedule" type="button">Personal schedule</button>
+        <button class="panel-item" id="goBook" type="button">Book greetings</button>
+        <button class="panel-item" id="goMine" type="button">Personal schedule</button>
         <button class="panel-item" id="goAdmin" type="button" hidden>Admin</button>
+        <button class="panel-item" id="goSS" type="button" hidden>Spreadsheet</button>
       </div>
     </div>
     <div class="overlay-dim" id="overlayDim" aria-label="Close menu"></div>
