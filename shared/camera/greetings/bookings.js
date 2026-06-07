@@ -28,9 +28,6 @@
 
   // ===== Routes =====
   const ROUTE_CAMERA = "/shared/camera/index.html";
-  const ROUTE_BOOK   = "/shared/camera/greetings/bookings.html";
-  const ROUTE_ME     = "/shared/camera/schedule/my-schedule.html";
-  const ROUTE_ADMIN  = "/shared/camera/admin/admin-book.html";
 
   function go(url) {
     if (url) window.location.assign(url);
@@ -43,15 +40,6 @@
   // ===== DOM =====
   const pageTitle = document.getElementById("pageTitle");
   const xBtn = document.getElementById("xBtn");
-
-  const kebabBtn = document.getElementById("kebabBtn");
-  const overlay = document.getElementById("overlay");
-  const overlayDim = document.getElementById("overlayDim");
-  const panelCloseBtn = document.getElementById("panelCloseBtn");
-
-  const goBookGreetings = document.getElementById("goBookGreetings");
-  const goMySchedule = document.getElementById("goMySchedule");
-  const goAdmin = document.getElementById("goAdmin");
 
   const monthBox = document.getElementById("monthBox");
   const monthText = document.getElementById("monthText");
@@ -156,14 +144,6 @@
 
   function hideCenter() {
     saveOverlay.hidden = true;
-  }
-
-  function openOverlay() {
-    overlay.hidden = false;
-  }
-
-  function closeOverlay() {
-    overlay.hidden = true;
   }
 
   function monthLabel(key) {
@@ -937,7 +917,6 @@
 
     setBookingGateVisibility();
 
-    if (goAdmin) goAdmin.hidden = !isAdmin;
     if (monthBox) monthBox.disabled = !isAdmin;
 
     userCode = getUserDisplayCode(who);
@@ -1004,16 +983,6 @@
 
   // ===== Events =====
   xBtn?.addEventListener("click", () => go(ROUTE_CAMERA));
-
-  kebabBtn?.addEventListener("click", openOverlay);
-  overlayDim?.addEventListener("click", closeOverlay);
-  panelCloseBtn?.addEventListener("click", closeOverlay);
-
-  goBookGreetings?.addEventListener("click", () => go(ROUTE_BOOK));
-  goMySchedule?.addEventListener("click", () => go(ROUTE_ME));
-  goAdmin?.addEventListener("click", () => {
-    if (isAdmin) go(ROUTE_ADMIN);
-  });
 
   monthBox?.addEventListener("click", () => {
     if (!isAdmin) return;
