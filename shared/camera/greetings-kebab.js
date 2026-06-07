@@ -21,7 +21,7 @@
     const kebabBtn   = $("kebabBtn");
     const overlay    = $("overlay");
     const overlayDim = $("overlayDim");
-    const panelClose = $("panelClose");
+    const panelClose = $("panelCloseBtn");
 
     // ===== BUTTONS =====
     const goBook  = $("goBook");
