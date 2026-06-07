@@ -10,16 +10,6 @@
   "use strict";
 
   // ===== DOM =====
-  const closeBtn   = document.getElementById("closeBtn");
-  const kebabBtn   = document.getElementById("kebabBtn");
-  const overlay    = document.getElementById("overlay");
-  const overlayDim = document.getElementById("overlayDim");
-  const panelClose = document.getElementById("panelClose");
-
-  const goBook  = document.getElementById("goBook");
-  const goMe    = document.getElementById("goMe");
-  const goAdmin = document.getElementById("goAdmin");
-
   const msgText = document.getElementById("msgText");
   const dotsEl  = document.getElementById("dots");
   const gridEl  = document.getElementById("schedGrid");
@@ -37,9 +27,6 @@
 
   // ===== Routes =====
   const ROUTE_CAMERA = "/shared/camera/index.html";
-  const ROUTE_BOOK   = "/shared/camera/greetings/bookings.html";
-  const ROUTE_ME     = "/shared/camera/schedule/my-schedule.html";
-  const ROUTE_ADMIN  = "/shared/camera/admin/admin-book.html";
 
   function go(url) { if (!url) return; window.location.assign(url); }
 
@@ -66,11 +53,6 @@
     if (isLoading) startDots();
     else { stopDots(); dotsEl.textContent = "..."; }
   }
-
-  // ===== Menu open/close =====
-  let menuOpen = false;
-  function openMenu() { if (!overlay) return; overlay.hidden = false; menuOpen = true; }
-  function closeMenu(){ if (!overlay) return; overlay.hidden = true;  menuOpen = false; }
 
   // ===== Auth hydration wait =====
   function safeWho() {
@@ -209,27 +191,15 @@
   // ===== Events =====
   closeBtn?.addEventListener("click", () => go(ROUTE_CAMERA));
 
-  kebabBtn?.addEventListener("click", openMenu);
-  overlayDim?.addEventListener("click", closeMenu);
-  panelClose?.addEventListener("click", closeMenu);
-
-  goBook?.addEventListener("click", () => go(ROUTE_BOOK));
-  goMe?.addEventListener("click", () => go(ROUTE_ME));
-  goAdmin?.addEventListener("click", () => go(ROUTE_ADMIN));
-
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") {
-      if (menuOpen) closeMenu();
-      else go(ROUTE_CAMERA);
-    }
-  });
+  if (e.key === "Escape") {
+    go(ROUTE_CAMERA);
+  }
+});
 
   // ===== Load schedule (UID version) =====
   async function load(who) {
     const role = String(who.role || "").toUpperCase().trim();
-
-    // Hide Admin button for non-adminish
-    if (!isAdminish(role) && goAdmin) goAdmin.style.display = "none";
 
     // display only
     const code = String(
