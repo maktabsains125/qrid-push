@@ -36,6 +36,9 @@
   const sessAM   = document.getElementById("sessAM");
   const sessPM   = document.getElementById("sessPM");
 
+  const roleSelect = document.getElementById("role");
+  const keyInput = document.getElementById("key");
+
   const email           = document.getElementById("email");            // username only
   const emailDomain     = document.getElementById("emailDomain");      // combobox input
   const emailDomainList = document.getElementById("emailDomainList");  // dropdown
@@ -49,7 +52,7 @@
   const btnSave = document.getElementById("btnSave");
 
   // Minimal required DOM guard (prevents hard crash)
-  const REQUIRED = [btnClose, codeInput, codeList, fullName, received, sessAM, sessPM, email, tally, btnClearTally, btnEdit, btnSave, btnAdd, btnDel, note, statusText, statusDots];
+  const REQUIRED = [btnClose, codeInput, codeList, fullName, received, sessAM, sessPM, email, roleSelect, keyInput, tally, btnClearTally, btnEdit, btnSave, btnAdd, btnDel, note, statusText, statusDots];
   if (REQUIRED.some(x => !x)) {
     console.error("USER CONTROLS: missing required DOM elements");
     // keep hidden (no reveal) to avoid broken UI flash
@@ -111,6 +114,8 @@
     sessPM.disabled = !isEdit;
     email.disabled = !isEdit;
     if (emailDomain) emailDomain.disabled = !isEdit;
+    if (roleSelect) roleSelect.disabled = !isEdit;
+    if (keyInput) keyInput.disabled = !isEdit;
     tally.disabled = !isEdit;
 
     btnSave.disabled = LOADING || !(MODE === "edit" || MODE === "add");
@@ -259,6 +264,9 @@
     received.checked = !!user.received;
     setSessionValue(user.session);
 
+    if (roleSelect) roleSelect.value = user.role || "GENERAL";
+    if (keyInput) keyInput.value = "";
+    
     // ✅ email text shows only username; domain goes to domain field
     const fullEmail = esc(user.email);
     if (fullEmail) setEmailFieldsFromFull_(fullEmail);
@@ -273,7 +281,8 @@
     received.checked = false;
     sessAM.checked = false;
     sessPM.checked = false;
-
+    if (roleSelect) roleSelect.value = "GENERAL";
+    if (keyInput) keyInput.value = "";
     email.value = "";
     if (emailDomain) emailDomain.value = "";
 
@@ -489,6 +498,8 @@ if (!codeToSave) {
         phone: phoneNorm,
         session: currentSessionValue(),
         email: buildEmail_(),
+        role: roleSelect ? roleSelect.value : "",
+        key: keyInput ? keyInput.value : "",
         tally: String(tally.value ?? "").trim()
       };
 
