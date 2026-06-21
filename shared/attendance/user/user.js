@@ -281,7 +281,7 @@
     received.checked = false;
     sessAM.checked = false;
     sessPM.checked = false;
-    if (roleSelect) roleSelect.value = "GENERAL";
+    if (roleSelect) roleSelect.value = "";
     if (keyInput) keyInput.value = "";
     email.value = "";
     if (emailDomain) emailDomain.value = "";
