@@ -264,7 +264,7 @@
     received.checked = !!user.received;
     setSessionValue(user.session);
 
-    if (roleSelect) roleSelect.value = user.role || "GENERAL";
+    if (roleSelect) roleSelect.value = user.role || "";
     if (keyInput) keyInput.value = "";
     
     // ✅ email text shows only username; domain goes to domain field
