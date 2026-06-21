@@ -264,6 +264,7 @@
     received.checked = !!user.received;
     setSessionValue(user.session);
 
+    console.log("Role from backend:", user.role);
     if (roleSelect) roleSelect.value = user.role || "";
     if (keyInput) keyInput.value = "";
     
