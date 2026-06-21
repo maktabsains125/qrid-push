@@ -5,24 +5,23 @@ export async function handler(event) {
     const method = event.httpMethod || "GET";
 
     if (method === "GET") {
-      const qs = event.queryStringParameters || {};
-      const action = String(qs.action || "").trim();https://script.google.com/macros/s/AKfycbykX8uuHLOfhgngUFtP0I3CGHKpryH4fkh-kHGD1QjDoI4jgJKALhiSX_4u4L2VHoF7/exec
-      const code = String(qs.code || "").trim();
+  const qs = event.queryStringParameters || {};
+  const action = String(qs.action || "").trim();
+  const code = String(qs.code || "").trim();
 
-      const url = new URL(GAS_URL);
-      if (action) url.searchParams.set("action", action);
-      if (code) url.searchParams.set("code", code);
+  const url = new URL(GAS_URL);
+  if (action) url.searchParams.set("action", action);
+  if (code) url.searchParams.set("code", code);
 
-      const r = await fetch(url.toString(), { method: "GET" });
-      const text = await r.text();
+  const r = await fetch(url.toString(), { method: "GET" });
+  const text = await r.text();
 
-      return {
-        statusCode: r.ok ? 200 : r.status,
-        headers: { "Content-Type": "application/json" },
-        body: text
-      };
-    }
-
+  return {
+    statusCode: r.ok ? 200 : r.status,
+    headers: { "Content-Type": "application/json" },
+    body: text
+  };
+}
    if (method === "POST") {
   const body = JSON.parse(event.body || "{}");
 
