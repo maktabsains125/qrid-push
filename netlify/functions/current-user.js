@@ -6,7 +6,7 @@ export async function handler(event) {
 
     if (method === "GET") {
       const qs = event.queryStringParameters || {};
-      const action = String(qs.action || "").trim();
+      const action = String(qs.action || "").trim();https://script.google.com/macros/s/AKfycbykX8uuHLOfhgngUFtP0I3CGHKpryH4fkh-kHGD1QjDoI4jgJKALhiSX_4u4L2VHoF7/exec
       const code = String(qs.code || "").trim();
 
       const url = new URL(GAS_URL);
