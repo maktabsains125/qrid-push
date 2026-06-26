@@ -28,9 +28,13 @@
     const goMine  = $("goMine");
     const goAdmin = $("goAdmin");
     const goSS    = $("goSS");
+    const goDuty    = $("goDuty");
 
     const SS_URL =
-      "https://docs.google.com/spreadsheets/d/1VTIbgepfUYEW3cfPGTDirv_pMyKjv2EJCnPl6S5Km0Q/edit?usp=sharing";
+      "https://docs.google.com/spreadsheets/d/1VTIbgepfUYEW3cfPGTDirv_pMyKjv2EJCnPl6S5Km0Q/edit?usp=sharing"; 
+
+    const Duty_URL =
+    "https://docs.google.com/spreadsheets/d/1GU_49Ru9KtU15KzWdbPOdYq5Wcy7lQOHACizcbqNNLQ/edit?usp=sharing"; 
 
     // ===== SHOW/HIDE ADMIN ITEMS =====
     const isAdminOrCoder =
@@ -44,6 +48,10 @@
       goSS.hidden = !isAdminOrCoder;
     }
 
+    if (goDuty) {
+      goDuty.hidden = !isAdminOrCoder;
+    }
+    
     // ===== MENU OPEN/CLOSE =====
     function openMenu() {
       if (overlay) overlay.hidden = false;
@@ -78,6 +86,10 @@
       window.open(SS_URL, "_blank");
     });
 
+     goDuty?.addEventListener("click", () => {
+      window.open(Duty_URL, "_blank");
+    });
+    
     // Start closed
     closeMenu();
   });
