@@ -566,7 +566,7 @@ function isGoBtnBlockedBrunei_() {
 
       const maybeTransient = (!res.ok && [502,503,504].includes(res.status));
       if (maybeTransient) {
-        log("Transient error; verifying completion...");
+        log("Verifying completion...");
         const verified = await verifyTransferCompleted_(lvl, idField.value, d);
         if (verified) {
           setProgress(100);
