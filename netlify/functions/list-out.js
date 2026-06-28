@@ -16,14 +16,16 @@ exports.handler = async function(event) {
     const targetUrl = `${GAS_URL}?${search.toString()}`;
     const resp = await fetch(targetUrl);
 
-    const text = await resp.text();
     let data;
 
     try {
-      data = JSON.parse(text);
+    data = await resp.json();
     } catch (e) {
-      data = { ok: false, error: "Invalid JSON from Apps Script", raw: text };
-    }
+     data = {
+    ok: false,
+    error: "Invalid JSON from Apps Script"
+  };
+}
 
     return {
       statusCode: 200,
