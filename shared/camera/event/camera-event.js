@@ -333,7 +333,7 @@
 
             id:qr.id,
 
-            user:who.name,
+            token: getSavedToken(),
 
             attendanceType
 
