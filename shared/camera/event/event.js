@@ -7,21 +7,26 @@
     return;
   }
 
-  const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzLcDCVIR5fao0tFDiBFD1F1jaeICDXqKqoCZ3a43zlYjb7mf149Lew1ybU8ry19misAA/exec";
+  const WEBAPP_URL =
+    "https://script.google.com/macros/s/AKfycbzLcDCVIR5fao0tFDiBFD1F1jaeICDXqKqoCZ3a43zlYjb7mf149Lew1ybU8ry19misAA/exec";
 
   const $ = (id) => document.getElementById(id);
 
   document.addEventListener("DOMContentLoaded", () => {
 
-    // ===== Buttons =====
+    // ===== Navigation =====
     $("btnClose")?.addEventListener("click", () => {
       location.assign("/shared/camera/index.html");
     });
 
-    // ===== Initial load =====
+    // ===== Load Event =====
     loadEventInfo();
 
   });
+
+  /******************************************************
+   * LOADING
+   ******************************************************/
 
   function showLoading(message = "Please wait") {
     $("statusText").textContent = message;
@@ -33,15 +38,23 @@
     $("statusDots").style.display = "none";
   }
 
+  /******************************************************
+   * LOAD EVENT INFORMATION
+   ******************************************************/
+
   async function loadEventInfo() {
 
-    showLoading("Loading event information");
+    showLoading("Loading event information...");
 
     try {
 
       const response = await fetch(
         `${WEBAPP_URL}?action=getEventInfo`
       );
+
+      if (!response.ok) {
+        throw new Error("Unable to connect to server.");
+      }
 
       const data = await response.json();
 
@@ -53,6 +66,19 @@
       $("tabName").textContent = data.tabName;
       $("eventDate").value = data.eventDate;
       $("attendeeCount").value = data.attendeeCount;
+
+      // Enable attendance buttons
+      [
+        "btnCamera",
+        "btnScanner",
+        "btnManual",
+        "btnAttendance",
+        "btnEdit",
+        "btnSave"
+      ].forEach(id => {
+        const el = $(id);
+        if (el) el.disabled = false;
+      });
 
       hideLoading("Ready");
 
