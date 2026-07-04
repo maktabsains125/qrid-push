@@ -71,7 +71,19 @@
   <div class="title" style="color:#FFF; text-align:left;">STEP 2 - If event is correct, take the attendance</div>
   
   <section class="card card--form" aria-label="Event attendance"> 
-  
+
+  <div class="field">
+  	<div class="label">Session</div>
+
+  		<select class="input" id="attendanceType" required>
+    	<option value="">Please select</option>
+    	<option value="clockIn">CLOCK IN</option>
+    	<option value="clockOut">CLOCK OUT</option>
+  		</select>
+
+  </div>
+
+	  
    <div class="rowCol">
       <div class="col">
         <button id="btnCamera" class="btn peach" type="button" disabled>Camera</button>
@@ -83,17 +95,6 @@
          <button id="btnManual" class="btn peach" type="button" disabled>Manual</button>
 	  </div>
    </div>
-
-  <div class="field">
-  <div class="label">Session</div>
-
-  <select class="input" id="attendanceType" required>
-    <option value="">Please select</option>
-    <option value="clockIn">CLOCK IN</option>
-    <option value="clockOut">CLOCK OUT</option>
-  </select>
-
-</div>
 
    <div class="btnRow">
       <button id="btnAttendance" class="btn peach" type="button" disabled>Attendance Report</button>
