@@ -48,9 +48,8 @@
   /******************************************************
    * ZXING
    ******************************************************/
-  const reader =
-    new ZXing.BrowserMultiFormatReader();
-
+ 
+  let reader = null;
   let busy = false;
   let cameraOpen = false;
 
@@ -151,6 +150,10 @@
    ******************************************************/
   async function openCamera(){
 
+    if (!reader) {
+    reader = new ZXing.BrowserMultiFormatReader();
+  }
+    
     if(cameraOpen) return;
 
     busy = false;
