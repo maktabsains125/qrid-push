@@ -29,6 +29,7 @@
     const goAdmin = $("goAdmin");
     const goSS    = $("goSS");
     const goDuty    = $("goDuty");
+    const goEvent    = $("goEvent");
 
     const SS_URL =
       "https://docs.google.com/spreadsheets/d/1VTIbgepfUYEW3cfPGTDirv_pMyKjv2EJCnPl6S5Km0Q/edit?usp=sharing"; 
@@ -75,6 +76,10 @@
     });
 
     goMine?.addEventListener("click", () => {
+      location.assign("/shared/camera/schedule/my-schedule.html");
+    });
+
+    goEvent?.addEventListener("click", () => {
       location.assign("/shared/camera/schedule/my-schedule.html");
     });
 
