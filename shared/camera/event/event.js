@@ -19,6 +19,21 @@
       location.assign("/shared/camera/index.html");
     });
 
+    $("btnAttendance")?.addEventListener("click", () => {
+      window.open(
+      "https://docs.google.com/spreadsheets/d/1XQxwrYfPF-G8Ajh4WTVrG4jOymIELrbfbC7MuN93Ykc/edit?usp=sharing",
+      "_blank"
+      );
+    });
+
+    $("btnEdit")?.addEventListener("click", () => {
+      window.open(
+      "https://docs.google.com/spreadsheets/d/1B1zH-uB6OJsdl1moO-DysWi_wV8JwQh9wzGwOH4dQRw/edit?usp=sharing",
+      "_blank"
+      );
+    });
+
+    
     // ===== Load Event =====
     loadEventInfo();
 
