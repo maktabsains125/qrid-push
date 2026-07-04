@@ -18,16 +18,26 @@
       location.assign("/shared/camera/index.html");
     });
 
-    // ===== Load page =====
+    // ===== Initial load =====
     loadEventInfo();
 
   });
 
+  function showLoading(message = "Please wait") {
+    $("statusText").textContent = message;
+    $("statusDots").style.display = "";
+  }
+
+  function hideLoading(message = "Ready") {
+    $("statusText").textContent = message;
+    $("statusDots").style.display = "none";
+  }
+
   async function loadEventInfo() {
 
-    try {
+    showLoading("Loading event information");
 
-      $("statusText").textContent = "Loading event information...";
+    try {
 
       const response = await fetch(
         `${WEBAPP_URL}?action=getEventInfo`
@@ -44,17 +54,17 @@
       $("eventDate").value = data.eventDate;
       $("attendeeCount").value = data.attendeeCount;
 
-      $("statusText").textContent = "Ready";
+      hideLoading("Ready");
 
     } catch (err) {
 
       console.error(err);
 
-      $("statusText").textContent = "Unable to load event information.";
+      hideLoading("Unable to load event information.");
 
     } finally {
 
-      // Reveal page after loading (success or failure)
+      // Reveal page after first load
       document.documentElement.style.visibility = "visible";
 
     }
