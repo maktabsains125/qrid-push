@@ -223,7 +223,7 @@
 
     try{
 
-      reader.reset();
+      reader?.reset();
 
     }
 
@@ -255,16 +255,6 @@
   }
 
 
-
-  /******************************************************
-   * PLACEHOLDER
-   * (implemented in Part 1B)
-   ******************************************************/
-  async function processScan(qr){
-
-    // implemented in Part 1B
-
-  }
 
    /******************************************************
    * POST JSON
@@ -315,6 +305,16 @@
 
     }
 
+    if (!els.attendanceType.value) {
+
+    alert("Please select Clock In or Clock Out.");
+
+    busy = false;
+ 
+    return;
+
+   }
+    
     showStatus("Recording attendance...");
 
     try{
@@ -354,9 +354,7 @@
             ? "CLOCK IN ✔"
             : "CLOCK OUT ✔",
 
-        time:
-          new Date(data.time)
-            .toLocaleTimeString()
+        time:data.time
 
       });
 
