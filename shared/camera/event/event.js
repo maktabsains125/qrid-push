@@ -29,14 +29,22 @@
    ******************************************************/
 
   function showLoading(message = "Please wait") {
-    $("statusText").textContent = message;
-    $("statusDots").style.display = "";
-  }
 
-  function hideLoading(message = "Ready") {
-    $("statusText").textContent = message;
-    $("statusDots").style.display = "none";
-  }
+  $("statusRow").style.display = "flex";
+  $("statusText").textContent = message;
+  $("statusDots").style.display = "";
+
+}
+
+function hideLoading(message = "Ready") {
+
+  $("statusText").textContent = message;
+  $("statusDots").style.display = "none";
+
+  // Hide the whole row
+  $("statusRow").style.display = "none";
+
+}
 
   /******************************************************
    * LOAD EVENT INFORMATION
