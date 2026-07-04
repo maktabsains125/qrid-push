@@ -254,28 +254,6 @@
 
   }
 
-  /******************************************************
- * SESSION TOKEN
- ******************************************************/
-
-   function getSavedToken() {
-
-  try {
-
-    const s = JSON.parse(
-      localStorage.getItem("mspsbs_session") || "null"
-    );
-
-    return s?.token || null;
-
-  } catch (_) {
-
-    return null;
-
-  }
-
-}
-  
 
    /******************************************************
    * POST JSON
@@ -352,7 +330,7 @@
 
             action:"recordAttendance",
 
-            token: getSavedToken(),
+            user: who.code,
             
             id:qr.id,
 
