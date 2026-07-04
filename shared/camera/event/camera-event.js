@@ -345,7 +345,7 @@
 
       showCard({
 
-        name:"Recorded",
+        name:qr.name,
 
         id:qr.id,
 
