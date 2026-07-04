@@ -11,7 +11,7 @@
     return;
   }
 
-  const SCAN_URL = "/.netlify/functions/event-scanner";
+  const SCAN_URL = "/.netlify/functions/event-camera";
 
   const $ = (id) => document.getElementById(id);
 
