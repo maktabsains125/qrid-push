@@ -1,3 +1,12 @@
+(function () {
+  "use strict";
+
+  const who = (window.Auth && Auth.who && Auth.who()) || null;
+  if (!who) {
+    window.location.replace("/");
+    return;
+  }
+
 const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzLcDCVIR5fao0tFDiBFD1F1jaeICDXqKqoCZ3a43zlYjb7mf149Lew1ybU8ry19misAA/exec";
 
 document.addEventListener("DOMContentLoaded", loadEventInfo);
