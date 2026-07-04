@@ -84,6 +84,21 @@
 	  </div>
    </div>
 
+  <div class="field">
+  <div class="label">Session</div>
+
+  <select class="input" id="attendanceType" required>
+    <option value="">Please select</option>
+    <option value="clockIn">CLOCK IN</option>
+    <option value="clockOut">CLOCK OUT</option>
+  </select>
+
+</div>
+
+   <div class="btnRow">
+      <button id="btnAttendance" class="btn peach" type="button" disabled>Attendance Report</button>
+   </div>
+	  
   </section>
 
   <!-- ===== CAMERA AND ATTENDANCE CARD ===== -->
@@ -112,13 +127,7 @@
         <video id="preview" playsinline muted></video>
       </div>
     </dialog>
-	  
-   <div class="btnRow">
-      <button id="btnAttendance" class="btn peach" type="button" disabled>Attendance Report</button>
-   </div>	  
-
-  </section>
-    
+	  	  
   
   <!-- ===== EVENT EDIT ===== -->
   <div class="title" style="color:#FFF; text-align:left;">STEP 3 - If event is incorrect, edit then save</div>
