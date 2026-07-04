@@ -274,16 +274,15 @@
 
     const data = await response.json();
 
-    if(!response.ok){
+if (!response.ok || data.success === false) {
 
-      throw new Error(
-        data.message ||
-        "Unable to contact server."
-      );
+  throw new Error(
+    data.message || "Unable to contact server."
+  );
 
-    }
+}
 
-    return data;
+return data;
 
   }
 
@@ -419,6 +418,7 @@
           hideCard();
           hideStatus();
 
+          closeCamera();
           openCamera();
 
         }
