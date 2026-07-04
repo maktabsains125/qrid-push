@@ -411,3 +411,126 @@ a:focus{
   text-align:left;
   font:14px/1.45 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
+
+/* =========================
+   CAMERA / ATTENDANCE
+   ========================= */
+
+/* Status box */
+.status{
+  margin:12px auto 0;
+  width:100%;
+  max-width:1280px;
+  background:#fff;
+  color:var(--ink);
+  border-radius:var(--radius);
+  padding:12px 14px;
+  box-shadow:var(--shadow);
+  font-weight:700;
+}
+
+.hidden{
+  display:none !important;
+}
+
+/* Result rows */
+.row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  align-items:center;
+  gap:8px;
+  padding:8px 0;
+  border-bottom:1px solid #eee;
+}
+
+.row:last-child{
+  border-bottom:none;
+}
+
+.value{
+  justify-self:end;
+}
+
+.value.bold{
+  justify-self:start;
+  font-weight:900;
+}
+
+/* Card buttons */
+.cardActions{
+  display:flex;
+  justify-content:center;
+  padding-top:10px;
+}
+
+.cardActionsCamera{
+  display:flex;
+  gap:12px;
+}
+
+.cardActionsCamera .btn{
+  flex:1;
+}
+
+.closeCard{
+  background:#000;
+  color:#fff;
+}
+
+.nextBtn{
+  background:var(--peach);
+  color:#000;
+}
+
+/* Camera dialog */
+.camDlg{
+  border:none;
+  padding:0;
+  width:min(640px,96vw);
+  border-radius:18px;
+  box-shadow:var(--shadow);
+}
+
+.camDlg::backdrop{
+  background:rgba(0,0,0,.55);
+}
+
+.camHead{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:10px 12px;
+  background:#fff;
+  border-radius:18px 18px 0 0;
+}
+
+.camTitle{
+  color:var(--ink);
+  font-weight:800;
+}
+
+.camBody{
+  background:#000;
+}
+
+.xBtn{
+  appearance:none;
+  border:0;
+  background:transparent;
+  color:var(--ink);
+  font-size:28px;
+  line-height:1;
+  cursor:pointer;
+}
+
+.xBtn:focus,
+.xBtn:active{
+  outline:none;
+  transform:none;
+}
+
+#preview{
+  display:block;
+  width:100%;
+  height:auto;
+}
