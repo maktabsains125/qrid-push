@@ -80,7 +80,7 @@
     });
 
     goEvent?.addEventListener("click", () => {
-      location.assign("/shared/camera/schedule/my-schedule.html");
+      location.assign("/shared/camera/event/event.html");
     });
 
     goAdmin?.addEventListener("click", () => {
