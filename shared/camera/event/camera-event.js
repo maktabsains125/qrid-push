@@ -331,9 +331,9 @@
 
             action:"recordAttendance",
 
-            id:qr.id,
-
             token: getSavedToken(),
+            
+            id:qr.id,
 
             attendanceType
 
