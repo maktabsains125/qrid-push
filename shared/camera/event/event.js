@@ -9,32 +9,52 @@
 
   const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbzLcDCVIR5fao0tFDiBFD1F1jaeICDXqKqoCZ3a43zlYjb7mf149Lew1ybU8ry19misAA/exec";
 
-  document.addEventListener("DOMContentLoaded", loadEventInfo);
+  const $ = (id) => document.getElementById(id);
+
+  document.addEventListener("DOMContentLoaded", () => {
+
+    // ===== Buttons =====
+    $("btnClose")?.addEventListener("click", () => {
+      location.assign("/shared/camera/index.html");
+    });
+
+    // ===== Load page =====
+    loadEventInfo();
+
+  });
 
   async function loadEventInfo() {
 
     try {
 
-      const response = await fetch(`${WEBAPP_URL}?action=getEventInfo`);
+      $("statusText").textContent = "Loading event information...";
+
+      const response = await fetch(
+        `${WEBAPP_URL}?action=getEventInfo`
+      );
+
       const data = await response.json();
 
       if (!data.success) {
         throw new Error(data.message || "Unable to load event information.");
       }
 
-      document.getElementById("eventName").value = data.eventName;
-      document.getElementById("tabName").textContent = data.tabName;
-      document.getElementById("eventDate").value = data.eventDate;
-      document.getElementById("attendeeCount").value = data.attendeeCount;
+      $("eventName").value = data.eventName;
+      $("tabName").textContent = data.tabName;
+      $("eventDate").value = data.eventDate;
+      $("attendeeCount").value = data.attendeeCount;
 
-      document.getElementById("statusText").textContent = "Ready";
-      document.documentElement.style.visibility = "visible";
+      $("statusText").textContent = "Ready";
 
     } catch (err) {
 
       console.error(err);
 
-      document.getElementById("statusText").textContent = "Unable to load event information.";
+      $("statusText").textContent = "Unable to load event information.";
+
+    } finally {
+
+      // Reveal page after loading (success or failure)
       document.documentElement.style.visibility = "visible";
 
     }
