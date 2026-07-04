@@ -3,8 +3,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8"/>
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
   <meta name="theme-color" content="#8f61a5"/>
   <title>EVENT ATTENDANCE</title>
 
@@ -85,13 +84,41 @@
 	  </div>
    </div>
 
+  </section>
+
+  <!-- ===== CAMERA AND ATTENDANCE CARD ===== -->
+  	
+    <div id="status" class="status hidden" aria-live="polite">Recording …</div>
+
+    <!-- Result (NO recorded by row) -->
+    <section id="result" class="card hidden" aria-live="polite" aria-atomic="true">
+      <div class="row"><div class="label">Name</div><div class="value bold" id="resName">—</div></div>
+      <div class="row"><div class="label">ID</div><div class="value" id="resId">—</div></div>
+      <div class="row"><div class="label">Mark</div><div class="value" id="resMark">—</div></div>
+      <div class="row"><div class="label">Clock-in time</div><div class="value" id="resTime">—</div></div>
+
+      <div class="cardActions cardActionsCamera">
+        <button id="closeCard" class="btn closeCard" type="button">Close</button>
+        <button id="nextBtn" class="btn nextBtn" type="button">Next</button>
+      </div>
+    </section>
+
+    <dialog id="camDlg" class="camDlg">
+      <div class="camHead">
+        <div class="camTitle">Scan student QR</div>
+        <button id="closeCam" class="xBtn" aria-label="close" type="button">×</button>
+      </div>
+      <div class="camBody">
+        <video id="preview" playsinline muted></video>
+      </div>
+    </dialog>
+	  
    <div class="btnRow">
-      <button id="btnAttendance" class="btn peach" type="button" disabled>Spreadsheet</button>
+      <button id="btnAttendance" class="btn peach" type="button" disabled>Attendance Report</button>
    </div>	  
 
   </section>
-  
-  
+    
   
   <!-- ===== EVENT EDIT ===== -->
   <div class="title" style="color:#FFF; text-align:left;">STEP 3 - If event is incorrect, edit then save</div>
