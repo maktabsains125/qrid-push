@@ -248,6 +248,10 @@ html,body{
 }
 
 .btn.grey{
+  height: 50px;
+  display: flex;
+  align-items: center;      /* vertical */
+  justify-content: center;  /* horizontal */
   background:#A7A6BA;
   color:var(--ink);
   font-size:12px;
