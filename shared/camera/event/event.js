@@ -241,7 +241,7 @@
 
     setBusy(true);
 
-    showLoading("Saving event...");
+    showLoading("Saving event");
 
     try {
 
