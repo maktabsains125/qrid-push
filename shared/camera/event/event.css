@@ -248,7 +248,7 @@ html,body{
 }
 
 .btn.grey{
-  background:var(--grey);
+  background:var(--grey-deep);
   
 }
 
