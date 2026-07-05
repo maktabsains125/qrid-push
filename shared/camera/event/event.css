@@ -68,12 +68,12 @@ html,body{
 .col--r{ justify-content:flex-end; }
 
 .title{
-  margin:0;
+  margin:12px auto 0;
   text-align:left;
   font-size:var(--title-size);
   font-weight:600;
   color:#fff;
-  line-height:1.2;
+  line-height:1;
 }
 
 /* =========================
