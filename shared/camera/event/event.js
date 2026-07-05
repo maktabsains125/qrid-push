@@ -103,25 +103,27 @@
    ******************************************************/
   function showLoading(message = "Please wait") {
 
-    $("statusRow").style.display = "flex";
-    $("statusText").textContent = message;
-    $("statusDots").style.display = "";
+  $("loadingOverlay").classList.add("active");
+  $("statusText").textContent = message;
+  $("statusDots").style.display = "";
 
   }
 
 
   function hideLoading(message = "") {
 
+  if (message) {
+
     $("statusText").textContent = message;
     $("statusDots").style.display = "none";
 
-    if (!message) {
-
-      $("statusRow").style.display = "none";
-
-    }
+    return;
 
   }
+
+  $("loadingOverlay").classList.remove("active");
+
+}
 
 
   /******************************************************
@@ -260,16 +262,17 @@
       // Refresh the page information
       await loadEventInfo();
 
-      // Show success message
-      hideLoading("Event saved successfully.");
+      // Show success message in the popup
+    $("statusText").textContent = "Event saved successfully.";
+    $("statusDots").style.display = "none";
 
-      // Keep the message visible briefly
-      await new Promise(resolve => setTimeout(resolve, 1200));
+    // Keep it visible briefly
+    await new Promise(resolve => setTimeout(resolve, 1200));
 
-      // Hide the status row completely
-      hideLoading();
+    // Close the popup
+    hideLoading();
 
-      alert(data.message || "Event saved successfully.");
+    alert(data.message || "Event saved successfully.");
 
     }
 
