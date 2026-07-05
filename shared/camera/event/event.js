@@ -131,7 +131,7 @@
    ******************************************************/
   async function loadEventInfo() {
 
-    showLoading("Loading event information...");
+    showLoading("Loading event information");
 
     try {
 
