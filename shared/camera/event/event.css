@@ -175,46 +175,6 @@ html,body{
 }
 
 /* =========================
-   PHONE INPUT (prefix + input)
-   ========================= */
-.phoneWrap{
-  display:flex;
-  align-items:stretch;
-  width:100%;
-  background:#fff;
-  color:var(--ink);
-  border:1px solid var(--grey-deep);
-  border-radius:var(--radius);
-  min-height:44px;
-  overflow:hidden;
-}
-
-.phonePrefix{
-  display:flex;
-  align-items:center;
-  white-space:nowrap;
-  color:#666;
-  font-weight:600;
-  padding:10px 10px 10px 12px;
-}
-
-.phoneInput{
-  flex:1;
-  min-width:0;
-  border:0 !important;
-  outline:0 !important;
-  background:transparent !important;
-  color:inherit;
-  padding:10px 12px 10px 0;
-  font:inherit;
-  line-height:1.4;
-}
-
-.phoneInput:disabled{
-  color:#888;
-}
-
-/* =========================
    BUTTONS
    ========================= */
 .btnRow{
@@ -355,7 +315,6 @@ a:focus{
   align-items:center;
   gap:6px;
   flex-wrap:nowrap;
-  margin-top:12px;
 }
 
 /* text + dots (exact style requested) */
@@ -543,4 +502,42 @@ a:focus{
   display:block;
   width:100%;
   height:auto;
+}
+
+/* =========================
+   LOADING OVERLAY
+   ========================= */
+
+.loadingOverlay{
+  position: fixed;
+  inset: 0;
+
+  display: none;              /* Hidden by default */
+  justify-content: center;
+  align-items: center;
+
+  background: rgba(0,0,0,.45);
+  z-index: 99999;
+}
+
+.loadingOverlay.active{
+  display: flex;
+}
+
+/* Popup box */
+.loadingBox{
+  min-width: 260px;
+  max-width: 90vw;
+
+  padding: 20px 28px;
+
+  background: #111;
+  color: #fff;
+
+  border-radius: 16px;
+  box-shadow: 0 12px 40px rgba(0,0,0,.35);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
