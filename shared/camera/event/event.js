@@ -14,38 +14,93 @@
 
   const $ = (id) => document.getElementById(id);
 
+  let saving = false;
+
+  /******************************************************
+   * PREVENT LEAVING WHILE SAVING
+   ******************************************************/
+  window.addEventListener("beforeunload", function (e) {
+
+    if (!saving) return;
+
+    e.preventDefault();
+    e.returnValue = "";
+
+  });
+
+
+  /******************************************************
+   * ENABLE / DISABLE PAGE
+   ******************************************************/
+  function setBusy(busy) {
+
+    [
+      "btnCamera",
+      "btnScanner",
+      "btnManual",
+      "btnAttendance",
+      "btnEdit",
+      "btnSave",
+      "btnClose"
+    ].forEach(id => {
+
+      const el = $(id);
+
+      if (el) {
+        el.disabled = busy;
+      }
+
+    });
+
+  }
+
+
   document.addEventListener("DOMContentLoaded", () => {
 
     // ===== Navigation =====
     $("btnClose")?.addEventListener("click", () => {
+
+      if (saving) return;
+
       location.assign("/shared/camera/index.html");
+
     });
 
+
     $("btnAttendance")?.addEventListener("click", () => {
+
+      if (saving) return;
+
       window.open(
         "https://docs.google.com/spreadsheets/d/1XQxwrYfPF-G8Ajh4WTVrG4jOymIELrbfbC7MuN93Ykc/edit?usp=sharing",
         "_blank"
       );
+
     });
 
+
     $("btnEdit")?.addEventListener("click", () => {
+
+      if (saving) return;
+
       window.open(
         "https://docs.google.com/spreadsheets/d/1B1zH-uB6OJsdl1moO-DysWi_wV8JwQh9wzGwOH4dQRw/edit?usp=sharing",
         "_blank"
       );
+
     });
+
 
     $("btnSave")?.addEventListener("click", saveEvent);
 
-    // ===== Initial Load =====
     loadEventInfo();
 
   });
 
+
   /******************************************************
    * LOADING
    ******************************************************/
-
   function showLoading(message = "Please wait") {
 
     $("statusRow").style.display = "flex";
@@ -54,18 +109,24 @@
 
   }
 
-  function hideLoading(message = "Ready") {
+
+  function hideLoading(message = "") {
 
     $("statusText").textContent = message;
     $("statusDots").style.display = "none";
-    $("statusRow").style.display = "none";
+
+    if (!message) {
+
+      $("statusRow").style.display = "none";
+
+    }
 
   }
+
 
   /******************************************************
    * LOAD EVENT INFORMATION
    ******************************************************/
-
   async function loadEventInfo() {
 
     showLoading("Loading event information...");
@@ -83,9 +144,12 @@
       const data = await response.json();
 
       if (!data.success) {
+
         throw new Error(
-          data.message || "Unable to load event information."
+          data.message ||
+          "Unable to load event information."
         );
+
       }
 
       $("eventName").value = data.eventName;
@@ -105,12 +169,14 @@
         const el = $(id);
 
         if (el) {
+
           el.disabled = false;
+
         }
 
       });
 
-      hideLoading("Ready");
+      hideLoading();
 
     }
 
@@ -167,6 +233,12 @@
    ******************************************************/
   async function saveEvent() {
 
+    if (saving) return;
+
+    saving = true;
+
+    setBusy(true);
+
     showLoading("Saving event...");
 
     try {
@@ -185,10 +257,17 @@
 
       );
 
-      // Reload event information after saving
+      // Refresh the page information
       await loadEventInfo();
 
-      hideLoading("Ready");
+      // Show success message
+      hideLoading("Event saved successfully.");
+
+      // Keep the message visible briefly
+      await new Promise(resolve => setTimeout(resolve, 1200));
+
+      // Hide the status row completely
+      hideLoading();
 
       alert(data.message || "Event saved successfully.");
 
@@ -198,9 +277,17 @@
 
       console.error(err);
 
-      hideLoading("Save failed");
+      hideLoading("Save failed.");
 
       alert(err.message);
+
+    }
+
+    finally {
+
+      saving = false;
+
+      setBusy(false);
 
     }
 
