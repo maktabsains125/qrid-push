@@ -69,11 +69,11 @@ html,body{
 
 .title{
   margin:12px auto 0;
-  text-align:left;
+  text-align:center;
   font-size:var(--title-size);
   font-weight:600;
   color:#fff;
-  line-height:1;
+  line-height:1.2;
 }
 
 /* =========================
@@ -245,6 +245,11 @@ html,body{
 .btn:disabled{
   opacity:.5;
   cursor:not-allowed;
+}
+
+.btn.grey{
+  background:var(--grey);
+  
 }
 
 /* Make Clear tally full width inside its column */
