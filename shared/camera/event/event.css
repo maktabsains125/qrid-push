@@ -248,8 +248,9 @@ html,body{
 }
 
 .btn.grey{
-  background:var(--grey-deep);
-  
+  background:#A7A6BA;
+  color:var(--ink);
+  font-size:12px;
 }
 
 /* Make Clear tally full width inside its column */
