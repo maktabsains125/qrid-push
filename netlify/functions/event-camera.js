@@ -1,5 +1,5 @@
 const WEBAPP =
-  "https://script.google.com/macros/s/AKfycbwq9pnHvBYuEOTFRD1UOYzdCF2sOCrJmJsSXdIFH-8KH-bQl7qBMK7zYYXlP8dEiwqk/exec";
+  "https://script.google.com/macros/s/AKfycby7cUgZdKcgPoWheH1UaLpC36lJsYNLCiFpy4mmJK9cwEdXGFb2X89SeTKXJ6-rwPV3/exec";
 
 exports.handler = async (event) => {
 
