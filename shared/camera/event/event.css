@@ -112,7 +112,7 @@ html,body{
   font-size:16px;
   font-weight:500;
   margin:0 0 6px;
-  text-align:center;
+  text-align:left;
 }
 
 .input{
@@ -122,6 +122,7 @@ html,body{
   border:1px solid var(--grey-deep);
   border-radius:var(--radius);
   font-size:16px;
+  text-align:center;
   line-height:1.4;
   padding:10px 12px;
   min-height:44px;
