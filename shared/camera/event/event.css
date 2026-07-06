@@ -30,7 +30,7 @@ html,body{
   min-height:100svh;
   display:flex;
   flex-direction:column;
-  padding:10px 14px 24px;
+  padding:8px 14px 24px;
   gap:16px;
 }
 
@@ -68,7 +68,7 @@ html,body{
 .col--r{ justify-content:flex-end; }
 
 .title{
-  margin:12px auto 0;
+  margin:10px auto 0;
   text-align:center;
   font-size:var(--title-size);
   font-weight:600;
