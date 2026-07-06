@@ -209,13 +209,16 @@ html,body{
 }
 
 .btn.grey{
+  margin:12px auto 0;
+  max-width:1280px;
   height: 50px;
   display: flex;
   align-items: center;      /* vertical */
   justify-content: center;  /* horizontal */
-  background:#A7A6BA;
+  background:#b2b1c7;
+  border-radius:var(--radius);
   color:var(--ink);
-  font-size:12px;
+  font-size:16px;
 }
 
 /* Make Clear tally full width inside its column */
