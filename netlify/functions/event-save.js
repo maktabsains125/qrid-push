@@ -17,7 +17,7 @@ exports.handler = async (event) => {
     const body = JSON.parse(event.body || "{}");
 
     const response = await fetch(
-      "https://script.google.com/macros/s/AKfycbzXr50K7eOO4Xuz1RGk7DLSQcccieX28fKnTwNCtDxE6QZlMZOoxS7UCQRu3DPss0rOxg/exec",
+      "https://script.google.com/macros/s/AKfycbw5x4M6V65vTlbx9_25GIl2Wi7MfuG6CqeoF_mEvJPpu2Let5b4eAv6vQgFRiDfV5TfiQ/exec",
       {
 
         method: "POST",
