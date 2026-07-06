@@ -30,8 +30,8 @@ html,body{
   min-height:100svh;
   display:flex;
   flex-direction:column;
-  padding:8px 14px 24px;
-  gap:10px;
+  padding:8px 14px 20px;
+  gap:8px;
 }
 
 /* =========================
