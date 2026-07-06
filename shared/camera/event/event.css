@@ -42,7 +42,7 @@ html,body{
   grid-template-columns:10% 1fr 10%;
   align-items:center;
   justify-items:center;
-  min-height:56px;
+  min-height:45px;
 }
 .closeBtn{
   appearance:none;
