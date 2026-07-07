@@ -94,7 +94,7 @@
       const el  = document.querySelector(selector);
       if (!who || !el) return;
       const r = String(who.role || '').trim();
-      el.textContent = r ? `${who.code} (${r})` : `${who.code}`;
+      el.textContent = r ? `${who.code}` : `${who.code}`;
     }
 
     Auth.requireRole('HEP');   // restrict page to HEP
