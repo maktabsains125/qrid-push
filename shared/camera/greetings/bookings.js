@@ -1018,6 +1018,13 @@
 
   saveBtn?.addEventListener("click", async () => {
     if (!isAdmin) return;
+
+    if (!dirty.size) {
+        showCenter("All changes are already saved.");
+        setTimeout(hideCenter, 800);
+        return;
+    }
+
     await saveDirty(true);
   });
 
