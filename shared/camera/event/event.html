@@ -178,12 +178,26 @@
   <div class="manualBody">
 
     <div class="field">
-      <div class="label">Name</div>
 
-      <select id="manualName" class="input">
-        <option value="">Please select</option>
-      </select>
+  <div class="label">Name</div>
+
+  <div class="combo">
+
+    <input
+      id="manualName"
+      class="input"
+      type="text"
+      autocomplete="off"
+      placeholder="Type student name">
+
+    <div
+      id="manualList"
+      class="comboList hidden">
     </div>
+
+  </div>
+
+</div>
 
     <div class="field">
       <div class="label">ID</div>
