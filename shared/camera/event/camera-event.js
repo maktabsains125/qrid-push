@@ -12,6 +12,7 @@
   }
 
   const SCAN_URL = "/.netlify/functions/event-camera";
+  const STUDENT_URL = "/.netlify/functions/event-camera?action=getStudents";
 
   const $ = (id) => document.getElementById(id);
 
@@ -313,6 +314,53 @@ return data;
 
   }
 
+  /******************************************************
+ * LOAD STUDENTS
+ ******************************************************/
+async function loadStudents(){
+
+  try{
+
+    const response =
+      await fetch(STUDENT_URL);
+
+    const data =
+      await response.json();
+
+    if(!response.ok || !data.success){
+
+      throw new Error(
+        data.message ||
+        "Unable to load student list."
+      );
+
+    }
+
+    els.manualName.innerHTML =
+      '<option value="">Please select</option>';
+
+    data.students.forEach(student=>{
+
+      const option =
+        document.createElement("option");
+
+      option.value = student.name;
+      option.textContent = student.name;
+      option.dataset.id = student.id;
+
+      els.manualName.appendChild(option);
+
+    });
+
+  }
+
+  catch(err){
+
+    alert(err.message);
+
+  }
+
+}
 
 
   /******************************************************
@@ -505,6 +553,58 @@ return data;
 
     closeManual();
 
+    async function loadStudents(){
+
+  try{
+
+    const response =
+      await fetch(STUDENT_URL);
+
+    const data =
+      await response.json();
+
+    if(!response.ok || !data.success){
+
+      throw new Error(
+        data.message ||
+        "Unable to load student list."
+      );
+
+    }
+
+    
+
+    els.manualName.innerHTML =
+      '<option value="">Please select</option>';
+
+    data.students.forEach(student=>{
+
+      const option =
+        document.createElement("option");
+
+      option.value =
+        student.name;
+
+      option.textContent =
+        student.name;
+
+      option.dataset.id =
+        student.id;
+
+      els.manualName.appendChild(option);
+
+    });
+
+  }
+
+  catch(err){
+
+    alert(err.message);
+
+  }
+
+}
+    
     processScan({
       id,
       name
@@ -512,5 +612,7 @@ return data;
 
   }
 );
+
+  loadStudents();
 
 })();
