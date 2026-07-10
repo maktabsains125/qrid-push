@@ -509,6 +509,18 @@ a:focus{
   height:auto;
 }
 
+.manualBody{
+  background:#fff;
+  padding:18px;
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+
+#manualEnter{
+  margin-top:6px;
+}
+
 /* =========================
    LOADING OVERLAY
    ========================= */
