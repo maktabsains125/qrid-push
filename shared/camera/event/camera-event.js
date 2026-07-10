@@ -565,3 +565,5 @@ async function loadStudents(){
 
     }
   );
+
+  })();
