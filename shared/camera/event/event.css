@@ -215,7 +215,7 @@ html,body{
   display: flex;
   align-items: center;      /* vertical */
   justify-content: center;  /* horizontal */
-  background:var(--ink);
+  background:#454543;
   color:var(--ink-invert);
   font-size:16px;
 }
