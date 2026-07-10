@@ -269,6 +269,9 @@
   hideCard();
   hideStatus();
 
+  els.manualName.selectedIndex = 0;
+  els.manualId.value = "";
+
   els.manualDlg.showModal();
 
 }
@@ -520,99 +523,45 @@ async function loadStudents(){
         closeManual
       );
 
-      els.manualName.addEventListener("change", () => {
+            els.manualName?.addEventListener("change", () => {
 
-      const option =
-        els.manualName.selectedOptions[0];
+        const option =
+          els.manualName.selectedOptions[0];
 
         els.manualId.value =
-        option?.dataset.id || "";
+          option?.dataset.id || "";
 
       });
 
-    }
-  );
+      els.manualEnter?.addEventListener(
+        "click",
+        ()=>{
 
-  els.manualEnter?.addEventListener(
-  "click",
-  ()=>{
+          const id =
+            els.manualId.value.trim();
 
-    const id =
-      els.manualId.value.trim();
+          const name =
+            els.manualName.value.trim();
 
-    const name =
-      els.manualName.value.trim();
+          if(!id){
 
-    if(!id){
+            alert("Please select a student.");
 
-      alert("Please select a student.");
+            return;
 
-      return;
+          }
 
-    }
+          closeManual();
 
-    closeManual();
+          processScan({
+            id,
+            name
+          });
 
-    async function loadStudents(){
-
-  try{
-
-    const response =
-      await fetch(STUDENT_URL);
-
-    const data =
-      await response.json();
-
-    if(!response.ok || !data.success){
-
-      throw new Error(
-        data.message ||
-        "Unable to load student list."
+        }
       );
 
+      loadStudents();
+
     }
-
-    
-
-    els.manualName.innerHTML =
-      '<option value="">Please select</option>';
-
-    data.students.forEach(student=>{
-
-      const option =
-        document.createElement("option");
-
-      option.value =
-        student.name;
-
-      option.textContent =
-        student.name;
-
-      option.dataset.id =
-        student.id;
-
-      els.manualName.appendChild(option);
-
-    });
-
-  }
-
-  catch(err){
-
-    alert(err.message);
-
-  }
-
-}
-    
-    processScan({
-      id,
-      name
-    });
-
-  }
-);
-
-  loadStudents();
-
-})();
+  );
