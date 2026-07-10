@@ -222,7 +222,9 @@
 
   }
 
-
+  /******************************************************
+   * MANUAL
+   ******************************************************/
 
   function closeCamera(){
 
@@ -261,6 +263,24 @@
 
   }
 
+  function openManual(){
+
+  hideCard();
+  hideStatus();
+
+  els.manualDlg.showModal();
+
+}
+
+function closeManual(){
+
+  try{
+    els.manualDlg.close();
+  }
+  catch(_){}
+
+}
+  
 
    /******************************************************
    * POST JSON
@@ -444,16 +464,53 @@ return data;
 
       els.btnManual?.addEventListener(
         "click",
-        ()=>{
-
-          alert(
-            "Manual attendance will be added next."
-          );
-
-        }
+        openManual
       );
+
+      els.closeManual?.addEventListener(
+        "click",
+        closeManual
+      );
+
+      els.manualName.addEventListener("change", () => {
+
+      const option =
+        els.manualName.selectedOptions[0];
+
+        els.manualId.value =
+        option?.dataset.id || "";
+
+      });
 
     }
   );
+
+  els.manualEnter?.addEventListener(
+  "click",
+  ()=>{
+
+    const id =
+      els.manualId.value.trim();
+
+    const name =
+      els.manualName.value.trim();
+
+    if(!id){
+
+      alert("Please select a student.");
+
+      return;
+
+    }
+
+    closeManual();
+
+    processScan({
+      id,
+      name
+    });
+
+  }
+);
 
 })();
