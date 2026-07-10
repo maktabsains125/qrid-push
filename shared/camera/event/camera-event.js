@@ -39,7 +39,14 @@
 
     camDlg: $("camDlg"),
     closeCam: $("closeCam"),
-    preview: $("preview")
+    preview: $("preview"),
+
+    manualDlg: $("manualDlg"),
+    closeManual: $("closeManual"),
+
+    manualName: $("manualName"),
+    manualId: $("manualId"),
+    manualEnter: $("manualEnter"),
 
   };
 
