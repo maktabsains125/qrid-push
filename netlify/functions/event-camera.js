@@ -8,52 +8,105 @@ exports.handler = async (event) => {
 
   try {
 
-    // GET -> Student list
+    /******************************************************
+     * GET -> Student list
+     ******************************************************/
     if (event.httpMethod === "GET") {
 
-      const response = await fetch(
-        STUDENT_WEBAPP + "?action=getStudents"
-      );
+      try {
 
-      const text = await response.text();
+        const response = await fetch(
+          STUDENT_WEBAPP + "?action=getStudents"
+        );
 
-      return {
-        statusCode: response.status,
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: text
-      };
+        const text = await response.text();
+
+        return {
+          statusCode: response.status,
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: text
+        };
+
+      } catch (err) {
+
+        return {
+          statusCode: 500,
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            success: false,
+            where: "GET STUDENT_WEBAPP",
+            message: err.message,
+            stack: err.stack
+          })
+        };
+
+      }
 
     }
 
-    // POST -> Camera attendance
+
+    /******************************************************
+     * POST -> Attendance
+     ******************************************************/
     if (event.httpMethod === "POST") {
 
       const body = JSON.parse(event.body || "{}");
 
-      const response = await fetch(CAMERA_WEBAPP, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(body)
-      });
+      try {
 
-      const text = await response.text();
+        const response = await fetch(
+          CAMERA_WEBAPP,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(body)
+          }
+        );
 
-      return {
-        statusCode: response.status,
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: text
-      };
+        const text = await response.text();
+
+        return {
+          statusCode: response.status,
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: text
+        };
+
+      } catch (err) {
+
+        return {
+          statusCode: 500,
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            success: false,
+            where: "POST CAMERA_WEBAPP",
+            message: err.message,
+            stack: err.stack
+          })
+        };
+
+      }
 
     }
 
+
+    /******************************************************
+     * Invalid method
+     ******************************************************/
     return {
       statusCode: 405,
+      headers: {
+        "Content-Type": "application/json"
+      },
       body: JSON.stringify({
         success: false,
         message: "Method Not Allowed"
@@ -62,8 +115,6 @@ exports.handler = async (event) => {
 
   } catch (err) {
 
-    console.error(err);
-
     return {
       statusCode: 500,
       headers: {
@@ -71,7 +122,9 @@ exports.handler = async (event) => {
       },
       body: JSON.stringify({
         success: false,
-        message: err.message
+        where: "Top Level",
+        message: err.message,
+        stack: err.stack
       })
     };
 
