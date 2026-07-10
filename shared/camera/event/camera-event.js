@@ -46,6 +46,7 @@
     closeManual: $("closeManual"),
 
     manualName: $("manualName"),
+    manualList: $("manualList"),
     manualId: $("manualId"),
     manualEnter: $("manualEnter"),
 
@@ -266,16 +267,6 @@
 
   function openManual(){
 
-  hideCard();
-  hideStatus();
-
-  els.manualName.selectedIndex = 0;
-  els.manualId.value = "";
-
-  els.manualDlg.showModal();
-
-}
-
 function closeManual(){
 
   try{
@@ -320,6 +311,8 @@ return data;
   /******************************************************
  * LOAD STUDENTS
  ******************************************************/
+let students = [];
+
 async function loadStudents(){
 
   try{
@@ -339,21 +332,7 @@ async function loadStudents(){
 
     }
 
-    els.manualName.innerHTML =
-      '<option value="">Please select</option>';
-
-    data.students.forEach(student=>{
-
-      const option =
-        document.createElement("option");
-
-      option.value = student.name;
-      option.textContent = student.name;
-      option.dataset.id = student.id;
-
-      els.manualName.appendChild(option);
-
-    });
+    students = data.students || [];
 
   }
 
@@ -364,7 +343,6 @@ async function loadStudents(){
   }
 
 }
-
 
   /******************************************************
    * PROCESS SCAN
@@ -523,15 +501,60 @@ async function loadStudents(){
         closeManual
       );
 
-            els.manualName?.addEventListener("change", () => {
+            els.manualName?.addEventListener("input", ()=>{
 
-        const option =
-          els.manualName.selectedOptions[0];
+  const search =
+    els.manualName.value
+      .trim()
+      .toLowerCase();
 
-        els.manualId.value =
-          option?.dataset.id || "";
+  els.manualList.innerHTML = "";
 
-      });
+  if(!search){
+
+    els.manualList.classList.add("hidden");
+    return;
+
+  }
+
+  const matches = students.filter(student =>
+    student.name
+      .toLowerCase()
+      .includes(search)
+  );
+
+  matches.slice(0,10).forEach(student=>{
+
+    const item =
+      document.createElement("div");
+
+    item.className = "comboItem";
+    item.textContent = student.name;
+
+    item.onclick = ()=>{
+
+      els.manualName.value = student.name;
+      els.manualId.value = student.id;
+
+      els.manualList.classList.add("hidden");
+
+    };
+
+    els.manualList.appendChild(item);
+
+  });
+
+  if(matches.length){
+
+    els.manualList.classList.remove("hidden");
+
+  }else{
+
+    els.manualList.classList.add("hidden");
+
+  }
+
+});
 
       els.manualEnter?.addEventListener(
         "click",
