@@ -160,6 +160,51 @@
         <video id="preview" playsinline muted></video>
       </div>
     </dialog>
+
+	<dialog id="manualDlg" class="camDlg">
+
+  <div class="camHead">
+    <div class="camTitle">Select student name</div>
+
+    <button
+      id="closeManual"
+      class="xBtn"
+      type="button"
+      aria-label="close">
+      ×
+    </button>
+  </div>
+
+  <div class="manualBody">
+
+    <div class="field">
+      <div class="label">Name</div>
+
+      <select id="manualName" class="input">
+        <option value="">Please select</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <div class="label">ID</div>
+
+      <input
+        id="manualId"
+        class="input"
+        type="text"
+        readonly>
+    </div>
+
+    <button
+      id="manualEnter"
+      class="btn peach"
+      type="button">
+      Enter
+    </button>
+
+  </div>
+
+</dialog>
 	  	  
 
 <!-- ===== KEBAB OVERLAY ===== -->
