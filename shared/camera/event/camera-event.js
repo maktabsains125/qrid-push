@@ -267,6 +267,21 @@
 
   function openManual(){
 
+  hideCard();
+  hideStatus();
+
+  els.manualName.value = "";
+  els.manualId.value = "";
+
+  els.manualList.innerHTML = "";
+  els.manualList.classList.add("hidden");
+
+  els.manualDlg.showModal();
+
+  els.manualName.focus();
+
+}
+
 function closeManual(){
 
   try{
