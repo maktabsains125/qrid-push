@@ -1,7 +1,7 @@
 // netlify/functions/current-user.js
 export async function handler(event) {
   try {
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbyEqbVtvFGEgPDA4nTIQEnKwQ9WHY7IuiQipP413KpJgJYzklc4pfMUYdaf9jldWPo/exec";
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbx_ZrMtGeD2Egu_A8y1kW32vkseBbuozTTJqF5-GMkWEYdLjq6KO0yHWXwQj7InKN8M/exec";
     const method = event.httpMethod || "GET";
 
     if (method === "GET") {
