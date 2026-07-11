@@ -109,14 +109,11 @@ const Auth = {
     return ROLE_ROUTES[r] || "/roles/general";
   },
 
-  who(){
-    const s = this.load();
-    return s ? {
-        uid: s.uid || "",
-        code: s.code,
-        role: s.role
-    } : null;
-}
+  return s ? {
+    uid: s.uid || "",
+    code: s.code,
+    role: s.role
+} : null;
 
   requireRole(req){
     const s = this.load();
