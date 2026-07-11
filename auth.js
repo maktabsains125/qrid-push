@@ -105,17 +105,20 @@ const Auth = {
   },
 
   routeFor(role){
-    const r = (role || "").toUpperCase();
-    return ROLE_ROUTES[r] || "/roles/general";
-  },
+  const r = (role || "").toUpperCase();
+  return ROLE_ROUTES[r] || "/roles/general";
+},
 
+who(){
+  const s = this.load();
   return s ? {
     uid: s.uid || "",
     code: s.code,
     role: s.role
-} : null;
+  } : null;
+},
 
-  requireRole(req){
+requireRole(req){
     const s = this.load();
     if (!s){ location.href = "/"; return; }
     if (req && (s.role || "").toUpperCase() !== String(req).toUpperCase()){
