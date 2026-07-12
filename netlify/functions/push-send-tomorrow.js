@@ -32,7 +32,7 @@ exports.handler = async () => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        mode: "getTodayGreetingPushList"
+        mode: "getTomorrowGreetingPushList"
       })
     });
 
@@ -68,8 +68,8 @@ exports.handler = async () => {
     const results = await Promise.allSettled(
       rows.map(async (row) => {
         const payload = JSON.stringify({
-          title: "Greeting duty today",
-          body: `You have a greeting duty today for ${row.shift}`,
+          title: "Greeting duty tomorrow",
+          body: `Hello, you have a greeting duty tomorrow for ${row.shift}`,
           url: "/shared/camera/greetings/bookings.html",
           tag: `greeting-${row.code}-${data.dateKey}`
         });
