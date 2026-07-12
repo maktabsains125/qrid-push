@@ -86,6 +86,25 @@ const AuthCheck = (() => {
       }
 
       // ------------------------------------------
+      // Refresh local session with verified values
+      // ------------------------------------------
+
+      const session = Auth.who();
+
+      if (session) {
+
+      session.role = data.role;
+      session.uid  = data.uid;
+      session.code = data.code;
+
+      localStorage.setItem(
+      "mspsbs_session",
+      JSON.stringify(session)
+     );
+
+}
+
+      // ------------------------------------------
       // Save cache
       // ------------------------------------------
 
