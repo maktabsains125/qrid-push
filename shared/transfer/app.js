@@ -1,6 +1,6 @@
 /* /shared/attendance/app.js — Attendance main page (role-aware)
  * UPDATE: btnTranspr time-lock (Brunei time)
- * - Disabled daily from 05:00 to 15:00 (inclusive of 05:00, exclusive of 15:01)
+ * - Disabled daily from 05:00 to 14:10 (inclusive of 05:00, exclusive of 15:01)
  * - Enabled from 14:10 to 04:59 next day
  * - EXCEPT Fridays + Sundays: enabled all day
  * - Still only visible/usable for REGIS + CODER (ADMIN removed)
@@ -10,7 +10,7 @@
 (async function () {
   "use strict";
 
-  const who = await AuthCheck.requireAnyRole([
+  const who = await AuthCheck.requireRole([
     "CODER",
     "ADMIN",
     "WELFARE",
@@ -18,8 +18,6 @@
   ]);
 
   if (!who) return;
-
-  const role = String(who.role || "").toUpperCase().trim();
 
   // ===== ROLE ALLOW-LIST to access THIS PAGE at all =====
   const role = String(who.role || "").toUpperCase().trim();
@@ -139,12 +137,12 @@
       const verified = JSON.parse(
       localStorage.getItem("mspsbs_verified") || "{}"
       );
-      const r = String(verified.role || "").toUpperCase().trim();
-      const roleFromLoad =
-        (window.Auth && typeof Auth.load === "function" && Auth.load()?.role) || "";
-      const r = String(roleFromWho || roleFromLoad).toUpperCase().trim();
 
-      const dest =
+    const r = String(verified.role || "")
+    .toUpperCase()
+    .trim();
+
+    const dest =
         (window.Auth && typeof Auth.routeFor === "function" && r)
           ? Auth.routeFor(r)
           : r
