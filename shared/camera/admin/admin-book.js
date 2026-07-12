@@ -11,19 +11,19 @@
     }
   }
 
-  ready(() => {
-    // ===== AUTH GATE: ADMIN/CODER only =====
-    const who = (window.Auth && Auth.who && Auth.who()) || null;
-    if (!who) {
-      location.replace("/");
-      return;
-    }
-    const role = String(who.role || "").toUpperCase().trim();
-    const ALLOWED = new Set(["ADMIN", "CODER"]);
-    if (!ALLOWED.has(role)) {
-      location.replace(Auth.routeFor ? Auth.routeFor(role) : "/");
-      return;
-    }
+  ready(async () => {
+
+  // ===== SERVER VERIFIED AUTH GATE =====
+  const user = await AuthCheck.requireRole(
+    "ADMIN",
+    "CODER"
+  );
+
+  if (!user) return;
+
+  const role = user.role;
+  const uid  = user.uid;
+  const code = user.code;
 
     // ===== CONFIG =====
     const API = "/.netlify/functions/adbook-netlify";
