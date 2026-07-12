@@ -4,11 +4,6 @@
   // ==========================================
   // Authentication state
   // ==========================================
-
-  let who = null;
-  let role = "";
-  let userCode = "";
-  let isAdmin = false;
   
   // ===== Routes =====
   const ROUTE_CAMERA = "/shared/camera/index.html";
