@@ -10,13 +10,13 @@
 (async function () {
   "use strict";
 
-  const who = await AuthCheck.requireRole([
-    "CODER",
-    "ADMIN",
-    "WELFARE",
-    "REGIS"
-  ]);
-
+  const who = await AuthCheck.requireRole(
+  "CODER",
+  "ADMIN",
+  "WELFARE",
+  "REGIS"
+ );
+  
   if (!who) return;
 
   // ===== ROLE ALLOW-LIST to access THIS PAGE at all =====
