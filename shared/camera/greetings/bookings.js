@@ -1,40 +1,15 @@
 (() => {
   "use strict";
 
-  // ===== Require login (auth hydration safety) =====
-  const user = await AuthCheck.requireRole(
-    "FT",
-    "REGIS",
-    "ADMIN",
-    "WELFARE",
-    "HEP",
-    "CODER"
-);
+  // ==========================================
+  // Authentication state
+  // ==========================================
 
-if (!user) return;
-
-// Save verified user
-who = user;
-
-role = String(user.role || "").toUpperCase().trim();
-
-isAdmin = isAdminRole(role);
-
-if (adminBar) adminBar.hidden = !isAdmin;
-if (editBtn) editBtn.hidden = !isAdmin;
-if (saveBtn) saveBtn.hidden = !isAdmin;
-
-setBookingGateVisibility();
-
-if (monthBox) monthBox.disabled = !isAdmin;
-
-userCode = String(user.code || "").trim().toUpperCase();
-
-if (!userCode) {
-    showPopup("Account code missing. Please contact admin.");
-    return;
-}
-
+  let who = null;
+  let role = "";
+  let userCode = "";
+  let isAdmin = false;
+  
   // ===== Routes =====
   const ROUTE_CAMERA = "/shared/camera/index.html";
 
@@ -907,29 +882,40 @@ if (!userCode) {
 
   // ===== Load / init =====
   async function loadInit() {
-    who = await waitForWho();
-    if (!who) {
-      window.location.replace("/");
-      return;
-    }
 
-    role = String(who.role || "").toUpperCase();
-    isAdmin = isAdminRole(role);
+  const user = await AuthCheck.requireRole(
+    "FT",
+    "REGIS",
+    "ADMIN",
+    "WELFARE",
+    "HEP",
+    "CODER"
+  );
 
-    if (adminBar) adminBar.hidden = !isAdmin;
-    if (editBtn) editBtn.hidden = !isAdmin;
-    if (saveBtn) saveBtn.hidden = !isAdmin;
+  if (!user) return;
 
-    setBookingGateVisibility();
+  // Save verified user
+  who = user;
 
-    if (monthBox) monthBox.disabled = !isAdmin;
+  role = String(user.role || "").toUpperCase().trim();
+  isAdmin = isAdminRole(role);
 
-    userCode = getUserDisplayCode(who);
-    if (!userCode) {
-      showPopup("Account code missing. Please contact admin.");
-      return;
-    }
+  if (adminBar) adminBar.hidden = !isAdmin;
+  if (editBtn) editBtn.hidden = !isAdmin;
+  if (saveBtn) saveBtn.hidden = !isAdmin;
 
+  setBookingGateVisibility();
+
+  if (monthBox) monthBox.disabled = !isAdmin;
+
+  userCode = String(user.code || "").trim().toUpperCase();
+
+  if (!userCode) {
+    showPopup("Account code missing. Please contact admin.");
+    return;
+  }
+
+  // ===== Continue with the rest of your existing loadInit() code below =====
     refreshPushCard().catch(() => {});
     ensureServiceWorker().catch(() => {});
 
