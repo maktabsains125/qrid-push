@@ -29,7 +29,7 @@
     <header class="top">
       <div class="welcome">
         <h1>WELCOME</h1>
-        <div class="user" id="whoami">[USER]</div>
+        <div class="user" id="whoami"></div>
       </div>
 
       <!-- Right side: logo + kebab menu -->
@@ -96,69 +96,80 @@
 
   <!-- ===== Auth + whoami + warm-up ===== -->
   <script src="/auth.js"></script>
+  <script src="/shared/auth-check.js"></script>
   <script>
-    document.body.classList.add('locked');
+    document.body.classList.add("locked");
 
-    (function secureAccess(){
-      const who = (window.Auth && Auth.who && Auth.who()) || null;
+(async () => {
 
-      if (!who) {
-        location.replace('/?logout=1');
-        return;
+  // Show cached identity immediately
+  const whoami = document.getElementById("whoami");
+
+  let cached = null;
+
+try {
+  cached = JSON.parse(
+    localStorage.getItem("mspsbs_verified") || "null"
+  );
+} catch (_) {}
+
+  if (cached && whoami) {
+    whoami.textContent = `${cached.code} (${cached.role})`;
+  }
+
+  // Verify JWT + require CODER role
+  const user = await AuthCheck.requireRole("CODER");
+
+  if (!user) return;
+
+  // Update with verified identity
+  if (whoami) {
+    whoami.textContent = `${user.code} (${user.role})`;
+  }
+
+  // Unlock page
+  document.body.classList.remove("locked");
+  // Sync logout across tabs
+  window.addEventListener("storage", e => {
+  if (e.key === "ms_logout_broadcast") {
+    location.replace("/index.html?logout=1");
+  }
+});
+
+
+  // Warm Displays cache
+  const PROXY = "/.netlify/functions/displays";
+  const CACHE_KEY = "ms_displays_cache_v1";
+
+  try {
+
+    const res = await fetch(
+      `${PROXY}?full=1&warm=1`,
+      {
+        cache: "no-store",
+        keepalive: true
       }
+    );
 
-      const role = String(who.role || '').toUpperCase();
+    if (res.ok) {
 
-      if (role !== 'CODER') {
-        alert('Access denied — CODER role required.');
-        location.replace('/');
-        return;
-      }
+      const data = await res.json();
 
-      document.body.classList.remove('locked');
-    })();
+      localStorage.setItem(
+        CACHE_KEY,
+        JSON.stringify({
+          t: Date.now(),
+          data
+        })
+      );
 
-    function setWhoami(selector = '#whoami') {
-      const who = Auth.who && Auth.who();
-      const el  = document.querySelector(selector);
-      if (!who || !el) return;
-      const roleTxt = String(who.role || '').trim();
-      el.textContent = roleTxt ? `${who.code} (${roleTxt})` : `${who.code}`;
     }
 
-    Auth.requireRole('CODER');
-    setWhoami('#whoami');
+  } catch (err) {
+    console.error(err);
+  }
 
-    window.addEventListener('storage', e => {
-      if (e.key === 'ms_logout_broadcast') {
-        location.replace('/?logout=1');
-      }
-    });
-
-    (function warmDisplays() {
-      const who = Auth.who && Auth.who();
-      if (!who) return;
-
-      const PROXY = "/.netlify/functions/displays";
-      const CACHE_KEY = "ms_displays_cache_v1";
-      const url = `${PROXY}?full=1&warm=1`;
-
-      async function go() {
-        try {
-          const res = await fetch(url, { cache: "no-store", keepalive: true });
-          if (!res.ok) return;
-          const data = await res.json();
-          localStorage.setItem(CACHE_KEY, JSON.stringify({ t: Date.now(), data }));
-        } catch {}
-      }
-
-      if ("requestIdleCallback" in window) {
-        requestIdleCallback(go, { timeout: 2000 });
-      } else {
-        setTimeout(go, 800);
-      }
-    })();
-
+})();
     document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("menuBtn")
         ?.addEventListener("click", () => window.Kebab?.open());
