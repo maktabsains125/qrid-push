@@ -60,7 +60,7 @@ exports.handler = async () => {
           total: 0,
           sent: 0,
           failed: 0,
-          message: "No greeting duties for today."
+          message: "No greeting duties for tomorrow."
         })
       };
     }
