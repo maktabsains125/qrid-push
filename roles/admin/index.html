@@ -24,7 +24,7 @@
     <header class="top">
       <div class="welcome">
         <h1>WELCOME</h1>
-        <div class="user" id="whoami">[USER]</div>
+        <div class="user" id="whoami"></div>
       </div>
 
       <!-- Right side: logo + kebab menu -->
@@ -102,20 +102,39 @@
 <script>
   (async () => {
 
+  // ---------------------------
+  // WHOAMI element
+  // ---------------------------
+
+  const whoami = document.querySelector("#whoami");
+
+  // ---------------------------
+  // Show cached identity instantly
+  // ---------------------------
+
+  const cached = JSON.parse(
+    localStorage.getItem("mspsbs_verified") || "null"
+  );
+
+  if (cached && whoami) {
+    whoami.textContent = `${cached.code} (${cached.role})`;
+  }
+
+  // ---------------------------
+  // Verify JWT in background
+  // ---------------------------
+
   const user = await AuthCheck.requireRole("ADMIN");
 
   if (!user) return;
 
   // ---------------------------
-  // WHOAMI
+  // Replace with freshly verified identity
   // ---------------------------
-
-  const whoami = document.querySelector("#whoami");
 
   if (whoami) {
     whoami.textContent = `${user.code} (${user.role})`;
   }
-
   // ---------------------------
   // Logout sync
   // ---------------------------
