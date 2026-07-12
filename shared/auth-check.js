@@ -49,18 +49,16 @@ const AuthCheck = (() => {
   (Date.now() - cached.checkedAt) < CACHE_MS
 ) {
 
-  const session = Auth.who();
+  const session = Auth.who() || {};
 
-  if (session) {
+session.role = data.role;
+session.uid  = data.uid;
+session.code = data.code;
 
-    session.role = cached.role;
-    session.uid  = cached.uid;
-    session.code = cached.code;
-
-    localStorage.setItem(
-      "mspsbs_session",
-      JSON.stringify(session)
-    );
+localStorage.setItem(
+    "mspsbs_session",
+    JSON.stringify(session)
+);
 
   }
 
