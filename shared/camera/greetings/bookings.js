@@ -880,6 +880,7 @@
 
   const user = await AuthCheck.requireRole(
     "FT",
+    "GENERAL",
     "REGIS",
     "ADMIN",
     "WELFARE",
