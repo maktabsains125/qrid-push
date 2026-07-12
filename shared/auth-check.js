@@ -3,92 +3,173 @@
    Shared JWT verification
    ========================================== */
 
-async function verify(force = false) {
+const AuthCheck = (() => {
 
-  if (!window.Auth) {
-    location.replace("/");
-    return null;
-  }
+  const CACHE_KEY = "mspsbs_verified";
+  const CACHE_MS  = 2 * 60 * 60 * 1000;   // 2 hours
 
-  const who = Auth.who();
+  // ==========================================
+  // Verify JWT with server
+  // ==========================================
+  async function verify(force = false) {
 
-  if (!who || !who.token) {
-    Auth.clear();
-    localStorage.removeItem("mspsbs_verified");
-    location.replace("/");
-    return null;
-  }
-
-  // ============================
-  // 2-hour verification cache
-  // ============================
-
-  if (!force) {
-
-    const cached = JSON.parse(
-      localStorage.getItem("mspsbs_verified") || "null"
-    );
-
-    const TWO_HOURS = 2 * 60 * 60 * 1000;
-
-    if (
-      cached &&
-      cached.verified &&
-      cached.uid === who.uid &&
-      cached.token === who.token &&
-      (Date.now() - cached.checkedAt) < TWO_HOURS
-    ) {
-      return cached;
+    // Auth helper must exist
+    if (!window.Auth) {
+      location.replace("/");
+      return null;
     }
 
-  }
+    // Local session must exist
+    const who = Auth.who();
 
-  try {
+    if (!who || !who.token) {
+      Auth.clear();
+      localStorage.removeItem(CACHE_KEY);
+      location.replace("/");
+      return null;
+    }
 
-    const res = await fetch("/.netlify/functions/verify", {
-      method: "POST",
-      headers:{
-        "Content-Type":"application/json"
-      },
-      body: JSON.stringify({
-        token: who.token
-      })
-    });
+    // ------------------------------------------
+    // Use cached verification
+    // ------------------------------------------
 
-    const data = await res.json();
+    if (!force) {
 
-    if (!data.ok || !data.verified) {
+      try {
+
+        const cached = JSON.parse(
+          localStorage.getItem(CACHE_KEY) || "null"
+        );
+
+        if (
+          cached &&
+          cached.verified &&
+          cached.uid === who.uid &&
+          cached.token === who.token &&
+          (Date.now() - cached.checkedAt) < CACHE_MS
+        ) {
+          return cached;
+        }
+
+      } catch (_) {
+        localStorage.removeItem(CACHE_KEY);
+      }
+
+    }
+
+    // ------------------------------------------
+    // Ask server
+    // ------------------------------------------
+
+    try {
+
+      const res = await fetch("/.netlify/functions/verify", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          token: who.token
+        })
+      });
+
+      const data = await res.json();
+
+      if (!data.ok || !data.verified) {
+
+        Auth.clear();
+        localStorage.removeItem(CACHE_KEY);
+
+        location.replace("/");
+
+        return null;
+      }
+
+      // ------------------------------------------
+      // Save cache
+      // ------------------------------------------
+
+      localStorage.setItem(
+        CACHE_KEY,
+        JSON.stringify({
+          ...data,
+          token: who.token,
+          checkedAt: Date.now()
+        })
+      );
+
+      return data;
+
+    } catch (err) {
+
+      console.error(err);
 
       Auth.clear();
-      localStorage.removeItem("mspsbs_verified");
+      localStorage.removeItem(CACHE_KEY);
+
       location.replace("/");
 
       return null;
     }
 
-    // Save verification cache
-    localStorage.setItem(
-      "mspsbs_verified",
-      JSON.stringify({
-        ...data,
-        token: who.token,
-        checkedAt: Date.now()
-      })
+  }
+
+  // ==========================================
+  // Require one of these roles
+  // ==========================================
+
+  async function requireRole(...allowedRoles) {
+
+    const verified = await verify();
+
+    if (!verified) {
+      return null;
+    }
+
+    const role = String(verified.role || "")
+      .toUpperCase()
+      .trim();
+
+    const allowed = allowedRoles.map(r =>
+      String(r).toUpperCase().trim()
     );
 
-    return data;
+    if (!allowed.includes(role)) {
+
+      if (window.Auth && typeof Auth.routeFor === "function") {
+        location.replace(Auth.routeFor(role));
+      } else {
+        location.replace("/");
+      }
+
+      return null;
+    }
+
+    return verified;
 
   }
-  catch(err){
 
-    console.error(err);
+  // ==========================================
+  // Force re-verification
+  // ==========================================
 
-    Auth.clear();
-    localStorage.removeItem("mspsbs_verified");
-    location.replace("/");
-
-    return null;
-
+  async function refresh() {
+    return verify(true);
   }
 
-}
+  // ==========================================
+  // Clear verification cache
+  // ==========================================
+
+  function clearCache() {
+    localStorage.removeItem(CACHE_KEY);
+  }
+
+  return {
+    verify,
+    requireRole,
+    refresh,
+    clearCache
+  };
+
+})();
