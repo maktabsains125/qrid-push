@@ -294,55 +294,130 @@
     }
 
     // showTop=false prevents "Loading..." flash during saves
-    async function loadCounters(showTop = true) {
-      try {
-        if (showTop) topStatusLoading();
-        const data = await apiGet({ mode: "getCounters" });
-        const c = data.counters || {};
+async function loadCounters(showTop = true) {
 
-        // ---- CALCULATIONS (read-only) ----
-        setText(c_pmTeachersTotal, c.R10);
-        setText(c_amTeachersTotal, c.R11);
+  console.log("================================");
+  console.log("loadCounters() START");
+  console.log("================================");
 
-        setText(c_shift1SlotsTotal, c.R7);
-        setText(c_shift2SlotsTotal, c.S7);
-        setText(c_shift3SlotsTotal, c.T7);
+  try {
 
-        setText(c_shift1and3Total, c.R8);
-        setText(c_shiftsTotal, c.R9);
+    if (showTop) topStatusLoading();
 
-        setText(c_amPerYear, c.T10);
-        setText(c_amPerMonth, c.R12);
+    console.log("1. Calling apiGet()...");
 
-        setText(c_pmPerYear, c.T11);
-        setText(c_pmPerMonth, c.R13);
+    const data = await apiGet({ mode: "getCounters" });
 
-        // ---- CONTROLS (editable, fetched first) ----
-        setSelect(openMonth, c.R4);
+    console.log("2. apiGet() returned:");
+    console.log(data);
 
-        setValue(slotsShift1, c.R6);
-        setValue(slotsShift2, c.S6);
-        setValue(slotsShift3, c.T6);
+    const c = data.counters || {};
 
-        setValue(maxPerMonthAM, c.T12);
-        setValue(maxPerMonthPM, c.T13);
+    console.log("3. Counters:");
+    console.log(c);
 
-        setValue(setAvgAM, c.U12);
-        setValue(setAvgPM, c.U13);
+    console.log("4. DOM check:");
+    console.log({
+      openMonth,
+      slotsShift1,
+      slotsShift2,
+      slotsShift3,
+      maxPerMonthAM,
+      maxPerMonthPM,
+      setAvgAM,
+      setAvgPM,
+      shift1Start,
+      shift1End,
+      shift2Start,
+      shift2End,
+      shift3Start,
+      shift3End,
+      c_pmTeachersTotal,
+      c_amTeachersTotal
+    });
 
-        setValue(shift1Start, c.T15);
-        setValue(shift1End,   c.U15);
-        setValue(shift2Start, c.T16);
-        setValue(shift2End,   c.U16);
-        setValue(shift3Start, c.T17);
-        setValue(shift3End,   c.U17);
+    console.log("5. Updating CALCULATIONS...");
 
-        if (showTop) topStatus("");
-      } catch (err) {
-        topStatus(String(err?.message || err));
-      }
-    }
+    setText(c_pmTeachersTotal, c.R10);
+    setText(c_amTeachersTotal, c.R11);
 
+    setText(c_shift1SlotsTotal, c.R7);
+    setText(c_shift2SlotsTotal, c.S7);
+    setText(c_shift3SlotsTotal, c.T7);
+
+    setText(c_shift1and3Total, c.R8);
+    setText(c_shiftsTotal, c.R9);
+
+    setText(c_amPerYear, c.T10);
+    setText(c_amPerMonth, c.R12);
+
+    setText(c_pmPerYear, c.T11);
+    setText(c_pmPerMonth, c.R13);
+
+    console.log("6. Updating CONTROLS...");
+
+    setSelect(openMonth, c.R4);
+
+    console.log("openMonth =", openMonth?.value);
+
+    setValue(slotsShift1, c.R6);
+    console.log("slotsShift1 =", slotsShift1?.value);
+
+    setValue(slotsShift2, c.S6);
+    console.log("slotsShift2 =", slotsShift2?.value);
+
+    setValue(slotsShift3, c.T6);
+    console.log("slotsShift3 =", slotsShift3?.value);
+
+    setValue(maxPerMonthAM, c.T12);
+    console.log("maxPerMonthAM =", maxPerMonthAM?.value);
+
+    setValue(maxPerMonthPM, c.T13);
+    console.log("maxPerMonthPM =", maxPerMonthPM?.value);
+
+    setValue(setAvgAM, c.U12);
+    console.log("setAvgAM =", setAvgAM?.value);
+
+    setValue(setAvgPM, c.U13);
+    console.log("setAvgPM =", setAvgPM?.value);
+
+    setValue(shift1Start, c.T15);
+    console.log("shift1Start =", shift1Start?.value);
+
+    setValue(shift1End, c.U15);
+    console.log("shift1End =", shift1End?.value);
+
+    setValue(shift2Start, c.T16);
+    console.log("shift2Start =", shift2Start?.value);
+
+    setValue(shift2End, c.U16);
+    console.log("shift2End =", shift2End?.value);
+
+    setValue(shift3Start, c.T17);
+    console.log("shift3Start =", shift3Start?.value);
+
+    setValue(shift3End, c.U17);
+    console.log("shift3End =", shift3End?.value);
+
+    console.log("7. Finished updating page.");
+
+    if (showTop) topStatus("");
+
+  } catch (err) {
+
+    console.error("loadCounters() FAILED");
+    console.error(err);
+    console.error(err.stack);
+
+    topStatus(String(err?.message || err));
+
+  }
+
+  console.log("================================");
+  console.log("loadCounters() END");
+  console.log("================================");
+
+}
     // ===== SAVE (debounced) =====
     function debounce(fn, ms) {
       let t = null;
