@@ -2,7 +2,7 @@
 // Proxy -> Verify JWT GAS
 
 const VERIFY_GAS_URL =
-  "https://script.google.com/macros/s/AKfycbyp5OQFfpCq5udaUplhMigut81wzcEo-xN1vRcy8F55LKsWQAY1rw1Mreq0-sNjoAs4/exec";
+  "https://script.google.com/macros/s/AKfycbyrwfiADnS860AYVkWx8k8OlhO35c14P9PhYDcvNBBAOk_v-AqJ1ilZRvgPoWwRxj_h/exec";
 
 function corsHeaders(origin) {
   return {
