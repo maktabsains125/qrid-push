@@ -15,7 +15,7 @@ const AuthCheck = (() => {
 
     // Auth helper must exist
     if (!window.Auth) {
-      location.replace("/");
+      location.replace("/index.html");
       return null;
     }
 
@@ -42,14 +42,30 @@ const AuthCheck = (() => {
         );
 
         if (
-          cached &&
-          cached.verified &&
-          cached.uid === who.uid &&
-          cached.token === who.token &&
-          (Date.now() - cached.checkedAt) < CACHE_MS
-        ) {
-          return cached;
-        }
+  cached &&
+  cached.verified &&
+  cached.uid === who.uid &&
+  cached.token === who.token &&
+  (Date.now() - cached.checkedAt) < CACHE_MS
+) {
+
+  const session = Auth.who();
+
+  if (session) {
+
+    session.role = cached.role;
+    session.uid  = cached.uid;
+    session.code = cached.code;
+
+    localStorage.setItem(
+      "mspsbs_session",
+      JSON.stringify(session)
+    );
+
+  }
+
+  return cached;
+}
 
       } catch (_) {
         localStorage.removeItem(CACHE_KEY);
