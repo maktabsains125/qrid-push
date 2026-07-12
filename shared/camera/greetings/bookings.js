@@ -2,29 +2,38 @@
   "use strict";
 
   // ===== Require login (auth hydration safety) =====
-  function safeWho() {
-    try {
-      if (window.Auth && typeof Auth.who === "function") return Auth.who() || null;
-    } catch (_) {}
-    return null;
-  }
+  const user = await AuthCheck.requireRole(
+    "FT",
+    "REGIS",
+    "ADMIN",
+    "WELFARE",
+    "HEP",
+    "CODER"
+);
 
-  function sleep(ms) {
-    return new Promise(r => setTimeout(r, ms));
-  }
+if (!user) return;
 
-  async function waitForWho(maxMs = 1200, stepMs = 80) {
-    const t0 = Date.now();
-    let w = safeWho();
-    if (w) return w;
+// Save verified user
+who = user;
 
-    while (Date.now() - t0 < maxMs) {
-      await sleep(stepMs);
-      w = safeWho();
-      if (w) return w;
-    }
-    return null;
-  }
+role = String(user.role || "").toUpperCase().trim();
+
+isAdmin = isAdminRole(role);
+
+if (adminBar) adminBar.hidden = !isAdmin;
+if (editBtn) editBtn.hidden = !isAdmin;
+if (saveBtn) saveBtn.hidden = !isAdmin;
+
+setBookingGateVisibility();
+
+if (monthBox) monthBox.disabled = !isAdmin;
+
+userCode = String(user.code || "").trim().toUpperCase();
+
+if (!userCode) {
+    showPopup("Account code missing. Please contact admin.");
+    return;
+}
 
   // ===== Routes =====
   const ROUTE_CAMERA = "/shared/camera/index.html";
@@ -186,10 +195,6 @@
   function isAdminRole(r) {
     const rr = String(r || "").trim().toUpperCase();
     return rr === "ADMIN" || rr === "CODER";
-  }
-
-  function getUserDisplayCode(sess) {
-    return String(sess?.code || sess?.uid || "").trim().toUpperCase();
   }
 
   function getPushLinkKey() {
@@ -799,7 +804,7 @@
         monthKey: currentMonth,
         a1,
         code: userCode,
-        role
+        token: Auth.who().token
       });
 
       const value = String(data.value || "").trim().toUpperCase();
