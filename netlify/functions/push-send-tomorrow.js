@@ -69,7 +69,7 @@ exports.handler = async () => {
       rows.map(async (row) => {
         const payload = JSON.stringify({
           title: "Greeting duty tomorrow",
-          body: `Hello, you have a greeting duty tomorrow for ${row.shift}`,
+          body: `Reminder: ${row.gate} • ${row.shift} tomorrow.`,
           url: "/shared/camera/greetings/bookings.html",
           tag: `greeting-${row.code}-${data.dateKey}`
         });
