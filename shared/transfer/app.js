@@ -7,27 +7,22 @@
  */
 
 // ===== LOCK to signed in user only =====
-(function () {
+(async function () {
   "use strict";
 
-  const who = (window.Auth && Auth.who && Auth.who()) || null;
-  if (!who) {
-    window.location.replace("/");
-    return;
-  }
+  const who = await AuthCheck.requireAnyRole([
+    "CODER",
+    "ADMIN",
+    "WELFARE",
+    "REGIS"
+  ]);
+
+  if (!who) return;
+
+  const role = String(who.role || "").toUpperCase().trim();
 
   // ===== ROLE ALLOW-LIST to access THIS PAGE at all =====
   const role = String(who.role || "").toUpperCase().trim();
-  const ALLOWED_ROLES = ["CODER", "ADMIN", "WELFARE", "REGIS"];
-
-  if (!ALLOWED_ROLES.includes(role)) {
-    let dest = "/";
-    if (window.Auth && typeof Auth.routeFor === "function" && role) {
-      dest = Auth.routeFor(role) || "/";
-    }
-    window.location.replace(dest);
-    return;
-  }
 
   // ===== Helpers =====
   const $ = (s, root = document) => root.querySelector(s);
@@ -141,8 +136,10 @@
   // ===== Role-based redirection =====
   function goBackToRole() {
     try {
-      const roleFromWho =
-        (window.Auth && typeof Auth.who === "function" && Auth.who()?.role) || "";
+      const verified = JSON.parse(
+      localStorage.getItem("mspsbs_verified") || "{}"
+      );
+      const r = String(verified.role || "").toUpperCase().trim();
       const roleFromLoad =
         (window.Auth && typeof Auth.load === "function" && Auth.load()?.role) || "";
       const r = String(roleFromWho || roleFromLoad).toUpperCase().trim();
