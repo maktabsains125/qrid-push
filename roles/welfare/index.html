@@ -95,24 +95,24 @@
 
   <!-- ===== Auth + whoami ===== -->
   <script src="/auth.js"></script>
+  <script src="/shared/auth-check.js"></script>
   <script>
-    // Restrict page to WELFARE
-    Auth.requireRole('WELFARE');
+    (async () => {
 
-    // tiny helper: prints "CODE (ROLE)" if role exists, else just "CODE"
-    function setWhoami(selector = '#whoami') {
-      const who = Auth.who();
-      const el  = document.querySelector(selector);
-      if (!who || !el) return;
-      const r = String(who.role || '').trim();
-      el.textContent = r ? `${who.code} (${r})` : `${who.code}`;
-    }
-    setWhoami('#whoami');
+  const user = await AuthCheck.requireRole("WELFARE");
+  if (!user) return;
 
-    // multi-tab logout sync
-    window.addEventListener('storage', e=>{
-      if (e.key === 'ms_logout_broadcast') location.replace('/?logout=1');
-    });
+  document.querySelector("#whoami").textContent = user.code;
+
+  warmDisplays();
+
+  window.addEventListener("storage", e => {
+    if (e.key === "ms_logout_broadcast") {
+      location.replace("/?logout=1");
+     }
+   });
+
+  })(); 
   </script>
 
   <!-- ==== Wirings ==== -->
@@ -134,8 +134,9 @@
       const btn = document.querySelector('.tile[aria-label="profile"]');
       if (!btn) return;
 
-      const who  = window.Auth?.who?.() || {};
-      const role = String(who.role || '').toUpperCase();
+      const role = JSON.parse(
+	  localStorage.getItem("mspsbs_verified") || "{}"
+	  ).role || "";
 
       const PATH_BY_ROLE = {
         FT:      '/shared/profile/index.html',
@@ -164,9 +165,12 @@
 
   <!-- ===== Displays Warm-up (silent prefetch + server wake) ===== -->
   <script>
-  (function warmDisplays(){
-    const who = Auth.who && Auth.who();
-    if (!who) return; // only warm if logged in
+  function warmDisplays(){
+    const who = JSON.parse(
+    localStorage.getItem("mspsbs_verified") || "{}"
+    );
+
+if (!who.verified) return;
 
     const PROXY = "/.netlify/functions/displays";   // same as Displays page
     const CACHE_KEY = "ms_displays_cache_v1";
@@ -187,7 +191,7 @@
     } else {
       setTimeout(go, 500);
     }
-  })();
+  
   </script>
 <script src="/shared/pwa.js"></script>
 </body>
