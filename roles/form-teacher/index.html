@@ -129,22 +129,20 @@
 
   <!-- ===== Core functions ===== -->
   <script src="/auth.js"></script>
+  <script src="/shared/auth-check.js"></script>
   <script defer src="/gate-ft.js"></script>
 
   <!-- ===== Wirings + Displays warm-up ===== -->
   <script>
-  (function(){
-    Auth.requireRole('FT');
+  (async function(){
+    const user = await AuthCheck.requireRole("FT");
+    if (!user) return;
 
     // === Display name + role ===
-    (function setWhoami(){
-      const who = Auth.who();
-      const el  = document.getElementById('whoami');
-      if (who && el) {
-        const r = String(who.role || '').trim();
-        el.textContent = r ? `${who.code} (${r})` : `${who.code}`;
-      }
-    })();
+    const whoami = document.getElementById("whoami");
+    if (whoami) {
+    whoami.textContent = `${user.code} (${user.role})`;
+    }
 
     // === Class badge ===
     (function setClassBadgeTop(){
@@ -160,7 +158,7 @@
 
     // Multi-tab logout sync
     window.addEventListener('storage', e=>{
-      if (e.key === 'ms_logout_broadcast') location.replace('/?logout=1');
+      if (e.key === 'ms_logout_broadcast') location.replace('/index.html?logout=1');
     });
 
     // ==== Camera ====
@@ -199,9 +197,7 @@
 
   btn.addEventListener('click', ()=>{
     const ft  = Auth.ft ? Auth.ft() : {};
-    const who = Auth.who ? Auth.who() : null;
-
-    if (!who?.code) {
+    if (!user.code) {
       alert("Session expired. Please login again.");
       location.href = "/";
       return;
@@ -230,8 +226,7 @@
       const btn = document.querySelector('.tile[aria-label="profile"]');
       if (!btn) return;
 
-      const who  = window.Auth?.who?.() || {};
-      const role = String(who.role || '').toUpperCase();
+      const role = String(user.role || "").toUpperCase();
 
       const PATH_BY_ROLE = {
         FT:      '/shared/profile/index.html',
@@ -257,8 +252,7 @@
 
     // ===== Displays Warm-up (cache prefetch + server wake) =====
     (function warmDisplays() {
-      const who = Auth.who && Auth.who();
-      if (!who) return; // only warm when logged in
+      if (!user) return;
 
       const PROXY = "/.netlify/functions/displays"; // same endpoint as Displays page
       const CACHE_KEY = "ms_displays_cache_v1";
