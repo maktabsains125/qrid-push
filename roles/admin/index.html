@@ -98,14 +98,68 @@
 
   <!-- ===== Auth + whoami + warm-up ===== -->
 <script src="/auth.js"></script>
+<script src="/shared/auth-check.js"></script>
 <script>
-  function setWhoami(selector = '#whoami') {
-    const who = Auth.who();
-    const el  = document.querySelector(selector);
-    if (!who || !el) return;
-    const r = String(who.role || '').trim();
-    el.textContent = r ? `${who.code} (${r})` : `${who.code}`;
+  (async () => {
+
+  const user = await AuthCheck.requireRole("ADMIN");
+
+  if (!user) return;
+
+  // ---------------------------
+  // WHOAMI
+  // ---------------------------
+
+  const whoami = document.querySelector("#whoami");
+
+  if (whoami) {
+    whoami.textContent = `${user.code} (${user.role})`;
   }
+
+  // ---------------------------
+  // Logout sync
+  // ---------------------------
+
+  window.addEventListener("storage", e => {
+    if (e.key === "ms_logout_broadcast") {
+      location.replace("/?logout=1");
+    }
+  });
+
+  // ---------------------------
+  // Displays Warm-up
+  // ---------------------------
+
+  const PROXY = "/.netlify/functions/displays";
+  const CACHE_KEY = "ms_displays_cache_v1";
+
+  try {
+
+    const res = await fetch(
+      `${PROXY}?full=1&warm=1`,
+      {
+        cache: "no-store",
+        keepalive: true
+      }
+    );
+
+    if (res.ok) {
+
+      const data = await res.json();
+
+      localStorage.setItem(
+        CACHE_KEY,
+        JSON.stringify({
+          t: Date.now(),
+          data
+        })
+      );
+
+    }
+
+  } catch (_) {}
+
+})();
 
   Auth.requireRole('ADMIN');
   setWhoami('#whoami');
@@ -180,8 +234,9 @@
       const btn = document.querySelector('.tile[aria-label="profile"]');
       if (!btn) return;
 
-      const who  = window.Auth?.who?.() || {};
-      const role = String(who.role || '').toUpperCase();
+      const role = JSON.parse(
+      localStorage.getItem("mspsbs_verified") || "{}"
+      ).role || "";
 
       const PATH_BY_ROLE = {
         FT:      '/shared/profile/index.html',
