@@ -41,7 +41,7 @@ const AuthCheck = (() => {
           localStorage.getItem(CACHE_KEY) || "null"
         );
 
-        if (
+       if (
   cached &&
   cached.verified &&
   cached.uid === who.uid &&
@@ -49,20 +49,18 @@ const AuthCheck = (() => {
   (Date.now() - cached.checkedAt) < CACHE_MS
 ) {
 
-  const session = Auth.who() || {};
+    const session = Auth.who() || {};
 
-session.role = data.role;
-session.uid  = data.uid;
-session.code = data.code;
+    session.role = cached.role;
+    session.uid  = cached.uid;
+    session.code = cached.code;
 
-localStorage.setItem(
-    "mspsbs_session",
-    JSON.stringify(session)
-);
+    localStorage.setItem(
+        "mspsbs_session",
+        JSON.stringify(session)
+    );
 
-  }
-
-  return cached;
+    return cached;
 }
 
       } catch (_) {
