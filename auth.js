@@ -104,7 +104,7 @@ const Auth = {
     return { level:"", class:"", anchor:"", returnid:"", profileid:"" };
   },
 
-  routeFor(role){
+ routeFor(role){
   const r = (role || "").toUpperCase();
   return ROLE_ROUTES[r] || "/roles/general";
 },
@@ -117,7 +117,7 @@ who(){
     code: s.code,
     role: s.role
   } : null;
-}
+},
 
 requireRole(req){
     const s = this.load();
