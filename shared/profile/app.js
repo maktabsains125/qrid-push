@@ -1,28 +1,24 @@
 /* Profiles app — role-aware buttons + level view + GAS fetch
    + dropdown classes + loading status + modal per student */
 
-(function () {
-  "use strict";
+(async function () {
 
-  // ===== LOCK to signed in user only =====
-  const who = (window.Auth && Auth.who && Auth.who()) || null;
-  if (!who) {
-    window.location.replace("/");
-    return;
-  }
+"use strict";
 
-  // ===== ROLE ALLOW-LIST =====
-  const role = String(who.role || "").toUpperCase().trim();
-  const ALLOWED_ROLES = ["FT", "REGIS", "ADMIN", "HEP", "WELFARE", "CODER"];
+const user = await AuthCheck.requireRole(
+    "FT",
+    "REGIS",
+    "ADMIN",
+    "HEP",
+    "WELFARE",
+    "CODER"
+);
 
-  if (!ALLOWED_ROLES.includes(role)) {
-    let dest = "/roles/general";
-    if (window.Auth && typeof Auth.routeFor === "function") {
-      dest = Auth.routeFor(role || "GENERAL") || "/roles/general";
-    }
-    window.location.replace(dest);
-    return;
-  }
+if (!user) return;
+
+const role = user.role;
+const uid  = user.uid;
+const code = user.code;
 
   // ===== CONFIG =====
   const GAS_URL = "https://script.google.com/macros/s/AKfycbyheg1vZR_GmdanPj07Vr9qrsJv3bUcxHEBgEPPQiyhfzd3Vd3azeoiABPEAK6Sf77d/exec";
