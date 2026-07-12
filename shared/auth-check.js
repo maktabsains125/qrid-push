@@ -49,16 +49,13 @@ const AuthCheck = (() => {
   (Date.now() - cached.checkedAt) < CACHE_MS
 ) {
 
-    const session = Auth.who() || {};
+    const session = Auth.load();
 
     session.role = cached.role;
     session.uid  = cached.uid;
     session.code = cached.code;
 
-    localStorage.setItem(
-        "mspsbs_session",
-        JSON.stringify(session)
-    );
+    Auth.save(session);
 
     return cached;
 }
@@ -101,7 +98,7 @@ const AuthCheck = (() => {
       // Refresh local session with verified values
       // ------------------------------------------
 
-      const session = Auth.who();
+      const session = Auth.load();
 
       if (session) {
 
@@ -109,12 +106,8 @@ const AuthCheck = (() => {
       session.uid  = data.uid;
       session.code = data.code;
 
-      localStorage.setItem(
-      "mspsbs_session",
-      JSON.stringify(session)
-     );
-
-}
+      Auth.save(session);
+      }
 
       // ------------------------------------------
       // Save cache
