@@ -126,6 +126,7 @@
 
       // Normalize role casing and save via shared Auth (mspsbs_session)
       const sess = data.session || {};
+      console.log("LOGIN SESSION:", sess);
       if (sess.role) sess.role = String(sess.role).toUpperCase();
 
       // ✅ Require UID (new auth identity)
