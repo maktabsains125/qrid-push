@@ -11,10 +11,11 @@
     }
   }
 
-  ready(() => {
-    const who = (window.Auth && Auth.who && Auth.who()) || null;
-    const role = String(who?.role || "").toUpperCase().trim();
+  ready(async () => {
 
+    const user = await AuthCheck.verify();
+    if (!user) return;
+    const role = String(user.role || "").toUpperCase().trim();
     const $ = (id) => document.getElementById(id);
 
     // ===== MENU =====
