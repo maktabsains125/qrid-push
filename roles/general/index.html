@@ -21,7 +21,7 @@
     <header class="top">
       <div class="welcome">
         <h1>WELCOME</h1>
-        <div class="user" id="whoami">[USER]</div>
+        <div class="user" id="whoami"></div>
       </div>
 
       <!-- Right side: logo + kebab menu -->
@@ -97,13 +97,20 @@
 
   <!-- Auth + page guard for role '' (empty). No arg = just ensure logged in. -->
   <script src="/auth.js"></script>
+  <script src="/shared/auth-check.js"></script>
   <script>
     // Ensure a session exists (no specific role required for this dashboard)
-    Auth.requireRole();
+    <script>
+(async () => {
 
-    const who = Auth.who();
-    const el  = document.getElementById('whoami');
-    if (who && el) el.textContent = String(who.code || '').trim(); // code only
+    const user = await AuthCheck.verify();
+    if (!user) return;
+
+    const el = document.getElementById("whoami");
+    if (el) el.textContent = user.code;
+
+})();
+</script>
 
     // multi-tab logout sync
     window.addEventListener("storage", (e)=>{
