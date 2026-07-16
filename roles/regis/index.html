@@ -144,7 +144,7 @@
 
   // Enable Profile button only after verification
   
-  setupProfileButton(user.role);
+  
 
   warmDisplays();
 
@@ -201,17 +201,14 @@ attendanceBtn?.addEventListener("click", () => {
 
 // ==== Profile button ====
 
-function setupProfileButton(role) {
+(function(){
 
-    role = String(role || "")
-        .trim()
-        .toUpperCase();
-
-    const btn = document.querySelector(
-        '.tile[aria-label="profile"]'
-    );
-
+    const btn = document.querySelector('.tile[aria-label="profile"]');
     if (!btn) return;
+
+    const role = JSON.parse(
+        localStorage.getItem("mspsbs_verified") || "{}"
+    ).role || "";
 
     const PATH_BY_ROLE = {
         FT: "/shared/profile/index.html",
@@ -224,28 +221,19 @@ function setupProfileButton(role) {
     const ALLOW = new Set(Object.keys(PATH_BY_ROLE));
 
     if (!ALLOW.has(role)) {
-
         btn.disabled = true;
         btn.style.opacity = "0.45";
         btn.style.pointerEvents = "none";
-
         return;
     }
 
-    btn.disabled = false;
-    btn.style.opacity = "";
-    btn.style.pointerEvents = "";
-
     const dest = PATH_BY_ROLE[role];
-
-    console.log("Profile clicked");
-    console.log("Destination =", dest);
 
     btn.addEventListener("click", () => {
         location.assign(dest);
     });
 
-} 
+})();
   </script>
   <!-- ===== Displays Warm-up ===== -->
   <script>
