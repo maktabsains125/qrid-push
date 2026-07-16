@@ -143,7 +143,12 @@
   document.querySelector("#whoami").textContent = user.code;
 
   // Enable Profile button only after verification
-  setupProfileButton(user.role);
+  
+  const verified = JSON.parse(
+    localStorage.getItem("mspsbs_verified") || "{}"
+);
+
+setupProfileButton(verified.role);
 
   warmDisplays();
 
@@ -201,6 +206,9 @@ attendanceBtn?.addEventListener("click", () => {
 // ==== Profile button ====
 
 function setupProfileButton(role){
+    role = String(role || "")
+    .trim()
+    .toUpperCase();
 
     const btn = document.querySelector(
         '.tile[aria-label="profile"]'
