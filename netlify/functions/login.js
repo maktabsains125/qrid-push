@@ -7,10 +7,10 @@
 // - Restricts payload to { code, password }
 // - Optional: adds server secret header (can be ignored by GAS)
 
-const GAS_URL = "https://script.google.com/macros/s/AKfycbwORXDRTekbukZcoReZH6Bw9rbFJl4waQyz-N9qryHOT8_b1Vz2D7XIwFbH5dDVO79q/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbwFf-yF4CrdS78HwLw5WgZVNYMo2Xv0jNEc_oUb4kWiv4Vew0GZ1-L-THtmaXFRCTtl/exec";
 
-// Optional secret between Netlify and GAS (only useful if you also enforce it in GAS)
-const PROXY_KEY = process.env.LOGIN_PROXY_KEY || ""; // set in Netlify env vars if you want
+// Optional secret between Netlify and GAS (only useful if also enforce it in GAS)
+const PROXY_KEY = process.env.LOGIN_PROXY_KEY || ""; // set in Netlify env vars possible too
 
 const CODE_RE = /^[A-Z0-9]{1,12}$/;
 
