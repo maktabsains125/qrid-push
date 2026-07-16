@@ -238,6 +238,9 @@ function setupProfileButton(role) {
 
     const dest = PATH_BY_ROLE[role];
 
+    console.log("Profile clicked");
+    console.log("Destination =", dest);
+
     btn.addEventListener("click", () => {
         location.assign(dest);
     });
