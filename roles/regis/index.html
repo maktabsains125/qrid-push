@@ -144,11 +144,7 @@
 
   // Enable Profile button only after verification
   
-  const verified = JSON.parse(
-    localStorage.getItem("mspsbs_verified") || "{}"
-);
-
-setupProfileButton(verified.role);
+  setupProfileButton(user.role);
 
   warmDisplays();
 
@@ -205,10 +201,11 @@ attendanceBtn?.addEventListener("click", () => {
 
 // ==== Profile button ====
 
-function setupProfileButton(role){
+function setupProfileButton(role) {
+
     role = String(role || "")
-    .trim()
-    .toUpperCase();
+        .trim()
+        .toUpperCase();
 
     const btn = document.querySelector(
         '.tile[aria-label="profile"]'
@@ -217,13 +214,11 @@ function setupProfileButton(role){
     if (!btn) return;
 
     const PATH_BY_ROLE = {
-
         FT: "/shared/profile/index.html",
         REGIS: "/shared/profile/index.html",
         ADMIN: "/shared/profile/index.html",
         HEP: "/shared/profile/index.html",
         WELFARE: "/shared/profile/index.html"
-
     };
 
     const ALLOW = new Set(Object.keys(PATH_BY_ROLE));
@@ -233,6 +228,7 @@ function setupProfileButton(role){
         btn.disabled = true;
         btn.style.opacity = "0.45";
         btn.style.pointerEvents = "none";
+
         return;
     }
 
@@ -240,15 +236,13 @@ function setupProfileButton(role){
     btn.style.opacity = "";
     btn.style.pointerEvents = "";
 
-    // Remove any previous click handler
-    btn.onclick = null;
+    const dest = PATH_BY_ROLE[role];
 
-    // Assign the click handler
-    btn.onclick = () => {
-        location.assign(PATH_BY_ROLE[role]);
-    };
+    btn.addEventListener("click", () => {
+        location.assign(dest);
+    });
 
-}  
+} 
   </script>
   <!-- ===== Displays Warm-up ===== -->
   <script>
