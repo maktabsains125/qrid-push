@@ -7,7 +7,7 @@
 // - Restricts payload to { code, password }
 // - Optional: adds server secret header (can be ignored by GAS)
 
-const GAS_URL = "https://script.google.com/macros/s/AKfycbzag3y3KzLZdezUvPTAhKfuxwTRrhgwynLwWGh-yadRP5KjRj9PADtTTi6lE6EWeMbx/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbwORXDRTekbukZcoReZH6Bw9rbFJl4waQyz-N9qryHOT8_b1Vz2D7XIwFbH5dDVO79q/exec";
 
 // Optional secret between Netlify and GAS (only useful if you also enforce it in GAS)
 const PROXY_KEY = process.env.LOGIN_PROXY_KEY || ""; // set in Netlify env vars if you want
