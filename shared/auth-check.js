@@ -8,6 +8,24 @@ const AuthCheck = (() => {
   const CACHE_KEY = "mspsbs_verified";
   const CACHE_MS  = 2 * 60 * 60 * 1000;   // 2 hours
 
+   function jwtExpired(token) {
+
+  try {
+
+    const payload = JSON.parse(
+      atob(token.split(".")[1])
+    );
+
+    return Date.now() >= payload.exp * 1000;
+
+  } catch {
+
+    return true;
+
+  }
+
+}
+
   // ==========================================
   // Verify JWT with server
   // ==========================================
@@ -28,6 +46,13 @@ const AuthCheck = (() => {
       location.replace("/");
       return null;
     }
+
+   // JWT already expired?
+   if (jwtExpired(who.token)) {
+
+   force = true;
+
+   }
 
     // ------------------------------------------
     // Use cached verification
