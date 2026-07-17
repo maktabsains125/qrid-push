@@ -28,15 +28,19 @@ async function fetchWithTimeout(url, options = {}, timeoutMs = 15000) {
 
 exports.handler = async () => {
   try {
+
     const res = await fetchWithTimeout(GAS_URL, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json"
+      },
       body: JSON.stringify({
         mode: "getTodayGreetingPushList"
       })
     });
 
     const text = await res.text();
+
     let data = {};
 
     try {
@@ -52,9 +56,13 @@ exports.handler = async () => {
     const rows = Array.isArray(data.rows) ? data.rows : [];
 
     if (!rows.length) {
+      console.log("No greeting duties for today.");
+
       return {
         statusCode: 200,
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json"
+        },
         body: JSON.stringify({
           ok: true,
           total: 0,
@@ -67,6 +75,7 @@ exports.handler = async () => {
 
     const results = await Promise.allSettled(
       rows.map(async (row) => {
+
         const payload = JSON.stringify({
           title: "Greeting duty today",
           body: `Reminder: ${row.gate} • ${row.shift} today.`,
@@ -74,54 +83,136 @@ exports.handler = async () => {
           tag: `greeting-${row.code}-${data.dateKey}`
         });
 
-        await webpush.sendNotification(row.subscription, payload);
-        return { code: row.code };
+        await webpush.sendNotification(
+          row.subscription,
+          payload
+        );
+
+        return row.code;
       })
     );
 
     let sent = 0;
     let failed = 0;
 
+    const successUsers = [];
+    const failedUsers = [];
+
     for (let i = 0; i < results.length; i++) {
+
       const result = results[i];
       const row = rows[i];
 
       if (result.status === "fulfilled") {
+
         sent++;
-      } else {
-        failed++;
-        const err = result.reason;
-        console.error(
-          "Push failed:",
-          row.code,
-          err && (err.statusCode || err.message || err)
+
+        successUsers.push({
+          code: row.code,
+          gate: row.gate,
+          shift: row.shift,
+          retried: false
+        });
+
+        continue;
+      }
+
+      const firstErr = result.reason;
+
+      console.warn(
+        `Retrying ${row.code}...`,
+        firstErr?.statusCode || firstErr?.message || firstErr
+      );
+
+      try {
+
+        const payload = JSON.stringify({
+          title: "Greeting duty today",
+          body: `Reminder: ${row.gate} • ${row.shift} today.`,
+          url: "/shared/camera/greetings/bookings.html",
+          tag: `greeting-${row.code}-${data.dateKey}`
+        });
+
+        await webpush.sendNotification(
+          row.subscription,
+          payload
         );
 
-        // Optional future improvement:
-        // if (err && (err.statusCode === 404 || err.statusCode === 410)) {
-        //   deactivate subscription in GAS sheet here
-        // }
+        sent++;
+
+        successUsers.push({
+          code: row.code,
+          gate: row.gate,
+          shift: row.shift,
+          retried: true
+        });
+
+        console.log(`Retry succeeded: ${row.code}`);
+
+      } catch (retryErr) {
+
+        failed++;
+
+        failedUsers.push({
+          code: row.code,
+          gate: row.gate,
+          shift: row.shift,
+          status: retryErr?.statusCode || "",
+          error: retryErr?.message || String(retryErr)
+        });
+
+        console.error(
+          `Retry failed: ${row.code}`,
+          retryErr?.statusCode || retryErr?.message || retryErr
+        );
+
       }
+
     }
+
+    console.log("====================================");
+    console.log("PUSH NOTIFICATION SUMMARY");
+    console.log("====================================");
+    console.log(`Total : ${rows.length}`);
+    console.log(`Sent  : ${sent}`);
+    console.log(`Failed: ${failed}`);
+    console.log("");
+
+    console.log("Successful users:");
+    console.table(successUsers);
+
+    console.log("Failed users:");
+    console.table(failedUsers);
 
     return {
       statusCode: 200,
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json"
+      },
       body: JSON.stringify({
         ok: true,
         total: rows.length,
         sent,
-        failed
+        failed,
+        successUsers,
+        failedUsers
       })
     };
+
   } catch (err) {
+
+    console.error(err);
+
     return {
       statusCode: 500,
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json"
+      },
       body: JSON.stringify({
         ok: false,
-        error: String(err && err.message ? err.message : err)
+        error: String(err?.message || err)
       })
     };
+
   }
 };
