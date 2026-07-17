@@ -422,15 +422,21 @@
       clearLocalPushLinked();
     }
 
-    if (Notification.permission === "granted" && existingSub && serverSaved) {
-      setPushCardState({
-        text: "Notifications are enabled for greeting duty reminders.",
-        buttonLabel: "On",
-        buttonDisabled: true
-      });
-      return;
+    if (Notification.permission === "granted" && existingSub) {
+
+    try {
+    await savePushSubscription(existingSub.toJSON());
+    } catch (e) {
+    console.warn("Failed to refresh push subscription:", e);
     }
 
+    setPushCardState({
+    text: "Notifications are enabled for greeting duty reminders.",
+    buttonLabel: "On",
+    buttonDisabled: true
+    });
+  return;
+}
     if (Notification.permission === "granted" && existingSub && !serverSaved) {
       setPushCardState({
         text: "This browser is already allowed to send notifications. Simply press Enable notifications.",
