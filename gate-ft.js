@@ -7,7 +7,7 @@
 
   if (who && el) {
     // UID usually should NOT be shown to users; keep it internal
-    el.textContent = `${who.code} (${who.role || "GENERAL"})`;
+    el.textContent = `${who.code}`;
   }
 
   // Useful for debugging / backend calls
