@@ -222,34 +222,11 @@
 
 
     // ==== PROFILE (role-aware) ====
-    (function(){
-      const btn = document.querySelector('.tile[aria-label="profile"]');
-      if (!btn) return;
-
-      const role = String(user.role || "").toUpperCase();
-
-      const PATH_BY_ROLE = {
-        FT:      '/shared/profile/index.html',
-        REGIS:   '/shared/profile/index.html',
-        ADMIN:   '/shared/profile/index.html',
-        HEP:     '/shared/profile/index.html',
-        WELFARE: '/shared/profile/index.html',
-        // GENERAL: '/shared/profile/readonly.html',
-      };
-
-      const ALLOW = new Set(Object.keys(PATH_BY_ROLE));
-
-      if (!ALLOW.has(role)) {
-        btn.disabled = true;
-        btn.style.opacity = '0.45';
-        btn.style.pointerEvents = 'none';
-        return;
-      }
-
-      const dest = PATH_BY_ROLE[role];
-      btn.addEventListener('click', () => location.assign(dest));
-    })();
-
+   // ==== Profile ====
+document.querySelector('.tile[aria-label="profile"]')
+  ?.addEventListener("click", () => {
+    location.assign("/shared/profile/index.html");
+  });
     // ===== Displays Warm-up (cache prefetch + server wake) =====
     (function warmDisplays() {
       if (!user) return;
