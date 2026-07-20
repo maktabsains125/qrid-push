@@ -1,0 +1,117 @@
+/* ======================================================
+   SHARED OVERLAY
+====================================================== */
+
+.overlayLoading{
+  position:fixed;
+  inset:0;
+
+  display:none;
+  justify-content:center;
+  align-items:center;
+
+  background:rgba(0,0,0,.45);
+
+  z-index:999999;
+}
+
+.overlayLoading.active{
+  display:flex;
+}
+
+.overlayBox{
+
+  min-width:260px;
+  max-width:90vw;
+
+  padding:20px 28px;
+
+  background:#111;
+  color:#fff;
+
+  border-radius:16px;
+
+  box-shadow:0 12px 40px rgba(0,0,0,.35);
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
+}
+
+.overlayRow{
+
+  display:flex;
+  align-items:center;
+  gap:6px;
+
+  flex-wrap:nowrap;
+
+}
+
+.overlayText,
+.overlayDots{
+
+  font:15px/1.45 ui-monospace,
+       SFMono-Regular,
+       Menlo,
+       Monaco,
+       Consolas,
+       "Liberation Mono",
+       "Courier New",
+       monospace;
+
+  font-weight:700;
+  color:#fff;
+
+  white-space:nowrap;
+
+}
+
+.overlayDots{
+
+  width:3ch;
+
+}
+
+#overlayDots{
+
+  display:inline-block;
+
+  overflow:hidden;
+
+  width:3ch;
+
+  white-space:pre;
+
+  text-align:left;
+
+  animation:overlayDotsWidth 1.2s steps(3,end) infinite;
+
+}
+
+#overlayDots::after{
+
+  content:"...";
+
+}
+
+@keyframes overlayDotsWidth{
+
+  0%{
+    width:1ch;
+  }
+
+  33%{
+    width:2ch;
+  }
+
+  66%{
+    width:3ch;
+  }
+
+  100%{
+    width:3ch;
+  }
+
+}
