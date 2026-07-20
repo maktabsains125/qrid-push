@@ -151,29 +151,25 @@
 
   try {
 
-    const res = await fetch(
-      `${PROXY}?full=1&warm=1`,
-      {
-        cache: "no-store",
-        keepalive: true
-      }
-    );
+    fetch(`${PROXY}?full=1&warm=1`, {
+  cache: "no-store",
+  keepalive: true
+})
+.then(async res => {
+  if (!res.ok) return;
 
-    if (res.ok) {
+  const data = await res.json();
 
-      const data = await res.json();
-
-      localStorage.setItem(
-        CACHE_KEY,
-        JSON.stringify({
-          t: Date.now(),
-          data
-        })
-      );
-
-    }
-
-  } catch (_) {}
+  localStorage.setItem(
+    CACHE_KEY,
+    JSON.stringify({
+      t: Date.now(),
+      data
+    })
+  );
+})
+.catch(() => {});
+   
 
 })();
 </script>
