@@ -129,7 +129,7 @@
   Push.refreshSubscription(user.code)
   .catch(e => console.warn("Push sync skipped:", e));
   if (whoami) {
-  whoami.textContent = `${user.code} (${user.role})`;
+  whoami.textContent = `${user.code}`;
  }
     
   // ---------------------------
