@@ -14,7 +14,6 @@
 
   // ===== API =====
   const API = "/.netlify/functions/bookings-netlify";
-  const PUSH_API = "/.netlify/functions/push-subscribe";
 
   // ===== DOM =====
   const pageTitle = document.getElementById("pageTitle");
@@ -73,10 +72,6 @@
     B: { 1: ["L","M","N"], 2: ["O","P","Q"], 3: ["R","S","T"] },
     C: { 1: ["U","V","W"], 2: ["X","Y","Z"], 3: ["AA","AB","AC"] },
   };
-
-  // ===== Push notifications =====
-  const PUSH_PUBLIC_KEY = "BIjJvyTjSAwpqPNrMiczDwHUQ8T0v_-ITLvPPMTTPv-mq9Eg0Q79kaJkCFqK1vxmoMOjovQ3GNasnPwYKbWqIvo";
-  const PUSH_SW_URL = "/sw.js";
 
   // ===== State =====
   let who = null;
@@ -237,68 +232,7 @@
   }
 
   // ===== Push notification helpers =====
-  function isIosLike() {
-    const ua = navigator.userAgent || "";
-    const touchMac = navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1;
-    return /iPhone|iPad|iPod/.test(ua) || touchMac;
-  }
-
-  function isStandalonePwa() {
-    return window.matchMedia?.("(display-mode: standalone)")?.matches || window.navigator.standalone === true;
-  }
-
-  function urlBase64ToUint8Array(base64String) {
-    const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
-    const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
-    const raw = atob(base64);
-    return Uint8Array.from([...raw].map(ch => ch.charCodeAt(0)));
-  }
-
-  function getDeviceId() {
-  let id = localStorage.getItem("pushDeviceId");
-  if (!id) {
-    id = crypto.randomUUID();
-    localStorage.setItem("pushDeviceId", id);
-   }
-  return id;
-  }
-
-  async function ensureServiceWorker() {
-    if (!("serviceWorker" in navigator)) {
-      throw new Error("Service worker is not supported.");
-    }
-    return navigator.serviceWorker.register(PUSH_SW_URL, { scope: "/" });
-  }
-
-  async function savePushSubscription(subscription) {
-    const res = await fetch(PUSH_API, {
-      method: "POST",
-      headers: { "Content-Type":"application/json" },
-      body: JSON.stringify({
-        mode: "savePushSubscription",
-        code: userCode,
-        deviceId: getDeviceId(),
-        subscription
-      })
-    });
-
-    const text = await res.text();
-    let data = null;
-
-    try {
-      data = JSON.parse(text);
-    } catch {
-      throw new Error("Bad JSON from push save endpoint");
-    }
-
-    if (!res.ok || !data.ok) {
-      throw new Error((data && data.error) || "Failed to save subscription");
-    }
-
-    return data;
-  }
-
-   
+  
   function setPushCardState({ text, buttonLabel, buttonDisabled }) {
     if (!pushCard) return;
 
@@ -351,8 +285,7 @@
     
     let existingSub = null;
     try {
-      const reg = await ensureServiceWorker();
-      existingSub = await reg.pushManager.getSubscription();
+    existingSub = await Push.getSubscription();
     } catch (_) {
       existingSub = null;
     }
@@ -360,7 +293,7 @@
     if (Notification.permission === "granted" && existingSub) {
 
     try {
-    await savePushSubscription(existingSub.toJSON());
+    await Push.refreshSubscription(userCode);
     } catch (e) {
     console.warn("Failed to refresh push subscription:", e);
     }
@@ -387,53 +320,6 @@
       buttonLabel: "Enable notifications",
       buttonDisabled: false
     });
-  }
-
-  async function enablePushNotifications() {
-    if (!("Notification" in window)) {
-      throw new Error("Notifications are not supported on this device/browser.");
-    }
-
-    if (isIosLike() && !isStandalonePwa()) {
-      throw new Error("On iPhone/iPad, add this app to Home Screen first, then open it from Home Screen.");
-    }
-
-    if (!("serviceWorker" in navigator)) {
-      throw new Error("Service worker is not supported on this device/browser.");
-    }
-
-    if (!("PushManager" in window)) {
-      throw new Error("Push notifications are not available in this browser view.");
-    }
-
-    let permission = Notification.permission;
-
-    if (permission === "denied") {
-      throw new Error("Notifications were blocked before. Please enable them in browser/site settings first.");
-    }
-
-    if (permission === "default") {
-      permission = await Notification.requestPermission();
-    }
-
-    if (permission !== "granted") {
-      throw new Error("Notification permission was not granted.");
-    }
-
-    const reg = await ensureServiceWorker();
-
-    let sub = await reg.pushManager.getSubscription();
-    if (!sub) {
-      sub = await reg.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey: urlBase64ToUint8Array(PUSH_PUBLIC_KEY)
-      });
-    }
-
-    await savePushSubscription(sub.toJSON());
-
-    await refreshPushCard();
-    showPopup("Notifications enabled.");
   }
 
   // ===== Month menu =====
@@ -859,20 +745,13 @@ async function loadInit() {
       return;
     }
 
-    try {
-    const reg = await ensureServiceWorker();
-    const sub = await reg.pushManager.getSubscription();
-
-    if (sub) {
-        await savePushSubscription(sub.toJSON());
-    }
-
+Push.ensureServiceWorker().catch(() => {});
+try {
+    await Push.refreshSubscription(userCode);
 } catch (e) {
     console.warn("Push sync skipped:", e);
 }
-
-    refreshPushCard().catch(() => {});
-    ensureServiceWorker().catch(() => {});
+await refreshPushCard();
 
     pageTitle.textContent = "BOOK GREETINGS";
 
@@ -1017,7 +896,7 @@ async function loadInit() {
 
   pushEnableBtn?.addEventListener("click", async () => {
     try {
-      await enablePushNotifications();
+      await Push.enableNotifications(userCode);
     } catch (err) {
       showPopup(String(err.message || err));
       await refreshPushCard();
