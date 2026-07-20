@@ -255,7 +255,7 @@
     const hasSW = ("serviceWorker" in navigator);
     const hasPushManager = ("PushManager" in window);
 
-    if (isIosLike() && !isStandalonePwa()) {
+    if (Push.isIosLike() && !Push.isStandalonePwa()) {
       setPushCardState({
         text: "To receive notifications on iPhone/iPad, add this app to Home Screen first, then open it from Home Screen.",
         buttonLabel: "Enable notifications",
