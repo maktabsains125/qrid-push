@@ -169,9 +169,13 @@
   );
 })
 .catch(() => {});
-   
+
+} catch (_) {
+  // ignore warm-up errors
+}
 
 })();
+
 </script>
    <!-- ==== Wirings (NO nested <script> here) ==== -->
   <script>
