@@ -24,6 +24,7 @@ window.Push = (() => {
 
   function isIosLike() {
     const ua = navigator.userAgent || "";
+
     const touchMac =
       navigator.platform === "MacIntel" &&
       navigator.maxTouchPoints > 1;
@@ -57,8 +58,8 @@ window.Push = (() => {
 
     const base64 =
       (base64String + padding)
-      .replace(/-/g, "+")
-      .replace(/_/g, "/");
+        .replace(/-/g, "+")
+        .replace(/_/g, "/");
 
     const raw = atob(base64);
 
@@ -78,7 +79,19 @@ window.Push = (() => {
       );
     }
 
+    // Ensure the service worker is active
+    await navigator.serviceWorker.ready;
+
     return reg;
+  }
+
+  async function getSubscription() {
+
+    if (!isSupported()) return null;
+
+    const reg = await ensureServiceWorker();
+
+    return reg.pushManager.getSubscription();
   }
 
   async function saveSubscription(code, subscription) {
@@ -108,7 +121,9 @@ window.Push = (() => {
     const data = await res.json();
 
     if (!res.ok || !data.ok) {
-      throw new Error(data.error || "Failed to save subscription.");
+      throw new Error(
+        data.error || "Failed to save subscription."
+      );
     }
 
     return data;
@@ -122,9 +137,7 @@ window.Push = (() => {
       return false;
     }
 
-    const reg = await ensureServiceWorker();
-
-    const sub = await reg.pushManager.getSubscription();
+    const sub = await getSubscription();
 
     if (!sub) {
       return false;
@@ -209,6 +222,8 @@ window.Push = (() => {
     enableNotifications,
 
     ensureServiceWorker,
+
+    getSubscription,
 
     getDeviceId,
 
