@@ -519,7 +519,10 @@
     Overlay.hide();
   }
 });
-  }
+
+  monthMenu.appendChild(div);
+    });
+ }
 
   function openMonthMenu() {
     if (!isAdmin) return;
