@@ -97,9 +97,9 @@
 
 
   <!-- ===== Auth + whoami + warm-up ===== -->
-<script src="/auth.js"></script>
-<script src="/shared/auth-check.js"></script>
-<script src="/shared/push.js"></script>
+<script defer src="/auth.js"></script>
+<script defer src="/shared/auth-check.js"></script>
+<script defer src="/shared/push.js"></script>
 <script>
   (async () => {
 
@@ -124,23 +124,14 @@
   // ---------------------------
   // Verify JWT in background
   // ---------------------------
-
   const user = await AuthCheck.requireRole("ADMIN");
-
   if (!user) return;
-  try {
-  await Push.refreshSubscription(user.code);
-} catch (e) {
-  console.warn("Push sync skipped:", e);
-}
-
-  // ---------------------------
-  // Replace with freshly verified identity
-  // ---------------------------
-
+  Push.refreshSubscription(user.code)
+  .catch(e => console.warn("Push sync skipped:", e));
   if (whoami) {
-    whoami.textContent = `${user.code} (${user.role})`;
-  }
+  whoami.textContent = `${user.code} (${user.role})`;
+ }
+    
   // ---------------------------
   // Logout sync
   // ---------------------------
