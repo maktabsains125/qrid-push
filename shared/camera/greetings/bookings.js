@@ -292,12 +292,6 @@
 
     if (Notification.permission === "granted" && existingSub) {
 
-    try {
-    await Push.refreshSubscription(userCode);
-    } catch (e) {
-    console.warn("Failed to refresh push subscription:", e);
-    }
-
     setPushCardState({
     text: "Notifications are enabled for greeting duty reminders.",
     buttonLabel: "On",
@@ -745,20 +739,21 @@ async function loadInit() {
       return;
     }
 
+pageTitle.textContent = "BOOK GREETINGS";
+
+// Start loading booking data immediately
+const initPromise = apiGet({
+    mode: "init",
+    code: userCode
+});
+
+// Push runs completely in the background
 Push.ensureServiceWorker().catch(() => {});
-try {
-    await Push.refreshSubscription(userCode);
-} catch (e) {
-    console.warn("Push sync skipped:", e);
-}
-await refreshPushCard();
+Push.refreshSubscription(userCode).catch(console.warn);
+refreshPushCard().catch(console.warn);
 
-    pageTitle.textContent = "BOOK GREETINGS";
-
-    init = await apiGet({
-      mode: "init",
-      code: userCode
-    });
+// Wait only for booking data
+init = await initPromise;
 
     bookingGate = Number(init.bookingGate || 0);
 
@@ -899,7 +894,9 @@ await refreshPushCard();
       await Push.enableNotifications(userCode);
     } catch (err) {
       showPopup(String(err.message || err));
-      await refreshPushCard();
+      setTimeout(() => {
+      refreshPushCard().catch(console.warn);
+      }, 0);
     }
   });
 
