@@ -959,6 +959,7 @@ async function loadInit() {
 
   } finally {
 
+    await new Promise(resolve => requestAnimationFrame(resolve));
     Overlay.hide();
 
   }
