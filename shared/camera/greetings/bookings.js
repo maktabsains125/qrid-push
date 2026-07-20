@@ -271,6 +271,15 @@
     return Uint8Array.from([...raw].map(ch => ch.charCodeAt(0)));
   }
 
+  function getDeviceId() {
+  let id = localStorage.getItem("pushDeviceId");
+  if (!id) {
+    id = crypto.randomUUID();
+    localStorage.setItem("pushDeviceId", id);
+   }
+  return id;
+  }
+
   async function ensureServiceWorker() {
     if (!("serviceWorker" in navigator)) {
       throw new Error("Service worker is not supported.");
