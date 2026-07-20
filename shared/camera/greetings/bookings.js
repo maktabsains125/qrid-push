@@ -875,6 +875,8 @@
   // ===== Load / init =====
   async function loadInit() {
 
+  Overlay.showLoading();
+
   const user = await AuthCheck.requireRole(
     "FT",
     "GENERAL",
@@ -919,6 +921,7 @@
 
     bookingGate = Number(init.bookingGate || 0);
     applyBookingGateUI();
+    Overlay.hide();
 
     currentMonth = String(init.monthKey || "JAN").toUpperCase();
     slotCounts = init.slotCounts || {
@@ -1051,6 +1054,7 @@
 
   // ===== Start =====
   loadInit().catch(err => {
+    Overlay.hide();
     console.error(err);
     showPopup(String(err.message || err));
     setStatus("Tap twice to book or unbook.");
