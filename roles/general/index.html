@@ -106,8 +106,11 @@
     const user = await AuthCheck.verify();
     if (!user) return;
 
-    const el = document.getElementById("whoami");
-    if (el) el.textContent = user.code;
+  // === Display name + role ===
+    const whoami = document.getElementById("whoami");
+    if (whoami) {
+    whoami.textContent = `${user.code} (${user.role})`;
+    }
 
 })();
 </script>
