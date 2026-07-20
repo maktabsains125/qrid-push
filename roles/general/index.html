@@ -99,9 +99,6 @@
   <script src="/auth.js"></script>
   <script src="/shared/auth-check.js"></script>
   <script>
-    // Ensure a session exists (no specific role required for this dashboard)
-    
-<script>
 (async () => {
   const user = await AuthCheck.verify();
   if (!user) return;
@@ -111,13 +108,12 @@
     whoami.textContent = `${user.code} (${user.role})`;
   }
 
-  // multi-tab logout sync
-  window.addEventListener("storage", (e)=>{
+  // Multi-tab logout sync
+  window.addEventListener("storage", (e) => {
     if (e.key === "ms_logout_broadcast") {
       location.replace("/?logout=1");
     }
   });
-
 })();
 </script>
 
