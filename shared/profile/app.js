@@ -5,6 +5,10 @@
 
 "use strict";
 
+Overlay.showLoading();
+
+try {
+
 const user = await AuthCheck.requireRole(
     "FT",
     "REGIS",
@@ -32,46 +36,9 @@ const code = user.code;
   const levelView = document.getElementById("levelView");
   const closeBtn  = document.getElementById("closeBtn");
 
-  // ===== Loading status area =====
-  const loadStatus = document.getElementById("loadStatus");
-  const loadMsg    = document.getElementById("loadMsg");
-  const dotsEl     = document.getElementById("dots");
-
   let dotsTimer = null;
 
-  function startDots() {
-    stopDots();
-    if (!dotsEl) return;
-    const frames = ["...", ".. ", ".  ", "   "];
-    let i = 0;
-    dotsEl.textContent = frames[0];
-    dotsTimer = setInterval(() => {
-      i = (i + 1) % frames.length;
-      dotsEl.textContent = frames[i];
-    }, 500);
-  }
-
-  function stopDots() {
-    if (dotsTimer) {
-      clearInterval(dotsTimer);
-      dotsTimer = null;
-    }
-  }
-
-  function showStatus(message) {
-    if (!loadStatus) return;
-    loadStatus.hidden = false;
-    if (loadMsg) loadMsg.textContent = message;
-    startDots();
-  }
-
-  function hideStatus() {
-    stopDots();
-    if (!loadStatus) return;
-    loadStatus.hidden = true;
-  }
-
-  // ===== Sections =====
+   // ===== Sections =====
   function showHome() {
     if (homeView) homeView.hidden = false;
     if (levelView) levelView.hidden = true;
@@ -79,7 +46,6 @@ const code = user.code;
     document.body.classList.remove("mode-level");
     document.documentElement.classList.remove("mode-level");
 
-    hideStatus();
   }
 
   function showLevel() {
@@ -116,7 +82,6 @@ const code = user.code;
       gotoRoleDashboard();
     }
   });
-
   // ===== Tabs =====
   const tabSearch  = document.getElementById("tabSearch");
   const tabClass   = document.getElementById("tabClass");
@@ -525,7 +490,7 @@ const code = user.code;
       return;
     }
 
-    showStatus("Names loading. Please wait");
+    Overlay.showLoading();
     try {
       if (tbody) {
         tbody.innerHTML = `<tr><td colspan="23">Loading…</td></tr>`;
@@ -550,7 +515,7 @@ const code = user.code;
       }
       activateTableRowClicks();
     } finally {
-      hideStatus();
+      Overlay.hide();
     }
   }
 
@@ -619,7 +584,7 @@ const code = user.code;
       cachedRows = [];
       lastClassRows = [];
 
-      showStatus("Classes loading. Please wait");
+      Overlay.showLoading();
       try {
         const data = await fetchClasses(currentLevel);
         const classes = data.classes || [];
@@ -627,7 +592,7 @@ const code = user.code;
       } catch (err) {
         populateClassDropdowns([], role === "FT" ? ftClass : "");
       } finally {
-        hideStatus();
+        Overlay.hide();
       }
 
       if (role === "FT" && ftClass) {
@@ -645,10 +610,10 @@ const code = user.code;
     });
   });
 
-  // Optional auto-open FT own level on load:
-  // if (role === "FT" && ftLevel) {
-  //   const btn = levelBtns.find(b => b.dataset.level === String(ftLevel));
-  //   if (btn && !btn.disabled) btn.click();
-  // }
+} finally {
+  await new Promise(resolve => requestAnimationFrame(resolve));
+  Overlay.hide();
+
+}
 
 })();
