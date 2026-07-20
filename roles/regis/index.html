@@ -134,11 +134,15 @@
   <!-- ===== Core functions ===== -->
   <script src="/auth.js"></script>
   <script src="/shared/auth-check.js"></script>
+  <script src="/shared/push.js"></script>
   <script>
 (async () => {
 
   const user = await AuthCheck.requireRole("REGIS");
   if (!user) return;
+  Push.ensureServiceWorker().catch(() => {});
+  Push.refreshSubscription(user.code)
+    .catch(err => console.warn("Push sync skipped:", err));
 
   document.querySelector("#whoami").textContent = user.code;
 
