@@ -98,6 +98,7 @@
   <!-- Auth + page guard for role '' (empty). No arg = just ensure logged in. -->
   <script src="/auth.js"></script>
   <script src="/shared/auth-check.js"></script>
+  <script src="/shared/push.js"></script>
   <script>
 (async () => {
   const user = await AuthCheck.verify();
@@ -105,8 +106,13 @@
 
   const whoami = document.getElementById("whoami");
   if (whoami) {
-    whoami.textContent = `${user.code}`;
+    whoami.textContent = user.code;
   }
+
+  // Refresh push subscription in the background
+  Push.ensureServiceWorker().catch(() => {});
+  Push.refreshSubscription(user.code)
+      .catch(err => console.warn("Push sync skipped:", err));
 
   // Multi-tab logout sync
   window.addEventListener("storage", (e) => {
@@ -115,7 +121,8 @@
     }
   });
 })();
-</script>
+  
+  </script>
 
   <!-- ==== Wirings ==== -->
   <script>
