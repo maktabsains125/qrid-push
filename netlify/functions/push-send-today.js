@@ -1,6 +1,6 @@
 const webpush = require("web-push");
 
-const GAS_URL = "https://script.google.com/macros/s/AKfycbz0og6Pz3CNFtIjigT2PQYxfnS2IeizG9adj5mtNW-Z3MTjkvmf4HBpZMjeTqLPDWTi/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycbwra1NxV5hDcTcV3sWOlwQwAR6292rgGWqpFxDndiESK9ai_ALlaPWsiIGWEgFaVXFA/exec";
 
 if (!process.env.VAPID_PUBLIC_KEY || !process.env.VAPID_PRIVATE_KEY) {
   throw new Error("Missing VAPID_PUBLIC_KEY or VAPID_PRIVATE_KEY");
