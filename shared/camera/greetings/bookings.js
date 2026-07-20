@@ -43,9 +43,6 @@
   const popupX = document.getElementById("popupX");
   const popupMsg = document.getElementById("popupMsg");
 
-  const saveOverlay = document.getElementById("saveOverlay");
-  const saveCardText = document.getElementById("saveCardText");
-
   // ===== Booking gate toggle =====
   const bookingGateBar = document.getElementById("bookingGateBar");
   const bookingGateToggle = document.getElementById("bookingGateToggle");
@@ -114,15 +111,6 @@
 
   function hidePopup() {
     popup.hidden = true;
-  }
-
-  function showCenter(text) {
-    saveCardText.textContent = text || "";
-    saveOverlay.hidden = false;
-  }
-
-  function hideCenter() {
-    saveOverlay.hidden = true;
   }
 
   function monthLabel(key) {
@@ -769,12 +757,15 @@
       return;
     }
 
-    const actionText = current ? "Cancelling..." : "Booking...";
+   try {
 
-    try {
-      showCenter(actionText);
-      setStatus("Saving...");
+  if (current) {
+    Overlay.showCancelling();
+  } else {
+    Overlay.showBooking();
+  }
 
+  setStatus("Saving...");
       const data = await apiPost({
         mode: "toggle",
         monthKey: currentMonth,
@@ -789,10 +780,10 @@
       const rowObj2 = monthRows.find(r => r.rIndex === rowNum);
       if (rowObj2) setValueForA1_(rowObj2, a1, value);
 
-      hideCenter();
+      Overlay.hide();
       applyBookingGateUI();
     } catch (err) {
-      hideCenter();
+      Overlay.hide();
       showPopup(String(err.message || err));
       applyBookingGateUI();
     }
@@ -843,7 +834,7 @@
     dirty.forEach((value, a1) => updates.push({ a1, value }));
 
     try {
-      if (showOverlayCard) showCenter("Saving...");
+      if (showOverlayCard) Overlay.showSaving();
       setStatus("Saving...");
 
       await apiPost({ mode: "saveCells", monthKey: currentMonth, updates });
@@ -851,10 +842,10 @@
       dirty.clear();
       applyUpdatesToUI(updates);
 
-      if (showOverlayCard) hideCenter();
+      if (showOverlayCard) Overlay.hide();
       applyBookingGateUI();
     } catch (err) {
-      if (showOverlayCard) hideCenter();
+      if (showOverlayCard) Overlay.hide();
       showPopup(String(err.message || err));
       applyBookingGateUI();
     }
@@ -1013,8 +1004,8 @@
     if (!isAdmin) return;
 
     if (!dirty.size) {
-        showCenter("All changes are already saved.");
-        setTimeout(hideCenter, 800);
+        Overlay.message("All changes are already saved.");
+        setTimeout(Overlay.hide, 800);
         return;
     }
 
@@ -1027,7 +1018,7 @@
     const newValue = bookingGate === 1 ? 0 : 1;
 
     try {
-      showCenter("Saving...");
+      Overlay.showSaving();
 
       const res = await apiPost({
         mode: "setBookingGate",
@@ -1036,10 +1027,10 @@
       });
 
       bookingGate = Number(res.bookingGate || 0);
-      hideCenter();
+      Overlay.hide();
       applyBookingGateUI();
     } catch (err) {
-      hideCenter();
+      Overlay.hide();
       showPopup(String(err.message || err));
       applyBookingGateUI();
     }
