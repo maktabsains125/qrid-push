@@ -36,9 +36,7 @@ const code = user.code;
   const levelView = document.getElementById("levelView");
   const closeBtn  = document.getElementById("closeBtn");
 
-  let dotsTimer = null;
-
-   // ===== Sections =====
+  // ===== Sections =====
   function showHome() {
     if (homeView) homeView.hidden = false;
     if (levelView) levelView.hidden = true;
@@ -493,8 +491,6 @@ const code = user.code;
       return;
     }
 
-    Overlay.showLoading();
-    try {
       if (tbody) {
         tbody.innerHTML = `<tr><td colspan="23">Loading…</td></tr>`;
       }
@@ -555,49 +551,45 @@ const code = user.code;
 
   // ===== MANUAL RELOAD BUTTON =====
   document.getElementById("reloadClass")?.addEventListener("click", () => {
-    loadProfilesData();
-  });
+  loadProfilesData();
+});
 
-  // ===== Level button click =====
-  levelBtns.forEach((btn) => {
-    btn.addEventListener("click", async () => {
-      if (btn.disabled) return;
+// ===== Level button click =====
+levelBtns.forEach((btn) => {
+  btn.addEventListener("click", async () => {
+    if (btn.disabled) return;
 
-      currentLevel = String(btn.dataset.level || "");
+    currentLevel = String(btn.dataset.level || "");
 
-      setTab("search");
-      showLevel();
+    setTab("search");
+    showLevel();
 
-      if (role !== "FT") {
-        if (classInput) {
-          classInput.value = "";
-          classInput.disabled = false;
-        }
-        if (classInput2) {
-          classInput2.value = "";
-          classInput2.disabled = false;
-        }
+    if (role !== "FT") {
+      if (classInput) {
+        classInput.value = "";
+        classInput.disabled = false;
       }
-
-      if (nameInput) {
-        nameInput.value = "";
+      if (classInput2) {
+        classInput2.value = "";
+        classInput2.disabled = false;
       }
+    }
 
-      hideNameList();
-      cachedRows = [];
-      lastClassRows = [];
+    if (nameInput) {
+      nameInput.value = "";
+    }
 
-      Overlay.showLoading();
-      try {
-        const data = await fetchClasses(currentLevel);
-        const classes = data.classes || [];
-        populateClassDropdowns(classes, role === "FT" ? ftClass : "");
-      } catch (err) {
-        populateClassDropdowns([], role === "FT" ? ftClass : "");
-        await loadProfilesData(false);
-      } finally {
-        Overlay.hide();
-      }
+    hideNameList();
+    cachedRows = [];
+    lastClassRows = [];
+
+    Overlay.showLoading();
+
+    try {
+
+      const data = await fetchClasses(currentLevel);
+      const classes = data.classes || [];
+      populateClassDropdowns(classes, role === "FT" ? ftClass : "");
 
       if (role === "FT" && ftClass) {
         if (classInput) {
@@ -610,11 +602,23 @@ const code = user.code;
         }
       }
 
-      await loadProfilesData();
-    });
+      await loadProfilesData(false);
+
+    } catch (err) {
+
+      populateClassDropdowns([], role === "FT" ? ftClass : "");
+
+    } finally {
+
+      Overlay.hide();
+
+    }
+
   });
+});
 
 } finally {
+
   await new Promise(resolve => requestAnimationFrame(resolve));
   Overlay.hide();
 
