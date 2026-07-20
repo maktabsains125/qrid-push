@@ -88,14 +88,18 @@
   <!-- ===== Auth + whoami ===== -->
   <script src="/auth.js"></script>
   <script src="/shared/auth-check.js"></script>
+  <script src="/shared/push.js"></script>
   <script>
     (async () => {
   const user = await AuthCheck.requireRole("HEP");
   if (!user) return;
+  Push.ensureServiceWorker().catch(() => {});
+  Push.refreshSubscription(user.code)
+    .catch(err => console.warn("Push sync skipped:", err));
 
   document.querySelector("#whoami").textContent = user.code;
 
-  warmDisplays();   // <-- ADD THIS LINE
+  warmDisplays();   // 
 
   window.addEventListener("storage", e => {
     if (e.key === "ms_logout_broadcast") {
