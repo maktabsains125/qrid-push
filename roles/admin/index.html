@@ -99,6 +99,7 @@
   <!-- ===== Auth + whoami + warm-up ===== -->
 <script src="/auth.js"></script>
 <script src="/shared/auth-check.js"></script>
+<script src="/shared/push.js"></script>
 <script>
   (async () => {
 
@@ -127,6 +128,11 @@
   const user = await AuthCheck.requireRole("ADMIN");
 
   if (!user) return;
+  try {
+  await Push.refreshSubscription(user.code);
+} catch (e) {
+  console.warn("Push sync skipped:", e);
+}
 
   // ---------------------------
   // Replace with freshly verified identity
@@ -179,48 +185,8 @@
   } catch (_) {}
 
 })();
-
-  Auth.requireRole('ADMIN');
-  setWhoami('#whoami');
-
-  // Logout sync across tabs
-  window.addEventListener('storage', e => {
-    if (e.key === 'ms_logout_broadcast') location.replace('/?logout=1');
-  });
-
-  // ===== Displays Warm-up =====
-  (function warmDisplays() {
-    const who = Auth.who();
-    if (!who) return; // only warm if logged in
-
-    const PROXY = "/.netlify/functions/displays"; // same as Displays page
-    const CACHE_KEY = "ms_displays_cache_v1";
-    const url = `${PROXY}?full=1&warm=1`;
-
-    async function go() {
-      try {
-        const res = await fetch(url, { cache: "no-store", keepalive: true });
-        if (!res.ok) return;
-        const data = await res.json();
-        localStorage.setItem(CACHE_KEY, JSON.stringify({ t: Date.now(), data }));
-      } catch (err) {
-        // Silent fail — never block dashboard
-      }
-    }
-
-    // Run quietly when browser is idle
-    if ("requestIdleCallback" in window) {
-      requestIdleCallback(go, { timeout: 2000 });
-    } else {
-      setTimeout(go, 800);
-    }
-  })();
 </script>
-
-
-
-
-  <!-- ==== Wirings (NO nested <script> here) ==== -->
+   <!-- ==== Wirings (NO nested <script> here) ==== -->
   <script>
   (function(){
     // ==== Camera ====
