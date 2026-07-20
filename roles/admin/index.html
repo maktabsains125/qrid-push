@@ -248,37 +248,13 @@
     document.querySelector('.tile[aria-label="transfer"]')
       ?.addEventListener('click', ()=> location.assign(TRANSFER_PATH));
 
-    // ==== Profile (role-aware) ====
-    (function(){
-      const btn = document.querySelector('.tile[aria-label="profile"]');
-      if (!btn) return;
-
-      const role = JSON.parse(
-      localStorage.getItem("mspsbs_verified") || "{}"
-      ).role || "";
-
-      const PATH_BY_ROLE = {
-        FT:      '/shared/profile/index.html',
-        REGIS:   '/shared/profile/index.html',
-        ADMIN:   '/shared/profile/index.html',
-        HEP:     '/shared/profile/index.html',
-        WELFARE: '/shared/profile/index.html',
-      };
-
-      const ALLOW = new Set(Object.keys(PATH_BY_ROLE));
-      if (!ALLOW.has(role)) {
-        btn.disabled = true;
-        btn.style.opacity = '0.45';
-        btn.style.pointerEvents = 'none';
-        return;
-      }
-
-      const dest = PATH_BY_ROLE[role] || '/shared/profile/index.html';
-      btn.addEventListener('click', () => location.assign(dest));
-    })();
-
+    // ==== Profile ====
+  document.querySelector('.tile[aria-label="profile"]')
+  ?.addEventListener("click", () => {
+    location.assign("/shared/profile/index.html");
+    });
   })();
-  </script>
+</script>
 
 <script src="/shared/pwa.js"></script>
 
