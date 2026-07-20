@@ -77,7 +77,6 @@
   // ===== Push notifications =====
   const PUSH_PUBLIC_KEY = "BIjJvyTjSAwpqPNrMiczDwHUQ8T0v_-ITLvPPMTTPv-mq9Eg0Q79kaJkCFqK1vxmoMOjovQ3GNasnPwYKbWqIvo";
   const PUSH_SW_URL = "/sw.js";
-  const PUSH_LINK_KEY_PREFIX = "greet_push_linked_";
 
   // ===== State =====
   let who = null;
@@ -153,22 +152,6 @@
   function isAdminRole(r) {
     const rr = String(r || "").trim().toUpperCase();
     return rr === "ADMIN" || rr === "CODER";
-  }
-
-  function getPushLinkKey() {
-    return `${PUSH_LINK_KEY_PREFIX}${userCode || ""}`;
-  }
-
-  function clearLocalPushLinked() {
-    try {
-      localStorage.removeItem(getPushLinkKey());
-    } catch (_) {}
-  }
-
-  function setLocalPushLinked() {
-    try {
-      localStorage.setItem(getPushLinkKey(), "1");
-    } catch (_) {}
   }
 
   async function apiGet(params) {
@@ -294,6 +277,7 @@
       body: JSON.stringify({
         mode: "savePushSubscription",
         code: userCode,
+        deviceId: getDeviceId(),
         subscription
       })
     });
@@ -314,32 +298,7 @@
     return data;
   }
 
-  async function checkPushSubscription() {
-    const res = await fetch(PUSH_API, {
-      method: "POST",
-      headers: { "Content-Type":"application/json" },
-      body: JSON.stringify({
-        mode: "checkPushSubscription",
-        code: userCode
-      })
-    });
-
-    const text = await res.text();
-    let data = null;
-
-    try {
-      data = JSON.parse(text);
-    } catch {
-      return { ok: false, saved: false, active: false };
-    }
-
-    if (!res.ok || !data.ok) {
-      return { ok: false, saved: false, active: false };
-    }
-
-    return data;
-  }
-
+   
   function setPushCardState({ text, buttonLabel, buttonDisabled }) {
     if (!pushCard) return;
 
@@ -389,34 +348,13 @@
       return;
     }
 
-    if (Notification.permission === "denied") {
-      clearLocalPushLinked();
-      setPushCardState({
-        text: "Notifications are blocked in browser/site settings. Please allow them there first, then return here.",
-        buttonLabel: "Blocked",
-        buttonDisabled: false
-      });
-      return;
-    }
-
+    
     let existingSub = null;
     try {
       const reg = await ensureServiceWorker();
       existingSub = await reg.pushManager.getSubscription();
     } catch (_) {
       existingSub = null;
-    }
-
-    let serverSaved = false;
-    try {
-      const check = await checkPushSubscription();
-      serverSaved = !!(check && check.saved && check.active);
-    } catch (_) {
-      serverSaved = false;
-    }
-
-    if (!serverSaved) {
-      clearLocalPushLinked();
     }
 
     if (Notification.permission === "granted" && existingSub) {
@@ -434,15 +372,7 @@
     });
   return;
 }
-    if (Notification.permission === "granted" && existingSub && !serverSaved) {
-      setPushCardState({
-        text: "This browser is already allowed to send notifications. Simply press Enable notifications.",
-        buttonLabel: "Enable notifications",
-        buttonDisabled: false
-      });
-      return;
-    }
-
+    
     if (Notification.permission === "granted" && !existingSub) {
       setPushCardState({
         text: "Notifications are allowed on this device. Press Enable notifications to turn on greeting duty reminders for QR-ID.",
@@ -501,7 +431,6 @@
     }
 
     await savePushSubscription(sub.toJSON());
-    setLocalPushLinked(true);
 
     await refreshPushCard();
     showPopup("Notifications enabled.");
@@ -924,11 +853,23 @@ async function loadInit() {
     if (monthBox) monthBox.disabled = !isAdmin;
 
     userCode = String(user.code || "").trim().toUpperCase();
-
+    
     if (!userCode) {
       showPopup("Account code missing. Please contact admin.");
       return;
     }
+
+    try {
+    const reg = await ensureServiceWorker();
+    const sub = await reg.pushManager.getSubscription();
+
+    if (sub) {
+        await savePushSubscription(sub.toJSON());
+    }
+
+} catch (e) {
+    console.warn("Push sync skipped:", e);
+}
 
     refreshPushCard().catch(() => {});
     ensureServiceWorker().catch(() => {});
