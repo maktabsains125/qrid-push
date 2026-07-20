@@ -124,7 +124,7 @@
   // ---------------------------
   // Verify JWT in background
   // ---------------------------
-  const user = await AuthCheck.requireRole("ADMIN");
+  const user = await AuthCheck.verify();
   if (!user) return;
   Push.refreshSubscription(user.code)
   .catch(e => console.warn("Push sync skipped:", e));
