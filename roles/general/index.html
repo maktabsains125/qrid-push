@@ -100,17 +100,23 @@
   <script src="/shared/auth-check.js"></script>
   <script>
     // Ensure a session exists (no specific role required for this dashboard)
-    <script>
+    
+<script>
 (async () => {
+  const user = await AuthCheck.verify();
+  if (!user) return;
 
-    const user = await AuthCheck.verify();
-    if (!user) return;
-
-  // === Display name + role ===
-    const whoami = document.getElementById("whoami");
-    if (whoami) {
+  const whoami = document.getElementById("whoami");
+  if (whoami) {
     whoami.textContent = `${user.code} (${user.role})`;
+  }
+
+  // multi-tab logout sync
+  window.addEventListener("storage", (e)=>{
+    if (e.key === "ms_logout_broadcast") {
+      location.replace("/?logout=1");
     }
+  });
 
 })();
 </script>
