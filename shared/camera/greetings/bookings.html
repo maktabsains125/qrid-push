@@ -8,11 +8,13 @@
 
   <link rel="stylesheet" href="./bookings.css"/>
   <link rel="stylesheet" href="/shared/stylesheet/left-kebab.css"/>
-
+  <link rel="stylesheet" href="/shared/overlay/overlay.css">
+	
   <script src="/auth.js" defer></script>
   <script src="/shared/auth-check.js" defer=""></script>
   <script src="./bookings.js" defer></script>
   <script src="/shared/camera/greetings-kebab.js" defer></script>
+  <script src="/shared/overlay/overlay.js" defer></script>
 </head>
 
 <body>
@@ -116,13 +118,6 @@
     <div class="popupCard" role="dialog" aria-modal="true" aria-label="Notice">
       <button class="popupX" id="popupX" type="button" aria-label="Close">×</button>
       <div class="popupMsg" id="popupMsg">Message</div>
-    </div>
-  </div>
-
-  <!-- Center status overlay (Booking... / Cancelling... / Saving...) -->
-  <div class="saveOverlay" id="saveOverlay" hidden>
-    <div class="saveCard">
-      <div class="saveCardText" id="saveCardText">Saving...</div>
     </div>
   </div>
   
