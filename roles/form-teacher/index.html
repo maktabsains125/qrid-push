@@ -130,6 +130,7 @@
   <!-- ===== Core functions ===== -->
   <script src="/auth.js"></script>
   <script src="/shared/auth-check.js"></script>
+  <script src="/shared/push.js"></script>
   <script defer src="/gate-ft.js"></script>
 
   <!-- ===== Wirings + Displays warm-up ===== -->
@@ -137,6 +138,10 @@
   (async function(){
     const user = await AuthCheck.requireRole("FT");
     if (!user) return;
+
+    Push.ensureServiceWorker().catch(() => {});
+    Push.refreshSubscription(user.code)
+    .catch(err => console.warn("Push sync skipped:", err));
 
     // === Display name + role ===
     const whoami = document.getElementById("whoami");
