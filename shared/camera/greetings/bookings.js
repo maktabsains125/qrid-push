@@ -873,57 +873,59 @@
   }
 
   // ===== Load / init =====
-  async function loadInit() {
+async function loadInit() {
 
   Overlay.showLoading();
 
-  const user = await AuthCheck.requireRole(
-    "FT",
-    "GENERAL",
-    "REGIS",
-    "ADMIN",
-    "WELFARE",
-    "HEP",
-    "CODER"
-  );
+  try {
 
-  if (!user) return;
+    const user = await AuthCheck.requireRole(
+      "FT",
+      "GENERAL",
+      "REGIS",
+      "ADMIN",
+      "WELFARE",
+      "HEP",
+      "CODER"
+    );
 
-  // Save verified user
-  who = user;
+    if (!user) return;
 
-  role = String(user.role || "").toUpperCase().trim();
-  isAdmin = isAdminRole(role);
+    // Save verified user
+    who = user;
 
-  if (adminBar) adminBar.hidden = !isAdmin;
-  if (editBtn) editBtn.hidden = !isAdmin;
-  if (saveBtn) saveBtn.hidden = !isAdmin;
+    role = String(user.role || "").toUpperCase().trim();
+    isAdmin = isAdminRole(role);
 
-  setBookingGateVisibility();
+    if (adminBar) adminBar.hidden = !isAdmin;
+    if (editBtn) editBtn.hidden = !isAdmin;
+    if (saveBtn) saveBtn.hidden = !isAdmin;
 
-  if (monthBox) monthBox.disabled = !isAdmin;
+    setBookingGateVisibility();
 
-  userCode = String(user.code || "").trim().toUpperCase();
+    if (monthBox) monthBox.disabled = !isAdmin;
 
-  if (!userCode) {
-    showPopup("Account code missing. Please contact admin.");
-    return;
-  }
+    userCode = String(user.code || "").trim().toUpperCase();
 
-  // ===== Continue with the rest of your existing loadInit() code below =====
+    if (!userCode) {
+      showPopup("Account code missing. Please contact admin.");
+      return;
+    }
+
     refreshPushCard().catch(() => {});
     ensureServiceWorker().catch(() => {});
 
     pageTitle.textContent = "BOOK GREETINGS";
-    setStatus("Loading. Please wait...");
 
-    init = await apiGet({ mode: "init", code: userCode });
+    init = await apiGet({
+      mode: "init",
+      code: userCode
+    });
 
     bookingGate = Number(init.bookingGate || 0);
-    applyBookingGateUI();
-    Overlay.hide();
 
     currentMonth = String(init.monthKey || "JAN").toUpperCase();
+
     slotCounts = init.slotCounts || {
       s1: init.slotCount || 1,
       s2: init.slotCount || 1,
@@ -939,34 +941,48 @@
     tShift3.textContent = `SHIFT 3:   ${s3.start || "--"} to ${s3.end || "--"}`;
 
     monthText.textContent = monthLabel(currentMonth);
+
     buildMonthMenu();
 
     await loadMonth(currentMonth, true);
 
     applyBookingGateUI();
+
+  } finally {
+
+    Overlay.hide();
+
+  }
+}
+  
+ async function loadMonth(monthKey, autoWeek) {
+
+  if (editMode) {
+    editMode = false;
+    dirty.clear();
+    editBtn.textContent = "Edit mode: OFF";
   }
 
-  async function loadMonth(monthKey, autoWeek) {
-    if (editMode) {
-      editMode = false;
-      dirty.clear();
-      editBtn.textContent = "Edit mode: OFF";
-    }
+  currentMonth = String(monthKey || "JAN").toUpperCase();
+  monthText.textContent = monthLabel(currentMonth);
 
-    setStatus("Loading. Please wait...");
+  const data = await apiGet({
+    mode: "month",
+    month: currentMonth
+  });
 
-    currentMonth = String(monthKey || "JAN").toUpperCase();
-    monthText.textContent = monthLabel(currentMonth);
+  monthRows = Array.isArray(data.rows) ? data.rows : [];
 
-    const data = await apiGet({ mode: "month", month: currentMonth });
-    monthRows = Array.isArray(data.rows) ? data.rows : [];
-    computeShownRows();
+  computeShownRows();
 
-    const wk = autoWeek ? findCurrentWeek() : selectedWeek;
-    setWeek(wk);
+  const wk = autoWeek
+    ? findCurrentWeek()
+    : selectedWeek;
 
-    applyBookingGateUI();
-  }
+  setWeek(wk);
+
+  applyBookingGateUI();
+}    
 
   // ===== Events =====
   xBtn?.addEventListener("click", () => go(ROUTE_CAMERA));
