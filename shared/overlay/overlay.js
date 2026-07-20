@@ -4,34 +4,43 @@
 
 "use strict";
 
+/******************************************************
+ * CREATE OVERLAY
+ ******************************************************/
 function createOverlay() {
 
   if (document.getElementById("overlayLoading")) return;
 
-  document.body.insertAdjacentHTML("beforeend", `
-    <div id="overlayLoading" class="overlayLoading">
+  document.body.insertAdjacentHTML(
+    "beforeend",
+`
+<div id="overlayLoading" class="overlayLoading">
 
-      <div class="overlayBox">
+  <div class="overlayBox">
 
-        <div class="overlayRow">
+    <div class="overlayRow">
 
-          <div id="overlayText" class="overlayText">
-            Loading
-          </div>
+      <div id="overlayText" class="overlayText">
+        Loading
+      </div>
 
-          <div class="overlayDots">
-            <span id="overlayDots"></span>
-          </div>
-
-        </div>
-
+      <div class="overlayDots">
+        <span id="overlayDots"></span>
       </div>
 
     </div>
-  `);
+
+  </div>
+
+</div>
+`
+  );
 
 }
 
+/******************************************************
+ * ENSURE OVERLAY EXISTS
+ ******************************************************/
 function ensureOverlay() {
 
   if (!document.getElementById("overlayLoading")) {
@@ -40,11 +49,15 @@ function ensureOverlay() {
 
 }
 
+/******************************************************
+ * SHOW
+ ******************************************************/
 function show(text = "Loading") {
 
   ensureOverlay();
 
   document.getElementById("overlayText").textContent = text;
+
   document.getElementById("overlayDots").style.display = "";
 
   document
@@ -54,6 +67,9 @@ function show(text = "Loading") {
 
 }
 
+/******************************************************
+ * HIDE
+ ******************************************************/
 function hide() {
 
   const overlay = document.getElementById("overlayLoading");
@@ -64,11 +80,15 @@ function hide() {
 
 }
 
+/******************************************************
+ * MESSAGE (NO ANIMATED DOTS)
+ ******************************************************/
 function message(text) {
 
   ensureOverlay();
 
   document.getElementById("overlayText").textContent = text;
+
   document.getElementById("overlayDots").style.display = "none";
 
   document
@@ -78,6 +98,9 @@ function message(text) {
 
 }
 
+/******************************************************
+ * PUBLIC API
+ ******************************************************/
 window.Overlay = {
 
   show,
@@ -96,10 +119,37 @@ window.Overlay = {
 
   showVerifying() {
     show("Verifying");
+  },
+
+  showBooking() {
+    show("Booking");
+  },
+
+  showCancelling() {
+    show("Cancelling");
+  },
+
+  showDeleting() {
+    show("Deleting");
+  },
+
+  showUploading() {
+    show("Uploading");
+  },
+
+  showDownloading() {
+    show("Downloading");
+  },
+
+  showProcessing() {
+    show("Processing");
   }
 
 };
 
+/******************************************************
+ * INITIALIZE
+ ******************************************************/
 if (document.readyState === "loading") {
 
   document.addEventListener(
