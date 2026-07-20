@@ -473,7 +473,10 @@ const code = user.code;
   }
 
   // ===== Shared loader (single fetch only) =====
-  async function loadProfilesData() {
+  async function loadProfilesData(showOverlay = true) {
+    if (showOverlay) Overlay.showLoading();
+    try {
+    
     const clazz = (role === "FT")
       ? ftClass
       : ((classInput2 && classInput2.value) || (classInput && classInput.value) || "").trim().toUpperCase();
@@ -515,7 +518,7 @@ const code = user.code;
       }
       activateTableRowClicks();
     } finally {
-      Overlay.hide();
+      if(showOverlay) Overlay.hide();
     }
   }
 
@@ -591,6 +594,7 @@ const code = user.code;
         populateClassDropdowns(classes, role === "FT" ? ftClass : "");
       } catch (err) {
         populateClassDropdowns([], role === "FT" ? ftClass : "");
+        await loadProfilesData(false);
       } finally {
         Overlay.hide();
       }
