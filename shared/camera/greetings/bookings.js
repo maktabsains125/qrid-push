@@ -507,12 +507,18 @@
       div.textContent = m.label;
       div.dataset.key = m.key;
       div.addEventListener("click", async () => {
-        if (!isAdmin) return;
-        closeMonthMenu();
-        await loadMonth(m.key, true);
-      });
-      monthMenu.appendChild(div);
-    });
+  if (!isAdmin) return;
+
+  closeMonthMenu();
+
+  Overlay.showLoading();
+
+  try {
+    await loadMonth(m.key, true);
+  } finally {
+    Overlay.hide();
+  }
+});
   }
 
   function openMonthMenu() {
