@@ -11,16 +11,17 @@
  */
 
 // ===== Soft auth (allow guest if session isn't ready) =====
-let who = (window.Auth && Auth.who && Auth.who()) || null;
+let who = (window.Auth && Auth.who && (async function () {
+  "use strict";
 
-// Give the dashboard up to 1 second to finish writing the session
-if (!who) {
-  await new Promise(resolve => setTimeout(resolve, 1000));
-  who = (window.Auth && Auth.who && Auth.who()) || null;
-}
+  let who = (window.Auth && Auth.who && Auth.who()) || null;
 
-// Continue even if who is still null.
-// Pages that truly require authentication should enforce it themselves.
+  if (!who) {
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    who = (window.Auth && Auth.who && Auth.who()) || null;
+  }
+
+  // Continue even if who is still null.
 
   // ===== CONFIG =====
   const PROXY = "/.netlify/functions/displays"; // same-origin proxy to GAS
