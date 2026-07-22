@@ -1,15 +1,19 @@
 // /shared/docs-absence/app.js
 // Lock to signed-in users only and wire up Close button.
 
-(function () {
+(async function () {
   "use strict";
 
   // ===== LOCK to signed in user only =====
-  const who = (window.Auth && Auth.who && Auth.who()) || null;
-  if (!who) {
-    window.location.replace("/");
-    return; // stop here
-  }
+  // ===== Soft auth =====
+let who = (window.Auth && Auth.who && Auth.who()) || null;
+
+if (!who) {
+  await new Promise(resolve => setTimeout(resolve, 1000));
+  who = (window.Auth && Auth.who && Auth.who()) || null;
+}
+
+// Continue even if who is still null.
 
   // ===== Close button =====
   const closeBtn = document.getElementById("closeBtn");
