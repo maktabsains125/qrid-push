@@ -10,15 +10,17 @@
  * - Add: <div id="overallCards"></div> where cards should render
  */
 
-// ===== LOCK to signed in user only =====
-(function () {
-  "use strict";
+// ===== Soft auth (allow guest if session isn't ready) =====
+let who = (window.Auth && Auth.who && Auth.who()) || null;
 
-  const who = (window.Auth && Auth.who && Auth.who()) || null;
-  if (!who) {
-    window.location.replace("/");
-    return; // stop here
-  }
+// Give the dashboard up to 1 second to finish writing the session
+if (!who) {
+  await new Promise(resolve => setTimeout(resolve, 1000));
+  who = (window.Auth && Auth.who && Auth.who()) || null;
+}
+
+// Continue even if who is still null.
+// Pages that truly require authentication should enforce it themselves.
 
   // ===== CONFIG =====
   const PROXY = "/.netlify/functions/displays"; // same-origin proxy to GAS
