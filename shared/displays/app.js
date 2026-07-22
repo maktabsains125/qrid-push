@@ -113,10 +113,6 @@ if (!who) {
     location.assign(route);
   });
 
-// ===== Skeleton cards =====
-
-function skeletonCard(title) {
-
   // ===== Skeleton cards (instant UI) =====
   function skeletonCard(title) {
     const card = document.createElement("div");
