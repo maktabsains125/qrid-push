@@ -12,7 +12,7 @@
 
 // ===== SOFT AUTH (allow guest if session isn't ready) =====
 
-(async function () {
+(function () {
   "use strict";
 
 let who = (window.Auth && Auth.who && Auth.who()) || null;
