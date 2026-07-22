@@ -15,14 +15,14 @@
 (async function () {
   "use strict";
 
-  let who = (window.Auth && Auth.who && Auth.who()) || null;
+let who = (window.Auth && Auth.who && Auth.who()) || null;
 
-  if (!who) {
-    await new Promise(resolve => setTimeout(resolve, 1000));
+// Check again later without blocking page load
+if (!who) {
+  setTimeout(() => {
     who = (window.Auth && Auth.who && Auth.who()) || null;
-  }
-
-  // Continue even if who is still null.
+  }, 500);
+}
 
   // ===== CONFIG =====
   const PROXY = "/.netlify/functions/displays"; // same-origin proxy to GAS
