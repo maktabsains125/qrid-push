@@ -103,14 +103,19 @@
 
   // ==== Exit button ====
   exitBtn &&
-    exitBtn.addEventListener("click", () => {
-      let route = "/"; // fallback
+  exitBtn.addEventListener("click", () => {
+    let route = "/";
 
-if (who && window.Auth && Auth.routeFor) {
-  route = Auth.routeFor(who.role);
-}
+    if (who && window.Auth && Auth.routeFor) {
+      route = Auth.routeFor(who.role);
+    }
 
-location.assign(route);
+    location.assign(route);
+  });
+
+// ===== Skeleton cards =====
+
+function skeletonCard(title) {
 
   // ===== Skeleton cards (instant UI) =====
   function skeletonCard(title) {
