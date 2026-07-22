@@ -10,7 +10,7 @@
  * - Add: <div id="overallCards"></div> where cards should render
  */
 
-// ===== Soft auth (allow guest if session isn't ready) =====
+// ===== SOFT AUTH (allow guest if session isn't ready) =====
 
 (async function () {
   "use strict";
@@ -104,9 +104,13 @@
   // ==== Exit button ====
   exitBtn &&
     exitBtn.addEventListener("click", () => {
-      const route = (window.Auth && Auth.routeFor && Auth.routeFor(who.role)) || "/";
-      location.assign(route);
-    });
+      let route = "/"; // fallback
+
+if (who && window.Auth && Auth.routeFor) {
+  route = Auth.routeFor(who.role);
+}
+
+location.assign(route);
 
   // ===== Skeleton cards (instant UI) =====
   function skeletonCard(title) {
