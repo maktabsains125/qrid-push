@@ -225,15 +225,14 @@ const code = user.code;
   const modalBody  = document.getElementById("modalBody");
 
   // ===== State =====
-  let currentLevel  = "";
-  let yearData      = {};
-  let cachedRows    = [];
-  let lastClassRows = [];
+ let currentLevel  = "";
+ let cachedRows    = [];
+ let lastClassRows = [];
 
   // ===== Backend helpers =====
-  async function fetchLevel(level) {
+  async function fetchClasses(level) {
     const params = new URLSearchParams({
-        fn: "profiles.level",
+        fn: "profiles.classes",
         level: level
     });
     const res = await fetch(
@@ -249,9 +248,39 @@ const code = user.code;
     if (!data.ok) {
         throw new Error(data.error || "Server error");
     }
-    return data;
+    return data.classes || [];
+}  
+
+async function fetchProfiles(level, clazz) {
+
+    const params = new URLSearchParams({
+        fn: "profiles.get",
+        level: level,
+        clazz: clazz
+    });
+
+    const res = await fetch(
+        `${GAS_URL}?${params.toString()}`,
+        {
+            mode: "cors"
+        }
+    );
+
+    if (!res.ok) {
+        throw new Error("Network error");
+    }
+
+    const data = await res.json();
+
+    if (!data.ok) {
+        throw new Error(data.error || "Server error");
+    }
+
+    return data.rows || [];
+
 }
-  // ===== Helpers =====
+
+// ===== Helpers =====
   function fullDOB(row) {
     const d = [
       row["BIRTH DAY"],
@@ -527,30 +556,34 @@ const code = user.code;
 
   // ===== Shared loader (single fetch only) =====
   async function loadProfilesData() {
-    const clazz = (role === "FT")
-    ? ftClass
-    : (
-        (classInput2.value || classInput.value)
-        .trim()
-        .toUpperCase()
-      );
 
-if (!clazz) {
-    cachedRows = [];
-    lastClassRows = [];
-    tbody.innerHTML =
-        `<tr><td colspan="23">Please choose class.</td></tr>`;
-    return;
+    const clazz =
+        role === "FT"
+            ? ftClass
+            : (
+                classInput2.value ||
+                classInput.value
+            ).trim().toUpperCase();
+
+    if (!clazz) {
+        cachedRows = [];
+        lastClassRows = [];
+        renderClassTable([]);
+        return;
+    }
+
+    cachedRows = await fetchProfiles(
+        currentLevel,
+        clazz
+    );
+
+    lastClassRows = cachedRows;
+    renderNameList(nameInput.value);
+    renderClassTable(cachedRows);
+
 }
-
-cachedRows = (yearData[clazz] || []).slice();
-lastClassRows = cachedRows;
-renderNameList(nameInput.value);
-renderClassTable(cachedRows);  
-}
-
   // ===== CLASS CHANGE HANDLER =====
-  function onClassChange() {
+  async function onClassChange() {
     cachedRows = [];
     hideNameList();
 
@@ -563,7 +596,7 @@ renderClassTable(cachedRows);
       }
     }
 
-    loadProfilesData();
+    await loadProfilesData();
   }
 
   classInput?.addEventListener("change", onClassChange);
@@ -585,7 +618,7 @@ renderClassTable(cachedRows);
   });
 
   // ===== MANUAL RELOAD BUTTON =====
-  document.getElementById("reloadClass")?.addEventListener("click", () => {
+  document.getElementById("reloadClass")?.addEventListener("click", async () => {
   loadProfilesData();
 });
 
@@ -622,12 +655,10 @@ levelBtns.forEach((btn) => {
 
     try {
 
-      const data = await fetchLevel(currentLevel);
-
-yearData = data.classes || {};
+     const classes = await fetchClasses(currentLevel);
 
 populateClassDropdowns(
-    Object.keys(yearData),
+    classes,
     role === "FT" ? ftClass : ""
 );
 
@@ -642,10 +673,13 @@ if (role === "FT") {
     await loadProfilesData();
 
 }
-
     } catch (err) {
 
-      populateClassDropdowns([], role === "FT" ? ftClass : "");
+      console.error(err);
+      populateClassDropdowns(
+      [],
+      role === "FT" ? ftClass : ""
+    );
 
     } finally {
 
