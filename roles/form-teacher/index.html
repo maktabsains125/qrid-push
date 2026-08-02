@@ -224,14 +224,7 @@
     location.assign(url);
   });
 })();
-
-
-    // ==== PROFILE (role-aware) ====
-   // ==== Profile ====
-document.querySelector('.tile[aria-label="profile"]')
-  ?.addEventListener("click", () => {
-    location.assign("/shared/profile/index.html");
-  });
+ 
     // ===== Displays Warm-up (cache prefetch + server wake) =====
     (function warmDisplays() {
       if (!user) return;
@@ -257,10 +250,18 @@ document.querySelector('.tile[aria-label="profile"]')
       } else {
         setTimeout(go, 500);
       }
-    })();
-
-  })();
+        })();
   </script>
-<script src="/shared/pwa.js"></script>
+
+  <script>
+    // ==== Profile ====
+    // Profile page performs its own authentication.
+    document.querySelector('.tile[aria-label="profile"]')
+      ?.addEventListener("click", () => {
+        location.assign("/shared/profile/index.html");
+      });
+  </script>
+
+  <script src="/shared/pwa.js"></script>
 </body>
 </html>
