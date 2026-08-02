@@ -25,7 +25,7 @@ const uid  = user.uid;
 const code = user.code;
 
   // ===== CONFIG =====
-  const GAS_URL = "https://script.google.com/macros/s/AKfycbxcGd2RTFsgh7tLuhs5UbKP72fkFaGjXDvNfE0-61Si04dF5zCkp6y_X4T0gH3nzGub/exec";
+  const GAS_URL = "https://script.google.com/macros/s/AKfycbxpPBNGzOS8WQrGHYUw3aujihPGcGoOo25JCDEmUaYH7AKB1Tgzc-XQZmy8LQeN95Rk/exec";
 
   // ===== Year in header =====
   const yy = document.getElementById("yy");
@@ -182,7 +182,8 @@ const code = user.code;
     bday: F("bday"),
     bmonth: F("bmonth"),
     byear: F("byear"),
-
+   
+    bcert: F("bcert"),
     ic: F("ic"),
     bruhims: F("bru-hims"),
 
@@ -262,6 +263,7 @@ const code = user.code;
     fields.bday.value            = r["BIRTH DAY"] || "";
     fields.bmonth.value          = r["BIRTH MONTH"] || "";
     fields.byear.value           = r["BIRTH YEAR"] || "";
+    fields.bcert.value           = r["BIRTH CERT"] || "";
 
     fields.ic.value              = r["IC"] || "";
     fields.bruhims.value         = r["BRU-HIMS"] || "";
@@ -379,13 +381,14 @@ const code = user.code;
       `<div class="modalLabel">Race</div><div class="modalValue">${studentObj["RACE"] || ""}</div>`,
       `<div class="modalLabel">Religion</div><div class="modalValue">${studentObj["RELIGION"] || ""}</div>`,
       `<div class="modalLabel">DOB</div><div class="modalValue">${fullDOB(studentObj) || ""}</div>`,
+      `<div class="modalLabel">Birth cert</div><div class="modalValue">${studentObj["BIRTH CERT"] || ""}</div>`,
       `<div class="modalLabel">IC</div><div class="modalValue">${studentObj["IC"] || ""}</div>`,
       `<div class="modalLabel">BRU-HIMS</div><div class="modalValue">${studentObj["BRU-HIMS"] || ""}</div>`,
       `<div class="modalLabel">Mobile No</div><div class="modalValue">${studentObj["PHONE"] || ""}</div>`,
       `<div class="modalLabel">Medical</div><div class="modalValue">${studentObj["MEDICAL CONDITION"] || ""}</div>`,
       `<div class="modalLabel">Aid</div><div class="modalValue">${studentObj["AID"] || ""}</div>`,
       `<div class="modalLabel">Welfare</div><div class="modalValue">${studentObj["WELFARE"] || ""}</div>`,
-      `<div class="modalLabel">House</div><div class="modalValue">${studentObj["SPORTSHOUSE"] || ""}</div>`
+      `<div class="modalLabel">Sportshouse</div><div class="modalValue">${studentObj["SPORTSHOUSE"] || ""}</div>`
     );
 
     htmlParts.push(
@@ -474,6 +477,7 @@ const code = user.code;
           <td>${r["RACE"] || ""}</td>
           <td>${r["RELIGION"] || ""}</td>
           <td>${fullDOB(r) || ""}</td>
+          <td>${r["BIRTH CERT"] || ""}</td>
           <td>${r["IC"] || ""}</td>
           <td>${r["BRU-HIMS"] || ""}</td>
           <td>${r["PHONE"] || ""}</td>
