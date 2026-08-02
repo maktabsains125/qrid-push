@@ -135,7 +135,7 @@
             <div class="grid2">
               <label class="row"><span class="lab">STUDENT ID</span><input id="adm" class="ctl" readonly></label>
               <label class="row"><span class="lab">GENDER</span><input id="gender" class="ctl" readonly></label>
-			  <label class="row"><span class="lab">RACE</span><input id="race" class="ctl" readonly></label>
+		      <label class="row"><span class="lab">RACE</span><input id="race" class="ctl" readonly></label>
               <label class="row"><span class="lab">RELIGION</span><input id="religion" class="ctl" readonly></label>
               <label class="row"><span class="lab">IC</span><input id="ic" class="ctl" readonly></label>
               <label class="row"><span class="lab">BRU-HIMS</span><input id="bru-hims" class="ctl" readonly></label>
@@ -155,8 +155,9 @@
 			</div>
 			<!-- ===== FATHER ===== -->
 		    <label class="row"><span class="lab">FATHER</span><input id="father" class="ctl" readonly></label>
-            <div class="grid2">
-              <label class="row"><span class="lab">ADDRESS</span><input id="fatherAdd" class="ctl" readonly></label>
+            <label class="row"><span class="lab">ADDRESS</span><input id="fatherAdd" class="ctl" readonly></label>
+			<div class="grid2">
+			  <label class="row"><span class="lab">MUKIM</span><input id="fatherMukim" class="ctl" readonly></label>
               <label class="row"><span class="lab">POSTCODE</span><input id="fatherPostcode" class="ctl" readonly></label>
               <label class="row"><span class="lab">MOBILE NO.</span><input id="fatherPhone" class="ctl" readonly></label>
               <label class="row"><span class="lab">OCCUPATION</span><input id="fatherOcc" class="ctl" readonly></label>
@@ -165,8 +166,10 @@
             
 			<!-- ===== MOTHER ===== -->  
             <label class="row"><span class="lab">MOTHER</span><input id="mother" class="ctl" readonly></label>
+			<label class="row"><span class="lab">ADDRESS</span><input id="motherAdd" class="ctl" readonly></label>
             <div class="grid2">
-              <label class="row"><span class="lab">ADDRESS</span><input id="motherAdd" class="ctl" readonly></label>
+              <label class="row"><span class="lab">MUKIM</span><input id="motherMukim" class="ctl" readonly></label>
+			  <label class="row"><span class="lab">ADDRESS</span><input id="motherAdd" class="ctl" readonly></label>
               <label class="row"><span class="lab">POSTCODE</span><input id="motherPostcode" class="ctl" readonly></label>
               <label class="row"><span class="lab">MOBILE NO.</span><input id="motherPhone" class="ctl" readonly></label>
               <label class="row"><span class="lab">OCCUPATION</span><input id="motherOcc" class="ctl" readonly></label>
@@ -177,8 +180,9 @@
 			<!-- ===== GUARDIAN ===== --> 
             <label class="row"><span class="lab">GUARDIAN</span><input id="guardian" class="ctl" readonly></label>
 			<label class="row"><span class="lab">RELATION</span><input id="guardianRel" class="ctl" readonly></label>
+			<label class="row"><span class="lab">ADDRESS</span><input id="guardianAdd" class="ctl" readonly></label>
 			<div class="grid2">
-              <label class="row"><span class="lab">ADDRESS</span><input id="guardianAdd" class="ctl" readonly></label>
+              <label class="row"><span class="lab">MUKIM</span><input id="guardianMukim" class="ctl" readonly></label>
               <label class="row"><span class="lab">POSTCODE</span><input id="guardianPostcode" class="ctl" readonly></label>
               <label class="row"><span class="lab">MOBILE NO.</span><input id="guardianPhone" class="ctl" readonly></label>
 			  <label class="row"><span class="lab">OCCUPATION</span><input id="guardianOcc" class="ctl" readonly></label>
@@ -217,12 +221,14 @@
   				  <th>SPORTSHOUSE</th>
   				  <th>FATHER</th>
   				  <th>FATHER ADDRESS</th>
+				  <th>FATHER MUKIM</th>
 			      <th>FATHER POSTCODE</th>
 				  <th>FATHER PHONE</th> 	
   				  <th>FATHER JOB</th>
 				  <th>FATHER WORKPLACE</th>
   				  <th>MOTHER</th>
 				  <th>MOTHER ADDRESS</th>
+				  <th>MOTHER MUKIM</th>
 				  <th>MOTHER POSTCODE</th>
   				  <th>MOTHER PHONE</th>
   				  <th>MOTHER JOB</th>
@@ -230,6 +236,7 @@
   				  <th>GUARDIAN</th>
   				  <th>RELATION</th>
 				  <th>GUARDIAN ADDRESS</th>
+				  <th>GUARDIAN MUKIM</th>
 				  <th>GUARDIAN POSTCODE</th>
   				  <th>GUARDIAN PHONE</th>
                   <th>GUARDIAN JOB</th>
