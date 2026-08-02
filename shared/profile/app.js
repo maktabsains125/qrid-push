@@ -25,7 +25,7 @@ const uid  = user.uid;
 const code = user.code;
 
   // ===== CONFIG =====
-  const GAS_URL = "https://script.google.com/macros/s/AKfycbzUd6VOPxkbVlT3nJV3111kVpJXMddIh5uitHVm_w-EecN_izYNFs0-gqUUT5jGtec1/exec";
+  const GAS_URL = "https://script.google.com/macros/s/AKfycbwsWZvjA3Ljglf1_afE_Pei2_49s3Ng2cU-pkvWr1n04ezuJ2ZfP2_PHshiinsaLHNP/exec";
 
   // ===== Year in header =====
   const yy = document.getElementById("yy");
@@ -195,6 +195,7 @@ const code = user.code;
 
     father: F("father"),
     fatherAdd: F("fatherAdd"),
+    fatherMukim: F("fatherMukim"), 
     fatherPostcode: F("fatherPostcode"),
     fatherPhone: F("fatherPhone"),
     fatherOcc: F("fatherOcc"),
@@ -202,6 +203,7 @@ const code = user.code;
 
     mother: F("mother"),
     motherAdd: F("motherAdd"),
+    motherMukim: F("motherMukim"),  
     motherPostcode: F("motherPostcode"),
     motherPhone: F("motherPhone"),
     motherOcc: F("motherOcc"),
@@ -210,6 +212,7 @@ const code = user.code;
     guardian: F("guardian"),
     guardianRel: F("guardianRel"),
     guardianAdd: F("guardianAdd"),
+    guardianMukim: F("guardianMukim"), 
     guardianPostcode: F("guardianPostcode"),
     guardianPhone: F("guardianPhone"),
     guardianOcc: F("guardianOcc"),
@@ -279,6 +282,7 @@ const code = user.code;
 
     fields.father.value          = r["FATHER"] || "";
     fields.fatherAdd.value       = r["FATHER ADDRESS"] || "";
+    fields.fatherMukim.value       = r["FATHER MUKIM"] || ""; 
     fields.fatherPostcode.value  = r["FATHER POSTCODE"] || "";
     fields.fatherPhone.value     = r["FATHER PHONE"] || "";
     fields.fatherOcc.value       = r["FATHER OCCUPATION"] || "";
@@ -286,6 +290,7 @@ const code = user.code;
     
     fields.mother.value          = r["MOTHER"] || "";
     fields.motherAdd.value       = r["MOTHER ADDRESS"] || "";
+    fields.motherMukim.value       = r["MOTHER MUKIM"] || "";
     fields.motherPostcode.value  = r["MOTHER POSTCODE"] || "";
     fields.motherPhone.value     = r["MOTHER PHONE"] || "";
     fields.motherOcc.value       = r["MOTHER OCCUPATION"] || "";
@@ -294,6 +299,7 @@ const code = user.code;
     fields.guardian.value           = r["GUARDIAN"] || "";
     fields.guardianRel.value        = r["GUARDIAN RELATION"] || "";
     fields.guardianAdd.value        = r["GUARDIAN ADDRESS"] || "";
+    fields.guardianMukim.value        = r["GUARDIAN MUKIM"] || "";
     fields.guardianPostcode.value   = r["GUARDIAN POSTCODE"] || "";
     fields.guardianPhone.value      = r["GUARDIAN PHONE"] || "";
     fields.guardianOcc.value        = r["GUARDIAN OCCUPATION"] || "";
@@ -398,6 +404,7 @@ const code = user.code;
       `<div class="modalGroupHead" style="color:#1b3487;">Father</div>`,
       `<div class="modalLabel">Name</div><div class="modalValue">${studentObj["FATHER"] || ""}</div>`,
       `<div class="modalLabel">Address</div><div class="modalValue">${studentObj["FATHER ADDRESS"] || ""}</div>`,
+      `<div class="modalLabel">Mukim</div><div class="modalValue">${studentObj["FATHER MUKIM"] || ""}</div>`,
       `<div class="modalLabel">Postcode</div><div class="modalValue">${studentObj["FATHER POSTCODE"] || ""}</div>`,
       `<div class="modalLabel">Mobile No</div><div class="modalValue">${studentObj["FATHER PHONE"] || ""}</div>`,
       `<div class="modalLabel">Job</div><div class="modalValue">${studentObj["FATHER OCCUPATION"] || ""}</div>`,
@@ -408,6 +415,7 @@ const code = user.code;
       `<div class="modalGroupHead" style="color:#ab1f57;">Mother</div>`,
       `<div class="modalLabel">Name</div><div class="modalValue">${studentObj["MOTHER"] || ""}</div>`,
       `<div class="modalLabel">Address</div><div class="modalValue">${studentObj["MOTHER ADDRESS"] || ""}</div>`,
+      `<div class="modalLabel">Mukim</div><div class="modalValue">${studentObj["MOTHER MUKIM"] || ""}</div>`,
       `<div class="modalLabel">Postcode</div><div class="modalValue">${studentObj["MOTHER POSTCODE"] || ""}</div>`,
       `<div class="modalLabel">Mobile No</div><div class="modalValue">${studentObj["MOTHER PHONE"] || ""}</div>`,
       `<div class="modalLabel">Job</div><div class="modalValue">${studentObj["MOTHER OCCUPATION"] || ""}</div>`,
@@ -419,6 +427,7 @@ const code = user.code;
       `<div class="modalLabel">Name</div><div class="modalValue">${studentObj["GUARDIAN"] || ""}</div>`,
       `<div class="modalLabel">Relation</div><div class="modalValue">${studentObj["GUARDIAN RELATION"] || ""}</div>`,
       `<div class="modalLabel">Address</div><div class="modalValue">${studentObj["GUARDIAN ADDRESS"] || ""}</div>`,
+      `<div class="modalLabel">Mukim</div><div class="modalValue">${studentObj["GUARDIAN MUKIM"] || ""}</div>`,
       `<div class="modalLabel">Postcode</div><div class="modalValue">${studentObj["GUARDIAN POSTCODE"] || ""}</div>`,
       `<div class="modalLabel">Mobile No</div><div class="modalValue">${studentObj["GUARDIAN PHONE"] || ""}</div>`,
       `<div class="modalLabel">Occupation</div><div class="modalValue">${studentObj["GUARDIAN OCCUPATION"] || ""}</div>`,
@@ -490,12 +499,14 @@ const code = user.code;
           <td>${r["SPORTSHOUSE"] || ""}</td>
           <td>${r["FATHER"] || ""}</td>
           <td>${r["FATHER ADDRESS"] || ""}</td>
+          <td>${r["FATHER MUKIM"] || ""}</td>
           <td>${r["FATHER POSTCODE"] || ""}</td>
           <td>${r["FATHER PHONE"] || ""}</td>
           <td>${r["FATHER OCCUPATION"] || ""}</td>
           <td>${r["FATHER WORKPLACE"] || ""}</td>
           <td>${r["MOTHER"] || ""}</td>
           <td>${r["MOTHER ADDRESS"] || ""}</td>
+          <td>${r["MOTHER MUKIM"] || ""}</td>
           <td>${r["MOTHER POSTCODE"] || ""}</td>
           <td>${r["MOTHER PHONE"] || ""}</td>
           <td>${r["MOTHER OCCUPATION"] || ""}</td>
@@ -503,6 +514,7 @@ const code = user.code;
           <td>${r["GUARDIAN"] || ""}</td>
           <td>${r["GUARDIAN RELATION"] || ""}</td>
           <td>${r["GUARDIAN ADDRESS"] || ""}</td>
+          <td>${r["GUARDIAN MUKIM"] || ""}</td>
           <td>${r["GUARDIAN POSTCODE"] || ""}</td>
           <td>${r["GUARDIAN PHONE"] || ""}</td>
           <td>${r["GUARDIAN OCCUPATION"] || ""}</td>
