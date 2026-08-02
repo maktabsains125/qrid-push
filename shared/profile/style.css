@@ -119,11 +119,12 @@ label:has(#motherWorkplace) .lab {
   color:#ab1f57;
   font-weight:700;
 }
+
 label:has(#guardian) .lab,
 label:has(#guardianRel) .lab,
 label:has(#guardianAdd) .lab,
 label:has(#guardianPostcode) .lab,
-label:has(#guardianPhone) .lab
+label:has(#guardianPhone) .lab,
 label:has(#guardianOcc) .lab,
 label:has(#guardianWorkplace) .lab {
   color:#297a1f;
