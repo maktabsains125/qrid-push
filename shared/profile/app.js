@@ -25,7 +25,7 @@ const uid  = user.uid;
 const code = user.code;
 
   // ===== CONFIG =====
-  const GAS_URL = "https://script.google.com/macros/s/AKfycbxpPBNGzOS8WQrGHYUw3aujihPGcGoOo25JCDEmUaYH7AKB1Tgzc-XQZmy8LQeN95Rk/exec";
+  const GAS_URL = "https://script.google.com/macros/s/AKfycbxElLUFnF3kz4fZE10w3TmqerWN9ml6gaHYLhOtmmUBgyth-ejjrpX1Gq-ua0U0wTox/exec";
 
   // ===== Year in header =====
   const yy = document.getElementById("yy");
@@ -223,28 +223,31 @@ const code = user.code;
 
   // ===== State =====
   let currentLevel  = "";
+  let yearData      = {};
   let cachedRows    = [];
   let lastClassRows = [];
 
   // ===== Backend helpers =====
-  async function fetchProfiles(level, clazz) {
-    const params = new URLSearchParams({ fn: "profiles.get", level, clazz });
-    const res = await fetch(`${GAS_URL}?${params.toString()}`, { mode: "cors" });
-    if (!res.ok) throw new Error("Network error");
+  async function fetchLevel(level) {
+    const params = new URLSearchParams({
+        fn: "profiles.level",
+        level: level
+    });
+    const res = await fetch(
+        `${GAS_URL}?${params.toString()}`,
+        {
+            mode: "cors"
+        }
+    );
+    if (!res.ok) {
+        throw new Error("Network error");
+    }
     const data = await res.json();
-    if (!data?.ok) throw new Error(data?.error || "Server error");
+    if (!data.ok) {
+        throw new Error(data.error || "Server error");
+    }
     return data;
-  }
-
-  async function fetchClasses(level) {
-    const params = new URLSearchParams({ fn: "profiles.classes", level });
-    const res = await fetch(`${GAS_URL}?${params.toString()}`, { mode: "cors" });
-    if (!res.ok) throw new Error("Network error");
-    const data = await res.json();
-    if (!data?.ok) throw new Error(data?.error || "Server error");
-    return data;
-  }
-
+}
   // ===== Helpers =====
   function fullDOB(row) {
     const d = [
@@ -511,52 +514,28 @@ const code = user.code;
   }
 
   // ===== Shared loader (single fetch only) =====
-  async function loadProfilesData(showOverlay = true) {
-    if (showOverlay) Overlay.showLoading();
-    try {
-    
+  async function loadProfilesData() {
     const clazz = (role === "FT")
-      ? ftClass
-      : ((classInput2 && classInput2.value) || (classInput && classInput.value) || "").trim().toUpperCase();
+    ? ftClass
+    : (
+        (classInput2.value || classInput.value)
+        .trim()
+        .toUpperCase()
+      );
 
-    if (!currentLevel || !clazz) {
-      cachedRows = [];
-      lastClassRows = [];
-      hideNameList();
+if (!clazz) {
+    cachedRows = [];
+    lastClassRows = [];
+    tbody.innerHTML =
+        `<tr><td colspan="23">Please choose class.</td></tr>`;
+    return;
+}
 
-      if (tbody) {
-        tbody.innerHTML = `<tr><td colspan="23">Please choose class.</td></tr>`;
-      }
-      activateTableRowClicks();
-      return;
-    }
-
-      if (tbody) {
-        tbody.innerHTML = `<tr><td colspan="23">Loading…</td></tr>`;
-      }
-
-      const data = await fetchProfiles(currentLevel, clazz);
-      const rows = data.rows || [];
-
-      cachedRows = rows.slice();
-      lastClassRows = rows.slice();
-
-      renderNameList(nameInput?.value || "");
-      renderClassTable(rows);
-
-    } catch (err) {
-      cachedRows = [];
-      lastClassRows = [];
-      hideNameList();
-
-      if (tbody) {
-        tbody.innerHTML = `<tr><td colspan="23">Error: ${String(err.message || err)}</td></tr>`;
-      }
-      activateTableRowClicks();
-    } finally {
-      if(showOverlay) Overlay.hide();
-    }
-  }
+cachedRows = (yearData[clazz] || []).slice();
+lastClassRows = cachedRows;
+renderNameList(nameInput.value);
+renderClassTable(cachedRows);  
+}
 
   // ===== CLASS CHANGE HANDLER =====
   function onClassChange() {
@@ -627,22 +606,26 @@ levelBtns.forEach((btn) => {
 
     try {
 
-      const data = await fetchClasses(currentLevel);
-      const classes = data.classes || [];
-      populateClassDropdowns(classes, role === "FT" ? ftClass : "");
+      const data = await fetchLevel(currentLevel);
 
-      if (role === "FT" && ftClass) {
-        if (classInput) {
-          classInput.value = ftClass;
-          classInput.disabled = true;
-        }
-        if (classInput2) {
-          classInput2.value = ftClass;
-          classInput2.disabled = true;
-        }
-      }
+yearData = data.classes || {};
 
-      await loadProfilesData(false);
+populateClassDropdowns(
+    Object.keys(yearData),
+    role === "FT" ? ftClass : ""
+);
+
+if (role === "FT") {
+
+    classInput.value = ftClass;
+    classInput.disabled = true;
+
+    classInput2.value = ftClass;
+    classInput2.disabled = true;
+
+    await loadProfilesData();
+
+}
 
     } catch (err) {
 
