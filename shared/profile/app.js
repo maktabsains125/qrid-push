@@ -562,6 +562,10 @@ renderClassTable(cachedRows);
     renderNameList(e.target.value);
   });
 
+  nameInput?.addEventListener("focus", () => {
+    renderNameList("");
+  });
+
   document.addEventListener("click", (e) => {
     if (nameList && !nameList.contains(e.target) && e.target !== nameInput) {
       hideNameList();
