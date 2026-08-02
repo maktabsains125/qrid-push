@@ -253,35 +253,42 @@ const code = user.code;
   }
 
   function fillRow(r) {
-    fields.adm.value            = r["ADM NO."] || "";
-    fields.gender.value         = r["GENDER"] || "";
-    fields.bday.value           = r["BIRTH DAY"] || "";
-    fields.bmonth.value         = r["BIRTH MONTH"] || "";
-    fields.byear.value          = r["BIRTH YEAR"] || "";
+    fields.adm.value             = r["ADM NO."] || "";
+    fields.gender.value          = r["GENDER"] || "";
+    fields.bday.value            = r["BIRTH DAY"] || "";
+    fields.bmonth.value          = r["BIRTH MONTH"] || "";
+    fields.byear.value           = r["BIRTH YEAR"] || "";
 
-    fields.ic.value             = r["IC"] || "";
-    fields.bruhims.value        = r["BRU-HIMS"] || "";
+    fields.ic.value              = r["IC"] || "";
+    fields.bruhims.value         = r["BRU-HIMS"] || "";
+    fields.phone.value           = r["PHONE"] || "";
+     
+    fields.med.value             = r["MEDICAL CONDITION"] || "";
+    fields.aid.value             = r["AID"] || "";
+    fields.welfare.value         = r["WELFARE"] || "";
+    fields.house.value           = r["SPORTSHOUSE"] || "";
 
-    fields.med.value            = r["MEDICAL CONDITION"] || "";
-    fields.aid.value            = r["AID"] || "";
-    fields.welfare.value        = r["WELFARE"] || "";
-    fields.house.value          = r["SPORTSHOUSE"] || "";
+    fields.father.value          = r["FATHER"] || "";
+    fields.fatherAdd.value       = r["FATHER ADDRESS"] || "";
+    fields.fatherPostcode.value  = r["FATHER POSTCODE"] || "";
+    fields.fatherPhone.value     = r["FATHER PHONE"] || "";
+    fields.fatherOcc.value       = r["FATHER OCCUPATION"] || "";
+    fields.fatherWorkplace.value = r["FATHER WORKPLACE"] || "";
+    
+    fields.mother.value          = r["MOTHER"] || "";
+    fields.motherAdd.value       = r["MOTHER ADDRESS"] || "";
+    fields.motherPostcode.value  = r["MOTHER POSTCODE"] || "";
+    fields.motherPhone.value     = r["MOTHER PHONE"] || "";
+    fields.motherOcc.value       = r["MOTHER OCCUPATION"] || "";
+    fields.motherWorkplace.value = r["MOTHER WORKPLACE"] || "";
 
-    fields.father.value         = r["FATHER'S NAME"] || "";
-    fields.fatherPhone.value    = r["FATHER PHONE"] || "";
-    fields.fatherOcc.value      = r["FATHER OCCUPATION"] || "";
-    fields.fatherAdd.value      = r["FATHER ADDRESS"] || "";
-
-    fields.mother.value         = r["MOTHER'S NAME"] || "";
-    fields.motherPhone.value    = r["MOTHER PHONE"] || "";
-    fields.motherOcc.value      = r["MOTHER OCCUPATION"] || "";
-    fields.motherAdd.value      = r["MOTHER ADDRESS"] || "";
-
-    fields.guardian.value       = r["GUARDIAN"] || "";
-    fields.guardianRel.value    = r["GUARDIAN RELATION"] || "";
-    fields.guardianPhone.value  = r["GUARDIAN PHONE"] || "";
-    fields.guardianOcc.value    = r["GUARDIAN OCCUPATION"] || "";
-    fields.guardianAdd.value    = r["GUARDIAN ADDRESS"] || "";
+    fields.guardian.value         = r["GUARDIAN"] || "";
+    fields.guardianRel.value      = r["GUARDIAN RELATION"] || "";
+    fields.guardianAdd.value      = r["GUARDIAN ADDRESS"] || "";
+    fields.guardianPostcode.value = r["GUARDIAN POSTCODE"] || "";
+    fields.guardianPhone.value    = r["GUARDIAN PHONE"] || "";
+    fields.guardianOcc.value      = r["GUARDIAN OCCUPATION"] || "";
+    fields.guardianAdd.value      = r["GUARDIAN ADDRESS"] || "";
   }
 
   function hideNameList() {
@@ -368,6 +375,7 @@ const code = user.code;
       `<div class="modalLabel">DOB</div><div class="modalValue">${fullDOB(studentObj) || ""}</div>`,
       `<div class="modalLabel">IC</div><div class="modalValue">${studentObj["IC"] || ""}</div>`,
       `<div class="modalLabel">BRU-HIMS</div><div class="modalValue">${studentObj["BRU-HIMS"] || ""}</div>`,
+      `<div class="modalLabel">Mobile</div><div class="modalValue">${studentObj["PHONE"] || ""}</div>`,
       `<div class="modalLabel">Medical</div><div class="modalValue">${studentObj["MEDICAL CONDITION"] || ""}</div>`,
       `<div class="modalLabel">Aid</div><div class="modalValue">${studentObj["AID"] || ""}</div>`,
       `<div class="modalLabel">Welfare</div><div class="modalValue">${studentObj["WELFARE"] || ""}</div>`,
@@ -376,7 +384,7 @@ const code = user.code;
 
     htmlParts.push(
       `<div class="modalGroupHead" style="color:#1b3487;">Father</div>`,
-      `<div class="modalLabel">Name</div><div class="modalValue">${studentObj["FATHER'S NAME"] || ""}</div>`,
+      `<div class="modalLabel">Name</div><div class="modalValue">${studentObj["FATHER"] || ""}</div>`,
       `<div class="modalLabel">Phone</div><div class="modalValue">${studentObj["FATHER PHONE"] || ""}</div>`,
       `<div class="modalLabel">Job</div><div class="modalValue">${studentObj["FATHER OCCUPATION"] || ""}</div>`,
       `<div class="modalLabel">Address</div><div class="modalValue">${studentObj["FATHER ADDRESS"] || ""}</div>`
@@ -384,7 +392,7 @@ const code = user.code;
 
     htmlParts.push(
       `<div class="modalGroupHead" style="color:#ab1f57;">Mother</div>`,
-      `<div class="modalLabel">Name</div><div class="modalValue">${studentObj["MOTHER'S NAME"] || ""}</div>`,
+      `<div class="modalLabel">Name</div><div class="modalValue">${studentObj["MOTHER"] || ""}</div>`,
       `<div class="modalLabel">Phone</div><div class="modalValue">${studentObj["MOTHER PHONE"] || ""}</div>`,
       `<div class="modalLabel">Job</div><div class="modalValue">${studentObj["MOTHER OCCUPATION"] || ""}</div>`,
       `<div class="modalLabel">Address</div><div class="modalValue">${studentObj["MOTHER ADDRESS"] || ""}</div>`
