@@ -375,7 +375,7 @@ const code = user.code;
       `<div class="modalLabel">DOB</div><div class="modalValue">${fullDOB(studentObj) || ""}</div>`,
       `<div class="modalLabel">IC</div><div class="modalValue">${studentObj["IC"] || ""}</div>`,
       `<div class="modalLabel">BRU-HIMS</div><div class="modalValue">${studentObj["BRU-HIMS"] || ""}</div>`,
-      `<div class="modalLabel">Mobile</div><div class="modalValue">${studentObj["PHONE"] || ""}</div>`,
+      `<div class="modalLabel">Phone</div><div class="modalValue">${studentObj["PHONE"] || ""}</div>`,
       `<div class="modalLabel">Medical</div><div class="modalValue">${studentObj["MEDICAL CONDITION"] || ""}</div>`,
       `<div class="modalLabel">Aid</div><div class="modalValue">${studentObj["AID"] || ""}</div>`,
       `<div class="modalLabel">Welfare</div><div class="modalValue">${studentObj["WELFARE"] || ""}</div>`,
