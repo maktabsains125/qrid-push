@@ -625,6 +625,7 @@ async function fetchProfiles(level, clazz) {
 // ===== Level button click =====
 levelBtns.forEach((btn) => {
   btn.addEventListener("click", async () => {
+    console.time("Year Button Total");
     if (btn.disabled) return;
 
     currentLevel = String(btn.dataset.level || "");
@@ -654,8 +655,9 @@ levelBtns.forEach((btn) => {
     Overlay.showLoading();
 
     try {
-
+     console.time("fetchClasses");
      const classes = await fetchClasses(currentLevel);
+     console.timeEnd("fetchClasses");
 
 populateClassDropdowns(
     classes,
@@ -682,7 +684,7 @@ if (role === "FT") {
     );
 
     } finally {
-
+      console.timeEnd("Year Button Total");
       Overlay.hide();
 
     }
