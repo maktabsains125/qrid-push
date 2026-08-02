@@ -25,7 +25,7 @@ const uid  = user.uid;
 const code = user.code;
 
   // ===== CONFIG =====
-  const GAS_URL = "https://script.google.com/macros/s/AKfycbyheg1vZR_GmdanPj07Vr9qrsJv3bUcxHEBgEPPQiyhfzd3Vd3azeoiABPEAK6Sf77d/exec";
+  const GAS_URL = "https://script.google.com/macros/s/AKfycbwcDRzvKLdZIthP13rLqiqyQbaFRdCWCKwhbuV6bSQJXE3PWMZC3SrRDUm1cUaf_Heo/exec";
 
   // ===== Year in header =====
   const yy = document.getElementById("yy");
@@ -184,26 +184,33 @@ const code = user.code;
     ic: F("ic"),
     bruhims: F("bru-hims"),
 
+    phone: F("phone"), 
     med: F("med"),
     aid: F("aid"),
     welfare: F("welfare"),
     house: F("house"),
 
     father: F("father"),
-    fatherPhone: F("fatherPhone"),
     fatherAdd: F("fatherAdd"),
+    fatherPostcode: F("fatherPostcode"),
+    fatherPhone: F("fatherPhone"),
     fatherOcc: F("fatherOcc"),
+    fatherWorkplace: F("fatherWorkplace"),
 
     mother: F("mother"),
-    motherPhone: F("motherPhone"),
     motherAdd: F("motherAdd"),
+    motherPostcode: F("motherPostcode"),
+    motherPhone: F("motherPhone"),
     motherOcc: F("motherOcc"),
+    motherWorkplace: F("motherWorkplace"),
 
     guardian: F("guardian"),
     guardianRel: F("guardianRel"),
-    guardianPhone: F("guardianPhone"),
     guardianAdd: F("guardianAdd"),
-    guardianOcc: F("guardianOcc")
+    guardianPostocde: F("guardianPostcode"),
+    guardianPhone: F("guardianPhone"),
+    guardianOcc: F("guardianOcc"),
+    guardianWorkplace: F("guardianWorkplace") 
   };
 
   // ===== Modal DOM =====
