@@ -25,7 +25,7 @@ const uid  = user.uid;
 const code = user.code;
 
   // ===== CONFIG =====
-  const GAS_URL = "https://script.google.com/macros/s/AKfycbwcDRzvKLdZIthP13rLqiqyQbaFRdCWCKwhbuV6bSQJXE3PWMZC3SrRDUm1cUaf_Heo/exec";
+  const GAS_URL = "https://script.google.com/macros/s/AKfycbwLzTaHXJmcZURQ8zPAqAVTqRHP-4eewFuFiSpuCcJTrb1_YtuOXsW-g69CceG-V7zQ/exec";
 
   // ===== Year in header =====
   const yy = document.getElementById("yy");
@@ -375,7 +375,7 @@ const code = user.code;
       `<div class="modalLabel">DOB</div><div class="modalValue">${fullDOB(studentObj) || ""}</div>`,
       `<div class="modalLabel">IC</div><div class="modalValue">${studentObj["IC"] || ""}</div>`,
       `<div class="modalLabel">BRU-HIMS</div><div class="modalValue">${studentObj["BRU-HIMS"] || ""}</div>`,
-      `<div class="modalLabel">Phone</div><div class="modalValue">${studentObj["PHONE"] || ""}</div>`,
+      `<div class="modalLabel">Mobile No.</div><div class="modalValue">${studentObj["PHONE"] || ""}</div>`,
       `<div class="modalLabel">Medical</div><div class="modalValue">${studentObj["MEDICAL CONDITION"] || ""}</div>`,
       `<div class="modalLabel">Aid</div><div class="modalValue">${studentObj["AID"] || ""}</div>`,
       `<div class="modalLabel">Welfare</div><div class="modalValue">${studentObj["WELFARE"] || ""}</div>`,
@@ -385,26 +385,32 @@ const code = user.code;
     htmlParts.push(
       `<div class="modalGroupHead" style="color:#1b3487;">Father</div>`,
       `<div class="modalLabel">Name</div><div class="modalValue">${studentObj["FATHER"] || ""}</div>`,
-      `<div class="modalLabel">Phone</div><div class="modalValue">${studentObj["FATHER PHONE"] || ""}</div>`,
+      `<div class="modalLabel">Address</div><div class="modalValue">${studentObj["FATHER ADDRESS"] || ""}</div>`,
+      `<div class="modalLabel">Postcode</div><div class="modalValue">${studentObj["FATHER POSTCODE"] || ""}</div>`,
+      `<div class="modalLabel">Mobile No.</div><div class="modalValue">${studentObj["FATHER PHONE"] || ""}</div>`,
       `<div class="modalLabel">Job</div><div class="modalValue">${studentObj["FATHER OCCUPATION"] || ""}</div>`,
-      `<div class="modalLabel">Address</div><div class="modalValue">${studentObj["FATHER ADDRESS"] || ""}</div>`
+      `<div class="modalLabel">Workplace</div><div class="modalValue">${studentObj["FATHER WORKPLACE"] || ""}</div>`
     );
 
     htmlParts.push(
       `<div class="modalGroupHead" style="color:#ab1f57;">Mother</div>`,
       `<div class="modalLabel">Name</div><div class="modalValue">${studentObj["MOTHER"] || ""}</div>`,
-      `<div class="modalLabel">Phone</div><div class="modalValue">${studentObj["MOTHER PHONE"] || ""}</div>`,
+      `<div class="modalLabel">Address</div><div class="modalValue">${studentObj["MOTHER ADDRESS"] || ""}</div>`,
+      `<div class="modalLabel">Postcode</div><div class="modalValue">${studentObj["MOTHER POSTCODE"] || ""}</div>`,
+      `<div class="modalLabel">Mobile No.</div><div class="modalValue">${studentObj["MOTHER PHONE"] || ""}</div>`,
       `<div class="modalLabel">Job</div><div class="modalValue">${studentObj["MOTHER OCCUPATION"] || ""}</div>`,
-      `<div class="modalLabel">Address</div><div class="modalValue">${studentObj["MOTHER ADDRESS"] || ""}</div>`
+      `<div class="modalLabel">Workplace</div><div class="modalValue">${studentObj["MOTHER WORKPLACE"] || ""}</div>`
     );
 
     htmlParts.push(
       `<div class="modalGroupHead" style="color:#297a1f;">Guardian</div>`,
       `<div class="modalLabel">Name</div><div class="modalValue">${studentObj["GUARDIAN"] || ""}</div>`,
       `<div class="modalLabel">Relation</div><div class="modalValue">${studentObj["GUARDIAN RELATION"] || ""}</div>`,
+      `<div class="modalLabel">Address</div><div class="modalValue">${studentObj["GUARDIAN ADDRESS"] || ""}</div>`,
+      `<div class="modalLabel">Postcode</div><div class="modalValue">${studentObj["GUARDIAN POSTCODE"] || ""}</div>`,
       `<div class="modalLabel">Phone</div><div class="modalValue">${studentObj["GUARDIAN PHONE"] || ""}</div>`,
       `<div class="modalLabel">Occupation</div><div class="modalValue">${studentObj["GUARDIAN OCCUPATION"] || ""}</div>`,
-      `<div class="modalLabel">Address</div><div class="modalValue">${studentObj["GUARDIAN ADDRESS"] || ""}</div>`
+      `<div class="modalLabel">Workplace</div><div class="modalValue">${studentObj["GUARDIAN WORKPLACE"] || ""}</div>`
     );
 
     modalBody.innerHTML = htmlParts.join("");
@@ -462,23 +468,30 @@ const code = user.code;
           <td>${fullDOB(r) || ""}</td>
           <td>${r["IC"] || ""}</td>
           <td>${r["BRU-HIMS"] || ""}</td>
+          <td>${r["PHONE"] || ""}</td>
           <td>${r["MEDICAL CONDITION"] || ""}</td>
           <td>${r["AID"] || ""}</td>
           <td>${r["WELFARE"] || ""}</td>
           <td>${r["SPORTSHOUSE"] || ""}</td>
-          <td>${r["FATHER'S NAME"] || ""}</td>
-          <td>${r["FATHER PHONE"] || ""}</td>
+          <td>${r["FATHER"] || ""}</td>
           <td>${r["FATHER ADDRESS"] || ""}</td>
+          <td>${r["FATHER POSTCODE"] || ""}</td>
+          <td>${r["FATHER PHONE"] || ""}</td>
           <td>${r["FATHER OCCUPATION"] || ""}</td>
-          <td>${r["MOTHER'S NAME"] || ""}</td>
-          <td>${r["MOTHER PHONE"] || ""}</td>
+          <td>${r["FATHER WORKPLACE"] || ""}</td>
+          <td>${r["MOTHER"] || ""}</td>
           <td>${r["MOTHER ADDRESS"] || ""}</td>
+          <td>${r["MOTHER POSTCODE"] || ""}</td>
+          <td>${r["MOTHER PHONE"] || ""}</td>
           <td>${r["MOTHER OCCUPATION"] || ""}</td>
+          <td>${r["MOTHER WORKPLACE"] || ""}</td>
           <td>${r["GUARDIAN"] || ""}</td>
           <td>${r["GUARDIAN RELATION"] || ""}</td>
-          <td>${r["GUARDIAN PHONE"] || ""}</td>
           <td>${r["GUARDIAN ADDRESS"] || ""}</td>
+          <td>${r["GUARDIAN POSTCODE"] || ""}</td>
+          <td>${r["GUARDIAN PHONE"] || ""}</td>
           <td>${r["GUARDIAN OCCUPATION"] || ""}</td>
+          <td>${r["MOTHER WORKPLACE"] || ""}</td>
         </tr>
       `).join("") || `<tr><td colspan="23">No data.</td></tr>`;
 
