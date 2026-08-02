@@ -25,7 +25,7 @@ const uid  = user.uid;
 const code = user.code;
 
   // ===== CONFIG =====
-  const GAS_URL = "https://script.google.com/macros/s/AKfycbwLzTaHXJmcZURQ8zPAqAVTqRHP-4eewFuFiSpuCcJTrb1_YtuOXsW-g69CceG-V7zQ/exec";
+  const GAS_URL = "https://script.google.com/macros/s/AKfycbxcGd2RTFsgh7tLuhs5UbKP72fkFaGjXDvNfE0-61Si04dF5zCkp6y_X4T0gH3nzGub/exec";
 
   // ===== Year in header =====
   const yy = document.getElementById("yy");
@@ -176,6 +176,8 @@ const code = user.code;
   const fields = {
     adm: F("adm"),
     gender: F("gender"),
+    race: F("race"),
+    religion: F("religion"),
 
     bday: F("bday"),
     bmonth: F("bmonth"),
@@ -255,6 +257,8 @@ const code = user.code;
   function fillRow(r) {
     fields.adm.value             = r["ADM NO."] || "";
     fields.gender.value          = r["GENDER"] || "";
+    fields.race.value            = r["RACE"] || "";
+    fields.religion.value        = r["RELIGION"] || "";
     fields.bday.value            = r["BIRTH DAY"] || "";
     fields.bmonth.value          = r["BIRTH MONTH"] || "";
     fields.byear.value           = r["BIRTH YEAR"] || "";
@@ -372,6 +376,8 @@ const code = user.code;
       `<div class="modalLabel">ID</div><div class="modalValue">${studentObj["ADM NO."] || ""}</div>`,
       `<div class="modalLabel">Name</div><div class="modalValue">${studentObj["STUDENT'S NAME"] || ""}</div>`,
       `<div class="modalLabel">Gender</div><div class="modalValue">${studentObj["GENDER"] || ""}</div>`,
+      `<div class="modalLabel">Race</div><div class="modalValue">${studentObj["RACE"] || ""}</div>`,
+      `<div class="modalLabel">Religion</div><div class="modalValue">${studentObj["RELIGION"] || ""}</div>`,
       `<div class="modalLabel">DOB</div><div class="modalValue">${fullDOB(studentObj) || ""}</div>`,
       `<div class="modalLabel">IC</div><div class="modalValue">${studentObj["IC"] || ""}</div>`,
       `<div class="modalLabel">BRU-HIMS</div><div class="modalValue">${studentObj["BRU-HIMS"] || ""}</div>`,
@@ -465,6 +471,8 @@ const code = user.code;
           <td>${r["ADM NO."] || ""}</td>
           <td>${r["STUDENT'S NAME"] || ""}</td>
           <td>${r["GENDER"] || ""}</td>
+          <td>${r["RACE"] || ""}</td>
+          <td>${r["RELIGION"] || ""}</td>
           <td>${fullDOB(r) || ""}</td>
           <td>${r["IC"] || ""}</td>
           <td>${r["BRU-HIMS"] || ""}</td>
