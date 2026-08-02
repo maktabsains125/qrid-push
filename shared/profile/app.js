@@ -207,7 +207,7 @@ const code = user.code;
     guardian: F("guardian"),
     guardianRel: F("guardianRel"),
     guardianAdd: F("guardianAdd"),
-    guardianPostocde: F("guardianPostcode"),
+    guardianPostcode: F("guardianPostcode"),
     guardianPhone: F("guardianPhone"),
     guardianOcc: F("guardianOcc"),
     guardianWorkplace: F("guardianWorkplace") 
@@ -282,13 +282,13 @@ const code = user.code;
     fields.motherOcc.value       = r["MOTHER OCCUPATION"] || "";
     fields.motherWorkplace.value = r["MOTHER WORKPLACE"] || "";
 
-    fields.guardian.value         = r["GUARDIAN"] || "";
-    fields.guardianRel.value      = r["GUARDIAN RELATION"] || "";
-    fields.guardianAdd.value      = r["GUARDIAN ADDRESS"] || "";
-    fields.guardianPostcode.value = r["GUARDIAN POSTCODE"] || "";
-    fields.guardianPhone.value    = r["GUARDIAN PHONE"] || "";
-    fields.guardianOcc.value      = r["GUARDIAN OCCUPATION"] || "";
-    fields.guardianAdd.value      = r["GUARDIAN ADDRESS"] || "";
+    fields.guardian.value           = r["GUARDIAN"] || "";
+    fields.guardianRel.value        = r["GUARDIAN RELATION"] || "";
+    fields.guardianAdd.value        = r["GUARDIAN ADDRESS"] || "";
+    fields.guardianPostcode.value   = r["GUARDIAN POSTCODE"] || "";
+    fields.guardianPhone.value      = r["GUARDIAN PHONE"] || "";
+    fields.guardianOcc.value        = r["GUARDIAN OCCUPATION"] || "";
+    fields.guardianWorkplace.value  = r["GUARDIAN WORKPLACE"] || "";
   }
 
   function hideNameList() {
@@ -491,7 +491,7 @@ const code = user.code;
           <td>${r["GUARDIAN POSTCODE"] || ""}</td>
           <td>${r["GUARDIAN PHONE"] || ""}</td>
           <td>${r["GUARDIAN OCCUPATION"] || ""}</td>
-          <td>${r["MOTHER WORKPLACE"] || ""}</td>
+          <td>${r["GUARDIAN WORKPLACE"] || ""}</td>
         </tr>
       `).join("") || `<tr><td colspan="23">No data.</td></tr>`;
 
