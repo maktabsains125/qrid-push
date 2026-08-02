@@ -120,7 +120,8 @@
               <select id="classInput" class="ctl"></select>
             </label>
 
-            <label class="row">
+            <!-- ===== STUDENT ===== -->
+		    <label class="row">
               <span class="lab">NAME</span>
               <div class="combo">
                 <input id="nameInput"
@@ -137,46 +138,59 @@
               <label class="row"><span class="lab">IC</span><input id="ic" class="ctl" readonly></label>
               <label class="row"><span class="lab">BRU-HIMS</span><input id="bru-hims" class="ctl" readonly></label>
             </div>
-
             <div class="grid3">
               <label class="row"><span class="lab">BIRTH DAY</span><input id="bday" class="ctl" readonly></label>
               <label class="row"><span class="lab">BIRTH MONTH</span><input id="bmonth" class="ctl" readonly></label>
               <label class="row"><span class="lab">BIRTH YEAR</span><input id="byear" class="ctl" readonly></label>
             </div>
-
+            <div class="grid2"
+		    <label class="row"><span class="lab">MOBILE NO</span><input id="phone" class="ctl" readonly></label>
             <label class="row"><span class="lab">MEDICAL MATTER</span><input id="med" class="ctl" readonly></label>
-
             <div class="grid2">
               <label class="row"><span class="lab">AID</span><input id="aid" class="ctl" readonly></label>
               <label class="row"><span class="lab">WELFARE</span><input id="welfare" class="ctl" readonly></label>
             </div>
-
             <label class="row"><span class="lab">SPORTSHOUSE</span><input id="house" class="ctl" readonly></label>
 
-            <label class="row"><span class="lab">FATHER</span><input id="father" class="ctl" readonly></label>
+			<!-- ===== FATHER ===== -->
+		    <label class="row"><span class="lab">FATHER</span><input id="father" class="ctl" readonly></label>
             <div class="grid2">
-              <label class="row"><span class="lab">PHONE</span><input id="fatherPhone" class="ctl" readonly></label>
+              <label class="row"><span class="lab">ADDRESS</span><input id="fatherAdd" class="ctl" readonly></label>
+              <label class="row"><span class="lab">POSTCODE</span><input id="fatherPostcode" class="ctl" readonly></label>
+            </div> 
+			<div class="grid2">
+              <label class="row"><span class="lab">MOBILE NO.</span><input id="fatherPhone" class="ctl" readonly></label>
               <label class="row"><span class="lab">OCCUPATION</span><input id="fatherOcc" class="ctl" readonly></label>
             </div>
-			<label class="row"><span class="lab">ADDRESS</span><input id="fatherAdd" class="ctl" readonly></label>
-
+			<label class="row"><span class="lab">WORKPLACE</span><input id="fatherWorkplace" class="ctl" readonly></label> 		  
+            
+			<!-- ===== MOTHER ===== -->  
             <label class="row"><span class="lab">MOTHER</span><input id="mother" class="ctl" readonly></label>
             <div class="grid2">
-              <label class="row"><span class="lab">PHONE</span><input id="motherPhone" class="ctl" readonly></label>
+              <label class="row"><span class="lab">ADDRESS</span><input id="motherAdd" class="ctl" readonly></label>
+              <label class="row"><span class="lab">POSTCODE</span><input id="motherPostcode" class="ctl" readonly></label>
+            </div> 
+			<div class="grid2">
+              <label class="row"><span class="lab">MOBILE NO.</span><input id="motherPhone" class="ctl" readonly></label>
               <label class="row"><span class="lab">OCCUPATION</span><input id="motherOcc" class="ctl" readonly></label>
             </div>
-			<label class="row"><span class="lab">ADDRESS</span><input id="motherAdd" class="ctl" readonly></label>
+			<label class="row"><span class="lab">WORKPLACE</span><input id="motherWorkplace" class="ctl" readonly></label>  
+			
 
+			<!-- ===== GUARDIAN ===== --> 
             <label class="row"><span class="lab">GUARDIAN</span><input id="guardian" class="ctl" readonly></label>
-            <div class="grid3">
-              <label class="row"><span class="lab">RELATION</span><input id="guardianRel" class="ctl" readonly></label>
-              <label class="row"><span class="lab">PHONE</span><input id="guardianPhone" class="ctl" readonly></label>
-              <div></div>
+			<label class="row"><span class="lab">RELATION</span><input id="guardianRel" class="ctl" readonly></label>
+			<div class="grid2">
+              <label class="row"><span class="lab">ADDRESS</span><input id="guardianAdd" class="ctl" readonly></label>
+              <label class="row"><span class="lab">POSTCODE</span><input id="guardianPostcode" class="ctl" readonly></label>
+            </div> 
+            <div class="grid2">
+              <label class="row"><span class="lab">MOBILE NO.</span><input id="guardianPhone" class="ctl" readonly></label>
+			  <label class="row"><span class="lab">OCCUPATION</span><input id="guardianOcc" class="ctl" readonly></label>
             </div>
-			<label class="row"><span class="lab">OCCUPATION</span><input id="guardianOcc" class="ctl" readonly></label>
-			<label class="row"><span class="lab">ADDRESS</span><input id="guardianAdd" class="ctl" readonly></label>
-
-          </form>
+            <label class="row"><span class="lab">WORKPLACE</span><input id="guardianWorkplace" class="ctl" readonly></label>   
+		  
+		  </form>
         </div>
 
         <!-- ===== CLASS PANE ===== -->
@@ -198,23 +212,30 @@
   				  <th>DOB</th>
   				  <th>IC</th>
   				  <th>BRU-HIMS</th>
+				  <th>PHONE</th>
   				  <th>MEDICAL</th>
   				  <th>AID</th>
   				  <th>WELFARE</th>
   				  <th>HOUSE</th>
   				  <th>FATHER</th>
-  				  <th>FATHER PHONE</th>
-  				  <th>FATHER JOB</th>
   				  <th>FATHER ADDRESS</th>
+			      <th>FATHER POSTCODE</th>
+				  <th>FATHER PHONE</th> 	
+  				  <th>FATHER JOB</th>
+				  <th>FATHER WORKPLACE</th>
   				  <th>MOTHER</th>
+				  <th>MOTHER ADDRESS</th>
+				  <th>MOTHER POSTCODE</th>
   				  <th>MOTHER PHONE</th>
   				  <th>MOTHER JOB</th>
-  				  <th>MOTHER ADDRESS</th>
+				  <th>MOTHER WORKPLACE</th>	
   				  <th>GUARDIAN</th>
   				  <th>RELATION</th>
+				  <th>GUARDIAN ADDRESS</th>
+				  <th>GUARDIAN POSTCODE</th>
   				  <th>GUARDIAN PHONE</th>
                   <th>GUARDIAN JOB</th>
-                  <th>GUARDIAN ADDRESS</th>
+				  <th>GUARDIAN WORKPLACE</th>
                 </tr>
               </thead>
               <tbody id="classTbody"></tbody>
