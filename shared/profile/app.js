@@ -25,7 +25,7 @@ const uid  = user.uid;
 const code = user.code;
 
   // ===== CONFIG =====
-  const GAS_URL = "https://script.google.com/macros/s/AKfycbwsWZvjA3Ljglf1_afE_Pei2_49s3Ng2cU-pkvWr1n04ezuJ2ZfP2_PHshiinsaLHNP/exec";
+  const GAS_URL = "https://script.google.com/macros/s/AKfycbybBTtZEb4BuWp2GqBGWuw2n85bVkmym3B9IutuCqtycw0t_JE0AabLPQ-EcRQYb3Eq/exec";
 
   // ===== Year in header =====
   const yy = document.getElementById("yy");
