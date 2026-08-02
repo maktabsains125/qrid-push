@@ -375,7 +375,7 @@ const code = user.code;
       `<div class="modalLabel">DOB</div><div class="modalValue">${fullDOB(studentObj) || ""}</div>`,
       `<div class="modalLabel">IC</div><div class="modalValue">${studentObj["IC"] || ""}</div>`,
       `<div class="modalLabel">BRU-HIMS</div><div class="modalValue">${studentObj["BRU-HIMS"] || ""}</div>`,
-      `<div class="modalLabel">Mobile No.</div><div class="modalValue">${studentObj["PHONE"] || ""}</div>`,
+      `<div class="modalLabel">Mobile No</div><div class="modalValue">${studentObj["PHONE"] || ""}</div>`,
       `<div class="modalLabel">Medical</div><div class="modalValue">${studentObj["MEDICAL CONDITION"] || ""}</div>`,
       `<div class="modalLabel">Aid</div><div class="modalValue">${studentObj["AID"] || ""}</div>`,
       `<div class="modalLabel">Welfare</div><div class="modalValue">${studentObj["WELFARE"] || ""}</div>`,
@@ -387,7 +387,7 @@ const code = user.code;
       `<div class="modalLabel">Name</div><div class="modalValue">${studentObj["FATHER"] || ""}</div>`,
       `<div class="modalLabel">Address</div><div class="modalValue">${studentObj["FATHER ADDRESS"] || ""}</div>`,
       `<div class="modalLabel">Postcode</div><div class="modalValue">${studentObj["FATHER POSTCODE"] || ""}</div>`,
-      `<div class="modalLabel">Mobile No.</div><div class="modalValue">${studentObj["FATHER PHONE"] || ""}</div>`,
+      `<div class="modalLabel">Mobile No</div><div class="modalValue">${studentObj["FATHER PHONE"] || ""}</div>`,
       `<div class="modalLabel">Job</div><div class="modalValue">${studentObj["FATHER OCCUPATION"] || ""}</div>`,
       `<div class="modalLabel">Workplace</div><div class="modalValue">${studentObj["FATHER WORKPLACE"] || ""}</div>`
     );
@@ -397,7 +397,7 @@ const code = user.code;
       `<div class="modalLabel">Name</div><div class="modalValue">${studentObj["MOTHER"] || ""}</div>`,
       `<div class="modalLabel">Address</div><div class="modalValue">${studentObj["MOTHER ADDRESS"] || ""}</div>`,
       `<div class="modalLabel">Postcode</div><div class="modalValue">${studentObj["MOTHER POSTCODE"] || ""}</div>`,
-      `<div class="modalLabel">Mobile No.</div><div class="modalValue">${studentObj["MOTHER PHONE"] || ""}</div>`,
+      `<div class="modalLabel">Mobile No</div><div class="modalValue">${studentObj["MOTHER PHONE"] || ""}</div>`,
       `<div class="modalLabel">Job</div><div class="modalValue">${studentObj["MOTHER OCCUPATION"] || ""}</div>`,
       `<div class="modalLabel">Workplace</div><div class="modalValue">${studentObj["MOTHER WORKPLACE"] || ""}</div>`
     );
@@ -408,7 +408,7 @@ const code = user.code;
       `<div class="modalLabel">Relation</div><div class="modalValue">${studentObj["GUARDIAN RELATION"] || ""}</div>`,
       `<div class="modalLabel">Address</div><div class="modalValue">${studentObj["GUARDIAN ADDRESS"] || ""}</div>`,
       `<div class="modalLabel">Postcode</div><div class="modalValue">${studentObj["GUARDIAN POSTCODE"] || ""}</div>`,
-      `<div class="modalLabel">Phone</div><div class="modalValue">${studentObj["GUARDIAN PHONE"] || ""}</div>`,
+      `<div class="modalLabel">Mobile No</div><div class="modalValue">${studentObj["GUARDIAN PHONE"] || ""}</div>`,
       `<div class="modalLabel">Occupation</div><div class="modalValue">${studentObj["GUARDIAN OCCUPATION"] || ""}</div>`,
       `<div class="modalLabel">Workplace</div><div class="modalValue">${studentObj["GUARDIAN WORKPLACE"] || ""}</div>`
     );
