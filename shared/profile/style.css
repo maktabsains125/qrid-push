@@ -102,6 +102,7 @@
 #father ~ .grid2 .lab,
 label:has(#father) .lab,
 label:has(#fatherAdd) .lab,
+label:has(#fatherMukim) .lab,
 label:has(#fatherPostcode) .lab,
 label:has(#fatherPhone) .lab,
 label:has(#fatherOcc) .lab,
@@ -112,6 +113,7 @@ label:has(#fatherWorkplace) .lab {
 
 label:has(#mother) .lab,
 label:has(#motherAdd) .lab,
+label:has(#motherMukim) .lab,
 label:has(#motherPostcode) .lab,
 label:has(#motherPhone) .lab,
 label:has(#motherOcc) .lab,
@@ -123,6 +125,7 @@ label:has(#motherWorkplace) .lab {
 label:has(#guardian) .lab,
 label:has(#guardianRel) .lab,
 label:has(#guardianAdd) .lab,
+label:has(#guardianMukim) .lab,
 label:has(#guardianPostcode) .lab,
 label:has(#guardianPhone) .lab,
 label:has(#guardianOcc) .lab,
