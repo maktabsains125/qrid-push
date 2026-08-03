@@ -1,5 +1,5 @@
 /* Profiles app — role-aware buttons + level view + GAS fetch
-   + dropdown classes + loading status + modal per student 1*/
+   + dropdown classes + loading status + modal per student*/
 
 (async function () {
 
