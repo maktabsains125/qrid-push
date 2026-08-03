@@ -25,7 +25,7 @@ const uid  = user.uid;
 const code = user.code;
 
   // ===== CONFIG =====
-  const GAS_URL = "https://script.google.com/macros/s/AKfycbybBTtZEb4BuWp2GqBGWuw2n85bVkmym3B9IutuCqtycw0t_JE0AabLPQ-EcRQYb3Eq/exec";
+  const PROFILE_API = "/.netlify/functions";
 
   // ===== Year in header =====
   const yy = document.getElementById("yy");
@@ -235,16 +235,17 @@ const code = user.code;
         fn: "profiles.classes",
         level: level
     });
-    const res = await fetch(
-        `${GAS_URL}?${params.toString()}`,
-        {
-            mode: "cors"
-        }
+     console.time("fetchClasses");
+     const res = await fetch(
+    `${PROFILE_API}/profiles-classes?${params.toString()}`
     );
     if (!res.ok) {
         throw new Error("Network error");
     }
+ 
     const data = await res.json();
+    console.timeEnd("fetchClasses");
+   
     if (!data.ok) {
         throw new Error(data.error || "Server error");
     }
@@ -252,25 +253,24 @@ const code = user.code;
 }  
 
 async function fetchProfiles(level, clazz) {
-
+    
     const params = new URLSearchParams({
         fn: "profiles.get",
         level: level,
         clazz: clazz
     });
 
+    console.time("fetchProfiles");
+   
     const res = await fetch(
-        `${GAS_URL}?${params.toString()}`,
-        {
-            mode: "cors"
-        }
-    );
-
+   `${PROFILE_API}/profiles-get?${params.toString()}`
+   );
     if (!res.ok) {
         throw new Error("Network error");
     }
-
     const data = await res.json();
+    console.timeEnd("fetchProfiles");
+
 
     if (!data.ok) {
         throw new Error(data.error || "Server error");
@@ -555,8 +555,9 @@ async function fetchProfiles(level, clazz) {
   }
 
   // ===== Shared loader (single fetch only) =====
-  async function loadProfilesData() {
-
+    
+   async function loadProfilesData() {
+    console.time("loadProfilesData");
     const clazz =
         role === "FT"
             ? ftClass
@@ -580,6 +581,7 @@ async function fetchProfiles(level, clazz) {
     lastClassRows = cachedRows;
     renderNameList(nameInput.value);
     renderClassTable(cachedRows);
+    console.timeEnd("loadProfilesData");
 
 }
   // ===== CLASS CHANGE HANDLER =====
@@ -595,9 +597,9 @@ async function fetchProfiles(level, clazz) {
         classInput.value = classInput2.value;
       }
     }
-
-    await loadProfilesData();
+   await loadProfilesData();
   }
+
 
   classInput?.addEventListener("change", onClassChange);
   classInput2?.addEventListener("change", onClassChange);
@@ -625,7 +627,8 @@ async function fetchProfiles(level, clazz) {
 // ===== Level button click =====
 levelBtns.forEach((btn) => {
   btn.addEventListener("click", async () => {
-    console.time("Year Button Total");
+    console.log("Year button clicked");
+    console.time("Year Button");
     if (btn.disabled) return;
 
     currentLevel = String(btn.dataset.level || "");
@@ -655,9 +658,8 @@ levelBtns.forEach((btn) => {
     Overlay.showLoading();
 
     try {
-     console.time("fetchClasses");
+
      const classes = await fetchClasses(currentLevel);
-     console.timeEnd("fetchClasses");
 
 populateClassDropdowns(
     classes,
@@ -684,7 +686,7 @@ if (role === "FT") {
     );
 
     } finally {
-      console.timeEnd("Year Button Total");
+      console.timeEnd("Year Button");
       Overlay.hide();
 
     }
