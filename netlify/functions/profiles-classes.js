@@ -1,7 +1,7 @@
 const fetch = require("node-fetch");
 
 const GAS_URL =
-"https://script.google.com/macros/s/AKfycbybBTtZEb4BuWp2GqBGWuw2n85bVkmym3B9IutuCqtycw0t_JE0AabLPQ-EcRQYb3Eq/exec";
+"https://script.google.com/macros/s/AKfycbwO5NGA-8JRTO6Z0KZXkauSSAmqZiCkyu58kn2XnAII79j5HAUPUHfGtFi-uz9OmUM/exec";
 
 exports.handler = async (event) => {
 
