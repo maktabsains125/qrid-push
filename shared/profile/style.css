@@ -101,6 +101,8 @@
 /* Color overrides for parent blocks (profiles page) */
 #father ~ .grid2 .lab,
 label:has(#father) .lab,
+label:has(#fatherIC) .lab,
+label:has(#fatherCol) .lab,
 label:has(#fatherAdd) .lab,
 label:has(#fatherMukim) .lab,
 label:has(#fatherPostcode) .lab,
@@ -112,6 +114,8 @@ label:has(#fatherWorkplace) .lab {
 }
 
 label:has(#mother) .lab,
+label:has(#motherIC) .lab,
+label:has(#motherCol) .lab,
 label:has(#motherAdd) .lab,
 label:has(#motherMukim) .lab,
 label:has(#motherPostcode) .lab,
@@ -124,6 +128,8 @@ label:has(#motherWorkplace) .lab {
 
 label:has(#guardian) .lab,
 label:has(#guardianRel) .lab,
+label:has(#guardianIC) .lab,
+label:has(#guardianCol) .lab,
 label:has(#guardianAdd) .lab,
 label:has(#guardianMukim) .lab,
 label:has(#guardianPostcode) .lab,
