@@ -194,6 +194,8 @@ const code = user.code;
     house: F("house"),
 
     father: F("father"),
+    fatherIC: F("fatherIC"),
+    fatherCol: F("fatherCol"),
     fatherAdd: F("fatherAdd"),
     fatherMukim: F("fatherMukim"), 
     fatherPostcode: F("fatherPostcode"),
@@ -202,6 +204,8 @@ const code = user.code;
     fatherWorkplace: F("fatherWorkplace"),
 
     mother: F("mother"),
+    motherIC: F("motherIC"),
+    motherCol: F("motherCol"),
     motherAdd: F("motherAdd"),
     motherMukim: F("motherMukim"),  
     motherPostcode: F("motherPostcode"),
@@ -211,6 +215,8 @@ const code = user.code;
 
     guardian: F("guardian"),
     guardianRel: F("guardianRel"),
+    guardianIC: F("guardianIC"),
+    guardianCol: F("guardianCol"),
     guardianAdd: F("guardianAdd"),
     guardianMukim: F("guardianMukim"), 
     guardianPostcode: F("guardianPostcode"),
@@ -310,6 +316,8 @@ async function fetchProfiles(level, clazz) {
     fields.house.value           = r["SPORTSHOUSE"] || "";
 
     fields.father.value          = r["FATHER"] || "";
+    fields.fatherIC.value        = r["FATHER IC"] || "";
+    fields.fatherCol.value       = r["FATHER IC COL"] || "";
     fields.fatherAdd.value       = r["FATHER ADDRESS"] || "";
     fields.fatherMukim.value       = r["FATHER MUKIM"] || ""; 
     fields.fatherPostcode.value  = r["FATHER POSTCODE"] || "";
@@ -318,6 +326,8 @@ async function fetchProfiles(level, clazz) {
     fields.fatherWorkplace.value = r["FATHER WORKPLACE"] || "";
     
     fields.mother.value          = r["MOTHER"] || "";
+    fields.motherIC.value          = r["MOTHER IC"] || "";
+    fields.motherCol.value          = r["MOTHER IC COL"] || "";
     fields.motherAdd.value       = r["MOTHER ADDRESS"] || "";
     fields.motherMukim.value       = r["MOTHER MUKIM"] || "";
     fields.motherPostcode.value  = r["MOTHER POSTCODE"] || "";
@@ -326,6 +336,8 @@ async function fetchProfiles(level, clazz) {
     fields.motherWorkplace.value = r["MOTHER WORKPLACE"] || "";
 
     fields.guardian.value           = r["GUARDIAN"] || "";
+    fields.guardianIC.value           = r["GUARDIAN IC"] || "";
+    fields.guardianCol.value           = r["GUARDIAN IC COL"] || "";
     fields.guardianRel.value        = r["GUARDIAN RELATION"] || "";
     fields.guardianAdd.value        = r["GUARDIAN ADDRESS"] || "";
     fields.guardianMukim.value        = r["GUARDIAN MUKIM"] || "";
@@ -432,6 +444,8 @@ async function fetchProfiles(level, clazz) {
     htmlParts.push(
       `<div class="modalGroupHead" style="color:#1b3487;">Father</div>`,
       `<div class="modalLabel">Name</div><div class="modalValue">${studentObj["FATHER"] || ""}</div>`,
+      `<div class="modalLabel">IC</div><div class="modalValue">${studentObj["FATHER IC"] || ""}</div>`,
+      `<div class="modalLabel">IC Colour</div><div class="modalValue">${studentObj["FATHER IC COL"] || ""}</div>`,
       `<div class="modalLabel">Address</div><div class="modalValue">${studentObj["FATHER ADDRESS"] || ""}</div>`,
       `<div class="modalLabel">Mukim</div><div class="modalValue">${studentObj["FATHER MUKIM"] || ""}</div>`,
       `<div class="modalLabel">Postcode</div><div class="modalValue">${studentObj["FATHER POSTCODE"] || ""}</div>`,
@@ -443,6 +457,8 @@ async function fetchProfiles(level, clazz) {
     htmlParts.push(
       `<div class="modalGroupHead" style="color:#ab1f57;">Mother</div>`,
       `<div class="modalLabel">Name</div><div class="modalValue">${studentObj["MOTHER"] || ""}</div>`,
+      `<div class="modalLabel">IC</div><div class="modalValue">${studentObj["MOTHER IC"] || ""}</div>`,
+      `<div class="modalLabel">IC Colour</div><div class="modalValue">${studentObj["MOTHER IC COL"] || ""}</div>`,
       `<div class="modalLabel">Address</div><div class="modalValue">${studentObj["MOTHER ADDRESS"] || ""}</div>`,
       `<div class="modalLabel">Mukim</div><div class="modalValue">${studentObj["MOTHER MUKIM"] || ""}</div>`,
       `<div class="modalLabel">Postcode</div><div class="modalValue">${studentObj["MOTHER POSTCODE"] || ""}</div>`,
@@ -454,6 +470,8 @@ async function fetchProfiles(level, clazz) {
     htmlParts.push(
       `<div class="modalGroupHead" style="color:#297a1f;">Guardian</div>`,
       `<div class="modalLabel">Name</div><div class="modalValue">${studentObj["GUARDIAN"] || ""}</div>`,
+      `<div class="modalLabel">IC</div><div class="modalValue">${studentObj["GUARDIAN IC"] || ""}</div>`,
+      `<div class="modalLabel">IC Colour</div><div class="modalValue">${studentObj["GUARDIAN IC COL"] || ""}</div>`,
       `<div class="modalLabel">Relation</div><div class="modalValue">${studentObj["GUARDIAN RELATION"] || ""}</div>`,
       `<div class="modalLabel">Address</div><div class="modalValue">${studentObj["GUARDIAN ADDRESS"] || ""}</div>`,
       `<div class="modalLabel">Mukim</div><div class="modalValue">${studentObj["GUARDIAN MUKIM"] || ""}</div>`,
@@ -527,6 +545,8 @@ async function fetchProfiles(level, clazz) {
           <td>${r["WELFARE"] || ""}</td>
           <td>${r["SPORTSHOUSE"] || ""}</td>
           <td>${r["FATHER"] || ""}</td>
+          <td>${r["FATHER IC"] || ""}</td>
+          <td>${r["FATHER IC COL"] || ""}</td>
           <td>${r["FATHER ADDRESS"] || ""}</td>
           <td>${r["FATHER MUKIM"] || ""}</td>
           <td>${r["FATHER POSTCODE"] || ""}</td>
@@ -534,6 +554,8 @@ async function fetchProfiles(level, clazz) {
           <td>${r["FATHER OCCUPATION"] || ""}</td>
           <td>${r["FATHER WORKPLACE"] || ""}</td>
           <td>${r["MOTHER"] || ""}</td>
+          <td>${r["MOTHER IC"] || ""}</td>
+          <td>${r["MOTHER IC COL"] || ""}</td>
           <td>${r["MOTHER ADDRESS"] || ""}</td>
           <td>${r["MOTHER MUKIM"] || ""}</td>
           <td>${r["MOTHER POSTCODE"] || ""}</td>
@@ -541,6 +563,8 @@ async function fetchProfiles(level, clazz) {
           <td>${r["MOTHER OCCUPATION"] || ""}</td>
           <td>${r["MOTHER WORKPLACE"] || ""}</td>
           <td>${r["GUARDIAN"] || ""}</td>
+          <td>${r["GUARDIAN IC"] || ""}</td>
+          <td>${r["GUARDIAN IC COL"] || ""}</td>
           <td>${r["GUARDIAN RELATION"] || ""}</td>
           <td>${r["GUARDIAN ADDRESS"] || ""}</td>
           <td>${r["GUARDIAN MUKIM"] || ""}</td>
