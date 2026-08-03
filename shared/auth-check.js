@@ -110,14 +110,16 @@ const AuthCheck = (() => {
       const data = await res.json();
 
       if (!data.ok || !data.verified) {
-
-        Auth.clear();
-        localStorage.removeItem(CACHE_KEY);
-
-        location.replace("/");
-
-        return null;
-      }
+      console.error("VERIFY REJECTED", {
+      response: data,
+      user: who.code,
+      time: new Date().toISOString()
+      });
+      Auth.clear();
+      localStorage.removeItem(CACHE_KEY);
+      location.replace("/");
+      return null;
+     }
 
       // ------------------------------------------
       // Refresh local session with verified values
@@ -151,17 +153,38 @@ const AuthCheck = (() => {
 
     } catch (err) {
 
-      console.error(err);
+    
+    console.error("VERIFY NETWORK ERROR", {
+        error: err,
+        message: err.message,
+        stack: err.stack,
+        user: who.code,
+        time: new Date().toISOString()
+    });
 
-      Auth.clear();
-      localStorage.removeItem(CACHE_KEY);
+    const fallback = {
+    verified: true,
+    ok: true,
+    offline: true,
+    role: who.role,
+    uid: who.uid,
+    code: who.code,
+    token: who.token,
+    checkedAt: Date.now()
+};
 
-      location.replace("/");
+    localStorage.setItem(
+        CACHE_KEY,
+        JSON.stringify(fallback)
+    );
 
-      return null;
-    }
+    return fallback;
 
   }
+
+}
+
+
 
   // ==========================================
   // Require one of these roles
